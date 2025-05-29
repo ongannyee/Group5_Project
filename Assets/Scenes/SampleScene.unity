@@ -456,7 +456,7 @@ GameObject:
   - component: {fileID: 1648125199}
   - component: {fileID: 1648125198}
   - component: {fileID: 1648125197}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FieldOfView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
