@@ -14,9 +14,10 @@ public class KieranController : MonoBehaviour
 
     public Vector2 movement;
 
-    //2. Cone Vision
+    //2. Cone Vision and circular vision
     public FieldOfView fov;
     public FogOfWar fogOfWar;
+    public float circularRadius = 2f;
 
     void Start()
     {
@@ -67,6 +68,9 @@ public class KieranController : MonoBehaviour
         if (fogOfWar != null && fov != null)
         {
             fogOfWar.RevealConeMesh(fov.GetWorldVertices());
+            // Reveal a small circle around player for peripheral awareness
+            fogOfWar.Reveal(transform.position, circularRadius); // radius = 1.5 units
+
         }
     }
 

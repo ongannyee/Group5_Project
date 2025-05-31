@@ -311,9 +311,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb371e7f25c76b43a33a735b85d540d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 10
+  viewRadius: 5
   viewAngle: 360
-  rayCount: 100
+  rayCount: 200
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
@@ -585,7 +585,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990790692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.17, y: 0.05, z: -0.31869745}
+  m_LocalPosition: {x: -6.33, y: 0.08, z: -0.31869745}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -705,7 +705,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d6ac0ab306d0334593fb36915486fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fov: {fileID: 1648125197}
+  playerTransforms:
+  - {fileID: 1282095727}
+  - {fileID: 160799167}
+  playerFOVs:
+  - {fileID: 1648125197}
+  - {fileID: 475367560}
+  peripheralRadius: 2
 --- !u!1 &1282095722
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,6 +788,7 @@ MonoBehaviour:
   movement: {x: 0, y: 0}
   fov: {fileID: 1648125197}
   fogOfWar: {fileID: 547736684}
+  circularRadius: 2
 --- !u!212 &1282095726
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1021,7 +1028,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewRadius: 5
   viewAngle: 90
-  rayCount: 100
+  rayCount: 200
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256

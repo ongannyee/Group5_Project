@@ -7,7 +7,7 @@ public class FieldOfView : MonoBehaviour
 {
     public float viewRadius = 8f;
     [Range(0, 360)] public float viewAngle = 90f;
-    public int rayCount = 100;
+    public int rayCount = 360;
     public LayerMask obstacleMask;
 
     private Mesh mesh;

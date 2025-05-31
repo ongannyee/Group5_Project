@@ -81,6 +81,34 @@ public class FogOfWar : MonoBehaviour
         }
     }
 
+    public void Reveal(Vector3 worldPos, float radius)
+    {
+        Vector2Int center = WorldToTextureCoord(worldPos);
+
+        int radiusInPixels = Mathf.RoundToInt(radius * pixelPerUnit);
+        int sqrRadius = radiusInPixels * radiusInPixels;
+
+        for (int y = -radiusInPixels; y <= radiusInPixels; y++)
+        {
+            for (int x = -radiusInPixels; x <= radiusInPixels; x++)
+            {
+                int px = center.x + x;
+                int py = center.y + y;
+
+                if (px < 0 || py < 0 || px >= textureSize || py >= textureSize)
+                    continue;
+
+                if (x * x + y * y <= sqrRadius)
+                {
+                    int index = py * textureSize + px;
+                    colors[index].a = 0; // reveal fully
+                    hasBeenSeen[index] = true;
+                }
+            }
+        }
+    }
+
+
     private void LateUpdate()
     {
         // Dim everything that has been seen but is not currently visible

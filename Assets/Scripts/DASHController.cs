@@ -41,6 +41,10 @@ public class DASHController : MonoBehaviour
         if (fogOfWar != null && fov != null)
         {
             fogOfWar.RevealConeMesh(fov.GetWorldVertices());
+
+            // Reveal a small circle around player for peripheral awareness
+            fogOfWar.Reveal(transform.position, 1.5f); // radius = 1.5 units
+
         }
     }
 

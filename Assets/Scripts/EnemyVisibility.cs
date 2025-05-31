@@ -2,63 +2,77 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class EnemyVisibility : MonoBehaviour
 {
-    public FieldOfView[] fovs; // assign all character FOVs here
+    public Transform[] playerTransforms; // Kieran & DASH
+    public FieldOfView[] playerFOVs;     // their respective FOVs
+    public float peripheralRadius = 1.5f;
 
-    private Renderer rend;
+    private SpriteRenderer sr;
 
-    private void Start()
+    void Start()
     {
-        rend = GetComponentInChildren<Renderer>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
-    private void Update()
+    void Update()
     {
-        bool isVisible = false;
+        bool visible = false;
 
-        foreach (var fov in fovs)
+        for (int i = 0; i < playerTransforms.Length; i++)
         {
-            if (IsInVisionCone(fov, transform.position))
+            Transform player = playerTransforms[i];
+            FieldOfView fov = playerFOVs[i];
+
+            // 1. Check cone visibility
+            if (IsInFOV(fov))
             {
-                isVisible = true;
+                visible = true;
+                break;
+            }
+
+            // 2. Check peripheral circular radius
+            if (Vector2.Distance(transform.position, player.position) <= peripheralRadius)
+            {
+                visible = true;
                 break;
             }
         }
 
-        rend.enabled = isVisible;
+        sr.enabled = visible;
     }
 
-    bool IsInVisionCone(FieldOfView fov, Vector3 worldPos)
+    bool IsInFOV(FieldOfView fov)
     {
-        if (fov == null || fov.GetComponent<MeshFilter>() == null) return false;
-
-        Vector3 localPos = fov.transform.InverseTransformPoint(worldPos);
-        Vector2 point = new Vector2(localPos.x, localPos.y);
-
-        Mesh mesh = fov.GetComponent<MeshFilter>().mesh;
-        Vector3[] vertices = mesh.vertices;
-        int[] triangles = mesh.triangles;
-
-        for (int i = 0; i < triangles.Length; i += 3)
+        List<Vector3> verts = fov.GetWorldVertices();
+        for (int i = 1; i < verts.Count - 1; i++)
         {
-            Vector2 p0 = vertices[triangles[i]];
-            Vector2 p1 = vertices[triangles[i + 1]];
-            Vector2 p2 = vertices[triangles[i + 2]];
-
-            if (PointInTriangle(point, p0, p1, p2))
+            if (PointInTriangle(transform.position, verts[0], verts[i], verts[i + 1]))
                 return true;
         }
-
         return false;
     }
 
-    bool PointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+    bool PointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
     {
-        float area = 0.5f * (-b.y * c.x + a.y * (-b.x + c.x) + a.x * (b.y - c.y) + b.x * c.y);
-        float s = 1f / (2f * area) * (a.y * c.x - a.x * c.y + (c.y - a.y) * p.x + (a.x - c.x) * p.y);
-        float t = 1f / (2f * area) * (a.x * b.y - a.y * b.x + (a.y - b.y) * p.x + (b.x - a.x) * p.y);
-        return s >= 0 && t >= 0 && (s + t) <= 1;
+        Vector3 v0 = c - a;
+        Vector3 v1 = b - a;
+        Vector3 v2 = p - a;
+
+        float d00 = Vector3.Dot(v0, v0);
+        float d01 = Vector3.Dot(v0, v1);
+        float d11 = Vector3.Dot(v1, v1);
+        float d20 = Vector3.Dot(v2, v0);
+        float d21 = Vector3.Dot(v2, v1);
+
+        float denom = d00 * d11 - d01 * d01;
+        if (denom == 0) return false;
+
+        float v = (d11 * d20 - d01 * d21) / denom;
+        float w = (d00 * d21 - d01 * d20) / denom;
+        float u = 1.0f - v - w;
+
+        return (u >= 0) && (v >= 0) && (w >= 0);
     }
 }
+
