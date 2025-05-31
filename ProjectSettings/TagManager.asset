@@ -16,7 +16,7 @@ TagManager:
   - Obstacles
   - Kieran
   - DASH
-  - 
+  - FOG
   - 
   - 
   - 
@@ -40,4 +40,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: FOG
+    uniqueID: 466721221
     locked: 0

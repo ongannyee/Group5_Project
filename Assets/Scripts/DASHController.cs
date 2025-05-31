@@ -11,6 +11,7 @@ public class DASHController : MonoBehaviour
 
     //2. Cone Vision
     public FieldOfView fov;
+    public FogOfWar fogOfWar;
     
     void Start()
     {
@@ -36,6 +37,11 @@ public class DASHController : MonoBehaviour
 
         fov.SetOrigin(transform.position);
         fov.SetAimDirection(aimDir);
+
+        if (fogOfWar != null && fov != null)
+        {
+            fogOfWar.RevealConeMesh(fov.GetWorldVertices());
+        }
     }
 
     void FixedUpdate()

@@ -82,4 +82,17 @@ public class FieldOfView : MonoBehaviour
         float rad = angleDeg * Mathf.Deg2Rad;
         return new Vector3(Mathf.Cos(rad), Mathf.Sin(rad));
     }
+
+    public List<Vector3> GetWorldVertices()
+    {
+        List<Vector3> worldVertices = new List<Vector3>();
+        Vector3[] vertices = mesh.vertices;
+
+        foreach (Vector3 vertex in vertices)
+        {
+            worldVertices.Add(transform.TransformPoint(vertex));
+        }
+
+        return worldVertices;
+    }
 }
