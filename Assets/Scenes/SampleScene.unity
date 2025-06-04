@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb371e7f25c76b43a33a735b85d540d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 5
+  viewRadius: 2
   viewAngle: 360
   rayCount: 200
   obstacleMask:

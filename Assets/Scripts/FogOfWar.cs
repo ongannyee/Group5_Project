@@ -211,7 +211,7 @@ public class FogOfWar : MonoBehaviour
         {
             if (hasBeenSeen[i])
             {
-                colors[i].a = 50; // dim alpha
+                colors[i].a = 255; // dim alpha
             }
             else
             {
