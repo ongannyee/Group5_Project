@@ -1,81 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyVisibility : MonoBehaviour
 {
-    public Transform[] playerTransforms;        // Kieran, DASH
-    public FieldOfView[] playerFOVs;            // Their FOVs
-    public MonoBehaviour[] playerControllers;   // KieranController, DASHController (match order with above)
-
-    private SpriteRenderer sr;
-
-    void Start()
+    public static bool IsInFOV(FieldOfView fov, Transform target)
     {
-        sr = GetComponent<SpriteRenderer>();
+        Vector3 dirToTarget = (target.position - fov.transform.position).normalized;
+        float distance = Vector3.Distance(fov.transform.position, target.position);
+
+        if (distance > fov.viewRadius) return false;
+        float angle = Vector3.Angle(fov.transform.right, dirToTarget);
+        if (angle > fov.viewAngle / 2f) return false;
+
+        // Check for line of sight (obstacle blocking)
+        RaycastHit2D hit = Physics2D.Raycast(fov.transform.position, dirToTarget, distance, fov.obstacleMask);
+        return !hit;
     }
 
-    void Update()
+    public static bool CanSeePlayerCone(Transform enemyTransform, Transform cone, LayerMask obstacleMask)
     {
-        bool visible = false;
+        Vector3 dir = (cone.position - enemyTransform.position).normalized;
+        float distance = Vector3.Distance(enemyTransform.position, cone.position);
 
-        for (int i = 0; i < playerTransforms.Length; i++)
-        {
-            Transform player = playerTransforms[i];
-            FieldOfView fov = playerFOVs[i];
-            MonoBehaviour controller = playerControllers[i];
-
-            // 1. Check cone visibility (FieldOfView mesh)
-            if (IsInFOV(fov))
-            {
-                visible = true;
-                break;
-            }
-
-            // 2. Optional: peripheral vision (only for Kieran)
-            if (controller is KieranController kieran)
-            {
-                if (Vector2.Distance(transform.position, player.position) <= kieran.peripheralRadius)
-                {
-                    visible = true;
-                    break;
-                }
-            }
-        }
-
-        sr.enabled = visible;
-    }
-
-    bool IsInFOV(FieldOfView fov)
-    {
-        List<Vector3> verts = fov.GetWorldVertices();
-        for (int i = 1; i < verts.Count - 1; i++)
-        {
-            if (PointInTriangle(transform.position, verts[0], verts[i], verts[i + 1]))
-                return true;
-        }
-        return false;
-    }
-
-    bool PointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
-    {
-        Vector3 v0 = c - a;
-        Vector3 v1 = b - a;
-        Vector3 v2 = p - a;
-
-        float d00 = Vector3.Dot(v0, v0);
-        float d01 = Vector3.Dot(v0, v1);
-        float d11 = Vector3.Dot(v1, v1);
-        float d20 = Vector3.Dot(v2, v0);
-        float d21 = Vector3.Dot(v2, v1);
-
-        float denom = d00 * d11 - d01 * d01;
-        if (Mathf.Abs(denom) < 0.0001f) return false;
-
-        float v = (d11 * d20 - d01 * d21) / denom;
-        float w = (d00 * d21 - d01 * d20) / denom;
-        float u = 1.0f - v - w;
-
-        return (u >= 0) && (v >= 0) && (w >= 0);
+        RaycastHit2D hit = Physics2D.Raycast(enemyTransform.position, dir, distance, obstacleMask);
+        return !hit;
     }
 }

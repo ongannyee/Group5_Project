@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class FieldOfView : MonoBehaviour
@@ -9,11 +11,14 @@ public class FieldOfView : MonoBehaviour
     [Range(0, 360)] public float viewAngle = 90f;
     public int rayCount = 360;
     public LayerMask obstacleMask;
-    public bool canSeeThroughWalls = false; // New: controls ray blocking
+    public LayerMask targetMask; // NEW: to detect player targets
+    public bool canSeeThroughWalls = false;
 
     private Mesh mesh;
     private Vector3 origin;
     private float angle;
+
+    public List<Transform> visibleTargets = new List<Transform>(); // NEW: visible targets list
 
     void Start()
     {
@@ -24,7 +29,10 @@ public class FieldOfView : MonoBehaviour
 
     void LateUpdate()
     {
+        origin = transform.position;
+
         DrawFieldOfView();
+        FindVisibleTargets(); // NEW: update visible targets
     }
 
     void DrawFieldOfView()
@@ -55,7 +63,6 @@ public class FieldOfView : MonoBehaviour
             }
             else
             {
-                // Ignore obstacles, go full distance
                 hitPoint = origin + dir * viewRadius;
             }
 
@@ -79,6 +86,29 @@ public class FieldOfView : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
+
+    public void FindVisibleTargets()
+    {
+        visibleTargets.Clear();
+        Collider2D[] targetsInViewRadius = Physics2D.OverlapCircleAll(origin, viewRadius, targetMask);
+
+        foreach (var target in targetsInViewRadius)
+        {
+            Vector3 dirToTarget = (target.transform.position - origin).normalized;
+            float angleToTarget = Vector3.Angle(DirFromAngle(angle, true), dirToTarget);
+
+            if (angleToTarget < viewAngle / 2f)
+            {
+                float distToTarget = Vector3.Distance(origin, target.transform.position);
+
+                if (canSeeThroughWalls || !Physics2D.Raycast(origin, dirToTarget, distToTarget, obstacleMask))
+                {
+                    visibleTargets.Add(target.transform);
+                }
+            }
+        }
+    }
+
 
     public void SetOrigin(Vector3 newOrigin)
     {

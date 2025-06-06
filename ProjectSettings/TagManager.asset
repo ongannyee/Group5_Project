@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PlayerVision
+  - Kieran
+  - DASH
   layers:
   - Default
   - TransparentFX
@@ -18,7 +21,7 @@ TagManager:
   - DASH
   - FOG
   - 
-  - 
+  - Player
   - 
   - 
   - 
@@ -43,4 +46,10 @@ TagManager:
     locked: 0
   - name: FOG
     uniqueID: 466721221
+    locked: 0
+  - name: Effects
+    uniqueID: 1418109047
+    locked: 0
+  - name: Player
+    uniqueID: 953189147
     locked: 0
