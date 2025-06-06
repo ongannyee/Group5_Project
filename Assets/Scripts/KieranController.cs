@@ -18,6 +18,8 @@ public class KieranController : MonoBehaviour
     public FieldOfView fov;
     public FogOfWar fogOfWar;
     public float circularRadius = 2f;
+    public float peripheralRadius = 2f; // Adjustable in Inspector
+
 
     void Start()
     {
@@ -69,8 +71,7 @@ public class KieranController : MonoBehaviour
         {
             fogOfWar.RevealConeMesh(fov.GetWorldVertices());
             // Reveal a small circle around player for peripheral awareness
-            fogOfWar.Reveal(transform.position, circularRadius); // radius = 1.5 units
-
+            fogOfWar.RevealCircularBlocked(transform.position, circularRadius, LayerMask.GetMask("Obstacles"));
         }
     }
 

@@ -9,6 +9,7 @@ public class FieldOfView : MonoBehaviour
     [Range(0, 360)] public float viewAngle = 90f;
     public int rayCount = 360;
     public LayerMask obstacleMask;
+    public bool canSeeThroughWalls = false; // New: controls ray blocking
 
     private Mesh mesh;
     private Vector3 origin;
@@ -32,18 +33,33 @@ public class FieldOfView : MonoBehaviour
         float angleStart = angle - viewAngle / 2f;
 
         List<Vector3> viewPoints = new List<Vector3>();
-        viewPoints.Add(Vector3.zero); // center point
+        viewPoints.Add(Vector3.zero); // center point of mesh
 
         for (int i = 0; i <= rayCount; i++)
         {
             float currentAngle = angleStart + angleStep * i;
             Vector3 dir = DirFromAngle(currentAngle, true);
-            RaycastHit2D hit = Physics2D.Raycast(origin, dir, viewRadius, obstacleMask);
 
-            if (hit)
-                viewPoints.Add(transform.InverseTransformPoint(hit.point));
+            Vector3 hitPoint;
+            if (!canSeeThroughWalls)
+            {
+                RaycastHit2D hit = Physics2D.Raycast(origin, dir, viewRadius, obstacleMask);
+                if (hit)
+                {
+                    hitPoint = hit.point;
+                }
+                else
+                {
+                    hitPoint = origin + dir * viewRadius;
+                }
+            }
             else
-                viewPoints.Add(transform.InverseTransformPoint(origin + dir * viewRadius));
+            {
+                // Ignore obstacles, go full distance
+                hitPoint = origin + dir * viewRadius;
+            }
+
+            viewPoints.Add(transform.InverseTransformPoint(hitPoint));
         }
 
         int vertexCount = viewPoints.Count;
@@ -62,7 +78,6 @@ public class FieldOfView : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
-
     }
 
     public void SetOrigin(Vector3 newOrigin)

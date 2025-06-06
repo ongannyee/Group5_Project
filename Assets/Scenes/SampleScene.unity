@@ -160,6 +160,11 @@ MonoBehaviour:
   movement: {x: 0, y: 0}
   fov: {fileID: 475367560}
   fogOfWar: {fileID: 547736684}
+  circularRadius: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  canSeeThroughWalls: 0
 --- !u!212 &160799166
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -311,12 +316,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb371e7f25c76b43a33a735b85d540d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 2
+  viewRadius: 4
   viewAngle: 360
   rayCount: 200
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
+  canSeeThroughWalls: 0
 --- !u!23 &475367561
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -570,6 +576,8 @@ GameObject:
   - component: {fileID: 990790695}
   - component: {fileID: 990790694}
   - component: {fileID: 990790697}
+  - component: {fileID: 990790698}
+  - component: {fileID: 990790699}
   m_Layer: 0
   m_Name: Guard
   m_TagString: Untagged
@@ -711,7 +719,41 @@ MonoBehaviour:
   playerFOVs:
   - {fileID: 1648125197}
   - {fileID: 475367560}
-  peripheralRadius: 2
+  playerControllers:
+  - {fileID: 1282095725}
+  - {fileID: 160799165}
+--- !u!114 &990790698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990790692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad0f36d8bd904f478bd5a43a693551f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+  rotationSpeed: 1
+  obstacleCheckCircleRadius: 1
+  obstacleCheckDistance: 1
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
+--- !u!114 &990790699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990790692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1bb1e106c97375419a1b11557b3ddc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAlertDistance: 10
 --- !u!1 &1282095722
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,7 +830,8 @@ MonoBehaviour:
   movement: {x: 0, y: 0}
   fov: {fileID: 1648125197}
   fogOfWar: {fileID: 547736684}
-  circularRadius: 2
+  circularRadius: 1.5
+  peripheralRadius: 2
 --- !u!212 &1282095726
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1026,12 +1069,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb371e7f25c76b43a33a735b85d540d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 5
+  viewRadius: 7
   viewAngle: 90
   rayCount: 200
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
+  canSeeThroughWalls: 0
 --- !u!23 &1648125198
 MeshRenderer:
   m_ObjectHideFlags: 0

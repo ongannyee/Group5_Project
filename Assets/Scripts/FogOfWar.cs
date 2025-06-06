@@ -10,27 +10,28 @@ public class FogOfWar : MonoBehaviour
 
     private Texture2D fogTexture;
     private Color32[] colors;
-    private byte[] revealMask;
+    //private byte[] revealMask;
     private SpriteRenderer sr;
     private float pixelPerUnit;
 
-    private bool[] hasBeenSeen;
+    //private bool[] hasBeenSeen;
 
 
     private void Start()
     {
-        hasBeenSeen = new bool[textureSize * textureSize];
+        //hasBeenSeen = new bool[textureSize * textureSize];
         sr = GetComponent<SpriteRenderer>();
         fogTexture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
         fogTexture.filterMode = FilterMode.Bilinear;
 
         colors = new Color32[textureSize * textureSize];
-        revealMask = new byte[textureSize * textureSize];
+        //revealMask = new byte[textureSize * textureSize];
 
+        
         for (int i = 0; i < colors.Length; i++)
         {
             colors[i] = new Color32(0, 0, 0, 255); // fully black
-            revealMask[i] = 0; // 0 = never seen
+            //revealMask[i] = 0; // 0 = never seen
         }
 
         fogTexture.SetPixels32(colors);
@@ -41,7 +42,7 @@ public class FogOfWar : MonoBehaviour
         pixelPerUnit = textureSize / worldSize;
     }
 
-    public void Reveal(Vector3 worldPos)
+/*     public void Reveal(Vector3 worldPos)
     {
         Vector2Int center = WorldToTextureCoord(worldPos);
 
@@ -79,7 +80,7 @@ public class FogOfWar : MonoBehaviour
             fogTexture.Apply();
             Debug.Log("Reveal applied at: " + worldPos);
         }
-    }
+    } */
 
     public void Reveal(Vector3 worldPos, float radius)
     {
@@ -102,13 +103,67 @@ public class FogOfWar : MonoBehaviour
                 {
                     int index = py * textureSize + px;
                     colors[index].a = 0; // reveal fully
-                    hasBeenSeen[index] = true;
+                    //hasBeenSeen[index] = true;
                 }
             }
         }
     }
 
+    public void RevealCircularBlocked(Vector3 center, float radius, LayerMask obstacleMask, int rayCount = 100)
+    {
+        float angleStep = 360f / rayCount;
 
+        for (int i = 0; i < rayCount; i++)
+        {
+            float angle = angleStep * i;
+            float rad = angle * Mathf.Deg2Rad;
+            Vector3 dir = new Vector3(Mathf.Cos(rad), Mathf.Sin(rad));
+            RaycastHit2D hit = Physics2D.Raycast(center, dir, radius, obstacleMask);
+
+            float distance = hit ? hit.distance : radius;
+            Vector3 endPoint = center + dir * distance;
+
+            RevealLine(center, endPoint);
+        }
+
+        fogTexture.SetPixels32(colors);
+        fogTexture.Apply();
+    }
+
+    void RevealLine(Vector3 startWorld, Vector3 endWorld)
+    {
+        Vector2Int start = WorldToTextureCoord(startWorld);
+        Vector2Int end = WorldToTextureCoord(endWorld);
+
+        int dx = Mathf.Abs(end.x - start.x);
+        int dy = Mathf.Abs(end.y - start.y);
+
+        int sx = start.x < end.x ? 1 : -1;
+        int sy = start.y < end.y ? 1 : -1;
+
+        int err = dx - dy;
+
+        int x = start.x;
+        int y = start.y;
+
+        while (true)
+        {
+            int index = y * textureSize + x;
+            if (index >= 0 && index < colors.Length)
+            {
+                colors[index].a = 0;
+            }
+
+            if (x == end.x && y == end.y)
+                break;
+
+            int e2 = 2 * err;
+            if (e2 > -dy) { err -= dy; x += sx; }
+            if (e2 < dx) { err += dx; y += sy; }
+        }
+    }
+
+    /*
     private void LateUpdate()
     {
         // Dim everything that has been seen but is not currently visible
@@ -122,7 +177,7 @@ public class FogOfWar : MonoBehaviour
 
         fogTexture.SetPixels32(colors);
         fogTexture.Apply();
-    }
+    }*/
 
     Vector2Int WorldToTextureCoord(Vector3 worldPos)
     {
@@ -139,7 +194,8 @@ public class FogOfWar : MonoBehaviour
 
     public void RevealConeMesh(List<Vector3> worldVertices)
     {
-        DimPreviouslySeen(); // reset before applying new vision
+        //DimPreviouslySeen(); // reset before applying new vision
+        ResetFogToBlack();
 
         for (int i = 1; i < worldVertices.Count - 1; i++)
         {
@@ -168,7 +224,7 @@ public class FogOfWar : MonoBehaviour
                 {
                     int index = y * textureSize + x;
                     colors[index].a = 0;
-                    hasBeenSeen[index] = true;
+                    //hasBeenSeen[index] = true;
                 }
             }
         }
@@ -205,6 +261,16 @@ public class FogOfWar : MonoBehaviour
         return (u >= 0) && (v >= 0) && (w >= 0);
     }
 
+    private void ResetFogToBlack()
+    {
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i].a = 255; // fully black
+        }
+    }
+
+
+    /*
     private void DimPreviouslySeen()
     {
         for (int i = 0; i < colors.Length; i++)
@@ -218,6 +284,6 @@ public class FogOfWar : MonoBehaviour
                 colors[i].a = 255; // fully black
             }
         }
-    }
+    }*/
 
 }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class EnemyVisibility : MonoBehaviour
 {
-    public Transform[] playerTransforms; // Kieran & DASH
-    public FieldOfView[] playerFOVs;     // their respective FOVs
-    public float peripheralRadius = 1.5f;
+    public Transform[] playerTransforms;        // Kieran, DASH
+    public FieldOfView[] playerFOVs;            // Their FOVs
+    public MonoBehaviour[] playerControllers;   // KieranController, DASHController (match order with above)
 
     private SpriteRenderer sr;
 
@@ -23,19 +23,23 @@ public class EnemyVisibility : MonoBehaviour
         {
             Transform player = playerTransforms[i];
             FieldOfView fov = playerFOVs[i];
+            MonoBehaviour controller = playerControllers[i];
 
-            // 1. Check cone visibility
+            // 1. Check cone visibility (FieldOfView mesh)
             if (IsInFOV(fov))
             {
                 visible = true;
                 break;
             }
 
-            // 2. Check peripheral circular radius
-            if (Vector2.Distance(transform.position, player.position) <= peripheralRadius)
+            // 2. Optional: peripheral vision (only for Kieran)
+            if (controller is KieranController kieran)
             {
-                visible = true;
-                break;
+                if (Vector2.Distance(transform.position, player.position) <= kieran.peripheralRadius)
+                {
+                    visible = true;
+                    break;
+                }
             }
         }
 
@@ -66,7 +70,7 @@ public class EnemyVisibility : MonoBehaviour
         float d21 = Vector3.Dot(v2, v1);
 
         float denom = d00 * d11 - d01 * d01;
-        if (denom == 0) return false;
+        if (Mathf.Abs(denom) < 0.0001f) return false;
 
         float v = (d11 * d20 - d01 * d21) / denom;
         float w = (d00 * d21 - d01 * d20) / denom;
@@ -75,4 +79,3 @@ public class EnemyVisibility : MonoBehaviour
         return (u >= 0) && (v >= 0) && (w >= 0);
     }
 }
-
