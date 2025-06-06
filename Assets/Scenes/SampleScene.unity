@@ -593,7 +593,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990790692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.33, y: 0.08, z: -0.31869745}
+  m_LocalPosition: {x: 10.13, y: -2.94, z: -0.31869745}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -734,13 +734,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad0f36d8bd904f478bd5a43a693551f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  rotationSpeed: 1
-  obstacleCheckCircleRadius: 1
-  obstacleCheckDistance: 1
+  speed: 3
+  rotationSpeed: 100
+  obstacleCheckCircleRadius: 0
+  obstacleCheckDistance: 0
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 256
 --- !u!114 &990790699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,7 +753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1bb1e106c97375419a1b11557b3ddc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerAlertDistance: 10
+  playerAlertDistance: 100
 --- !u!1 &1282095722
 GameObject:
   m_ObjectHideFlags: 0
@@ -892,7 +892,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1282095722}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 10.22, y: -0.54, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1219,7 +1219,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687587003}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: -12.42, y: -4.39, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

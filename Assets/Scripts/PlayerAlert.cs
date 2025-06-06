@@ -9,30 +9,54 @@ public class PlayerAlert : MonoBehaviour
 
     [SerializeField] private float playerAlertDistance;
 
-    private Transform player;
+    private Transform kieran;
+    private Transform dash;
 
     private void Awake()
     {
-        player = FindObjectOfType<KieranController>().transform;
-    }
-    void Start()
-    {
-        
+        // Find both players in the scene
+        kieran = FindObjectOfType<KieranController>().transform;
+        dash = FindObjectOfType<DASHController>().transform; // Replace with your actual DASH controller name
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        Vector2 enemyToPlayerVector = player.position - transform.position;
-        DirectionToPlayer = enemyToPlayerVector.normalized;
+        AwareOfPlayer = false;
 
-        if(enemyToPlayerVector.magnitude <= playerAlertDistance)
+        Vector2 enemyPos = transform.position;
+        Vector2 directionToKieran = (Vector2)kieran.position - enemyPos;
+        Vector2 directionToDash = (Vector2)dash.position - enemyPos;
+
+        float distanceToKieran = directionToKieran.magnitude;
+        float distanceToDash = directionToDash.magnitude;
+
+        // Check who is in range
+        bool kieranInRange = distanceToKieran <= playerAlertDistance;
+        bool dashInRange = distanceToDash <= playerAlertDistance;
+
+        if (kieranInRange && dashInRange)
         {
+            // Choose the closest one
+            if (distanceToKieran <= distanceToDash)
+            {
+                DirectionToPlayer = directionToKieran.normalized;
+            }
+            else
+            {
+                DirectionToPlayer = directionToDash.normalized;
+            }
+
             AwareOfPlayer = true;
         }
-        else
+        else if (kieranInRange)
         {
-            AwareOfPlayer = false;
+            DirectionToPlayer = directionToKieran.normalized;
+            AwareOfPlayer = true;
+        }
+        else if (dashInRange)
+        {
+            DirectionToPlayer = directionToDash.normalized;
+            AwareOfPlayer = true;
         }
     }
 }
