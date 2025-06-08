@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Swapping control between Kieran and DASH
 public class CharacterManager : MonoBehaviour
 {
     public GameObject kieran;

@@ -1,62 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerAlert : MonoBehaviour
 {
-    public bool AwareOfPlayer { get; private set; }
-    public Vector2 DirectionToPlayer { get; private set; }
+    public static Transform Kieran;
+    public static Transform DASH;
 
-    [SerializeField] private float playerAlertDistance;
-
-    private Transform kieran;
-    private Transform dash;
-
-    private void Awake()
+    void Awake()
     {
-        // Find both players in the scene
-        kieran = FindObjectOfType<KieranController>().transform;
-        dash = FindObjectOfType<DASHController>().transform; // Replace with your actual DASH controller name
+        if (Kieran == null)
+            Kieran = GameObject.FindWithTag("Kieran")?.transform;
+
+        if (DASH == null)
+            DASH = GameObject.FindWithTag("DASH")?.transform;
     }
 
-    private void Update()
+    // Returns the visible player to chase, prioritizing Kieran
+    public static Transform GetVisiblePlayerToChase(List<Transform> visibleTargets)
     {
-        AwareOfPlayer = false;
+        if (visibleTargets.Contains(Kieran))
+            return Kieran;
 
-        Vector2 enemyPos = transform.position;
-        Vector2 directionToKieran = (Vector2)kieran.position - enemyPos;
-        Vector2 directionToDash = (Vector2)dash.position - enemyPos;
+        if (visibleTargets.Contains(DASH))
+            return DASH;
 
-        float distanceToKieran = directionToKieran.magnitude;
-        float distanceToDash = directionToDash.magnitude;
-
-        // Check who is in range
-        bool kieranInRange = distanceToKieran <= playerAlertDistance;
-        bool dashInRange = distanceToDash <= playerAlertDistance;
-
-        if (kieranInRange && dashInRange)
-        {
-            // Choose the closest one
-            if (distanceToKieran <= distanceToDash)
-            {
-                DirectionToPlayer = directionToKieran.normalized;
-            }
-            else
-            {
-                DirectionToPlayer = directionToDash.normalized;
-            }
-
-            AwareOfPlayer = true;
-        }
-        else if (kieranInRange)
-        {
-            DirectionToPlayer = directionToKieran.normalized;
-            AwareOfPlayer = true;
-        }
-        else if (dashInRange)
-        {
-            DirectionToPlayer = directionToDash.normalized;
-            AwareOfPlayer = true;
-        }
+        return null;
     }
 }
