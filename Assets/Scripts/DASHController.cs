@@ -12,9 +12,9 @@ public class DASHController : MonoBehaviour
     // 2. Vision System
     public FieldOfView fov;
     public FogOfWar fogOfWar;
-    public float circularRadius = 0f;
+    public float circularRadius = 4f;
     public LayerMask obstacleMask; // Assign "Obstacles" layer in Inspector
-    public bool canSeeThroughWalls = false; // Can be toggled by future skills
+    public bool canSeeThroughWalls = true; // Can be toggled by future skills
 
     void Update()
     {
@@ -26,7 +26,7 @@ public class DASHController : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mousePos - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        //transform.rotation = Quaternion.Euler(0f, 0f, angle);                   //Rotates the object to face the mouse (on Z axis, in 2D). not really need
 
         // 3. Set full-circle field of view
         if (fov != null)
@@ -36,14 +36,15 @@ public class DASHController : MonoBehaviour
             fov.canSeeThroughWalls = canSeeThroughWalls;
         }
 
-        // 4. Reveal vision using full circle mesh and optionally reveal through walls
+        // !!NEED REVISED LOGIC 4. Reveal vision using full circle mesh and optionally reveal through walls 
         if (fogOfWar != null && fov != null)
         {
             fogOfWar.RevealConeMesh(fov.GetWorldVertices());
 
             if (canSeeThroughWalls)
             {
-                fogOfWar.Reveal(transform.position, circularRadius);
+                fogOfWar.Reveal(transform.position, circularRadius);    
+                
             }
             else
             {
@@ -51,7 +52,6 @@ public class DASHController : MonoBehaviour
             }
         }
     }
-
 
     void FixedUpdate()
     {

@@ -7,22 +7,23 @@ using System.Linq;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class FieldOfView : MonoBehaviour
 {
+    // 1. Variables related to cone vision
     public float viewRadius = 8f;
     [Range(0, 360)] public float viewAngle = 90f;
     public int rayCount = 360;
-    public LayerMask obstacleMask;
-    public LayerMask targetMask; // NEW: to detect player targets
+    public LayerMask obstacleMask;  // to detect obstacles like walls
+    public LayerMask targetMask;    // to detect player targets, for enemy only
     public bool canSeeThroughWalls = false;
 
-    private Mesh mesh;
-    private Vector3 origin;
+    private Mesh mesh;      // for cone drawing
+    private Vector3 origin; // set cone attach to obj
     private float angle;
 
-    public List<Transform> visibleTargets = new List<Transform>(); // NEW: visible targets list
+    public List<Transform> visibleTargets = new List<Transform>(); // visible targets list
 
     void Start()
     {
-        mesh = new Mesh();
+        mesh = new Mesh();  // collection of vertices, edges, and triangles that define a 3D (or 2D) shape
         GetComponent<MeshFilter>().mesh = mesh;
         origin = Vector3.zero;
     }
@@ -32,33 +33,35 @@ public class FieldOfView : MonoBehaviour
         origin = transform.position;
 
         DrawFieldOfView();
-        FindVisibleTargets(); // NEW: update visible targets
+        FindVisibleTargets(); // update visible targets
     }
 
+    // Draw cone vision
     void DrawFieldOfView()
     {
-        float angleStep = viewAngle / rayCount;
-        float angleStart = angle - viewAngle / 2f;
+        float angleStep = viewAngle / rayCount;     // this calculates each small triangle angle
+        float angleStart = angle - viewAngle / 2f;  //finds the starting angle for the first ray in the cone.
 
         List<Vector3> viewPoints = new List<Vector3>();
         viewPoints.Add(Vector3.zero); // center point of mesh
 
+        // drawing the cone
         for (int i = 0; i <= rayCount; i++)
         {
             float currentAngle = angleStart + angleStep * i;
-            Vector3 dir = DirFromAngle(currentAngle, true);
+            Vector3 dir = DirFromAngle(currentAngle, true); //Converts the angle into a direction vector
 
             Vector3 hitPoint;
             if (!canSeeThroughWalls)
             {
-                RaycastHit2D hit = Physics2D.Raycast(origin, dir, viewRadius, obstacleMask);
+                RaycastHit2D hit = Physics2D.Raycast(origin, dir, viewRadius, obstacleMask);    //Stores the details of the object hit
                 if (hit)
                 {
-                    hitPoint = hit.point;
+                    hitPoint = hit.point;   // Ray hit a wall or object
                 }
                 else
                 {
-                    hitPoint = origin + dir * viewRadius;
+                    hitPoint = origin + dir * viewRadius;   // Ray hit nothing, goes full distance
                 }
             }
             else
@@ -66,9 +69,10 @@ public class FieldOfView : MonoBehaviour
                 hitPoint = origin + dir * viewRadius;
             }
 
-            viewPoints.Add(transform.InverseTransformPoint(hitPoint));
+            viewPoints.Add(transform.InverseTransformPoint(hitPoint));  // Save local-space hit point
         }
 
+        // draw the cone
         int vertexCount = viewPoints.Count;
         Vector3[] vertices = viewPoints.ToArray();
         int[] triangles = new int[(vertexCount - 2) * 3];
@@ -81,53 +85,60 @@ public class FieldOfView : MonoBehaviour
             triangles[idx + 2] = i + 1;
         }
 
+        //clear previous vertices
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
 
+    // Find target
     public void FindVisibleTargets()
     {
-        visibleTargets.Clear();
-        Collider2D[] targetsInViewRadius = Physics2D.OverlapCircleAll(origin, viewRadius, targetMask);
+        visibleTargets.Clear(); // clear old data
+        Collider2D[] targetsInViewRadius = Physics2D.OverlapCircleAll(origin, viewRadius, targetMask);  //Get nearby targets in a circular area
 
         foreach (var target in targetsInViewRadius)
         {
-            Vector3 dirToTarget = (target.transform.position - origin).normalized;
-            float angleToTarget = Vector3.Angle(DirFromAngle(angle, true), dirToTarget);
+            Vector3 dirToTarget = (target.transform.position - origin).normalized;          // Calculate direction to target
+            float angleToTarget = Vector3.Angle(DirFromAngle(angle, true), dirToTarget);    // Calculate angle to target
 
-            if (angleToTarget < viewAngle / 2f)
+            if (angleToTarget < viewAngle / 2f) //turns a full angle like 90° into a cone from -45deg to +45deg.
             {
                 float distToTarget = Vector3.Distance(origin, target.transform.position);
 
                 if (canSeeThroughWalls || !Physics2D.Raycast(origin, dirToTarget, distToTarget, obstacleMask))
                 {
-                    visibleTargets.Add(target.transform);
+                    visibleTargets.Add(target.transform); // add target as visible obj
                 }
             }
         }
     }
 
-
+    // Set the cone position 
     public void SetOrigin(Vector3 newOrigin)
     {
         origin = newOrigin;
         transform.position = newOrigin;
     }
 
+    // Set cone direction
     public void SetAimDirection(Vector3 aimDir)
     {
-        angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+        angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;    //Mathf.Atan2: Calculates the angle (in radians) between the positive X-axis and the aimDir vector.
+                                                                    //Mathf.Rad2Deg: Converts the angle from radians to degrees (Unity works in degrees for most rotations).
     }
 
+    // getting a direction vector from a given angle
     private Vector3 DirFromAngle(float angleDeg, bool global)
     {
-        if (!global) angleDeg += transform.eulerAngles.z;
-        float rad = angleDeg * Mathf.Deg2Rad;
-        return new Vector3(Mathf.Cos(rad), Mathf.Sin(rad));
+        if (!global) angleDeg += transform.eulerAngles.z;   //Adjust angle for local rotation
+        float rad = angleDeg * Mathf.Deg2Rad;               //Convert to radians
+        return new Vector3(Mathf.Cos(rad), Mathf.Sin(rad)); //Return direction vector
     }
 
+    // returns a list of the mesh's vertices converted into world space positions.
+    // Use to generate fog-of-war effects in player controller
     public List<Vector3> GetWorldVertices()
     {
         List<Vector3> worldVertices = new List<Vector3>();

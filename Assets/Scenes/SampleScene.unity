@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 160799165}
   - component: {fileID: 160799169}
   - component: {fileID: 160799168}
-  m_Layer: 12
+  m_Layer: 10
   m_Name: DASH_test_mod
   m_TagString: DASH
   m_Icon: {fileID: 0}
@@ -193,10 +193,10 @@ MonoBehaviour:
   movement: {x: 0, y: 0}
   fov: {fileID: 475367560}
   fogOfWar: {fileID: 547736684}
-  circularRadius: 0
+  circularRadius: 4
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   canSeeThroughWalls: 0
 --- !u!212 &160799166
 SpriteRenderer:
@@ -590,9 +590,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8764daa9896c40f46b4cc464f226c0d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureSize: 256
+  textureSize: 512
   worldSize: 50
-  revealRadius: 5
 --- !u!212 &547736685
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -915,7 +914,7 @@ GameObject:
   - component: {fileID: 1282095725}
   - component: {fileID: 1282095724}
   - component: {fileID: 1282095723}
-  m_Layer: 12
+  m_Layer: 9
   m_Name: Kieran_test_mod
   m_TagString: Kieran
   m_Icon: {fileID: 0}
@@ -1577,7 +1576,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4522036532966363503, guid: 5cc9562119706f64ca29f42da13b85a0, type: 3}
       propertyPath: targetMask.m_Bits
-      value: 4096
+      value: 5632
       objectReference: {fileID: 0}
     - target: {fileID: 4522036532966363503, guid: 5cc9562119706f64ca29f42da13b85a0, type: 3}
       propertyPath: obstacleMask.m_Bits

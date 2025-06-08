@@ -27,7 +27,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
-        // 🔴 Show alert only if chasing
+        // Show alert only if chasing
         alertIndicator.SetActive(currentState == State.Chasing);
 
         switch (currentState)
