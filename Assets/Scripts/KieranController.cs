@@ -11,13 +11,13 @@ public class KieranController : MonoBehaviour
     public float fasterSpeed = 12f;
     private float moveSpeed;
     private int speedState = 0; // 0: normal, 1: fast, 2: faster
-
     public Vector2 movement;
 
     //2. Cone Vision and circular vision
     public FieldOfView fov;
     public FogOfWar fogOfWar;
     public float circularRadius = 2f;
+    public float peripheralRadius = 2f; // Adjustable in Inspector
 
     void Start()
     {
@@ -31,10 +31,9 @@ public class KieranController : MonoBehaviour
         movement.y = Input.GetAxisRaw("Vertical");
 
         //1.2 Rotate to face the mouse cursor
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 direction = mousePos - transform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Converts mouse position from screen space to world space.
+        Vector3 direction = mousePos - transform.position;                      //Gets a direction vector from the object to the mouse.
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;    //Converts that direction into an angle in degrees.
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
         //1.3 Toggle move speed with spacebar
@@ -58,7 +57,7 @@ public class KieranController : MonoBehaviour
             Debug.Log("Speed state: " + speedState + " | Speed: " + moveSpeed);
         }
 
-        //2.1 Cone Vision
+        //2.1 Cone Vision and Circular vision
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 aimDir = (mouseWorld - transform.position).normalized;
 
@@ -69,8 +68,7 @@ public class KieranController : MonoBehaviour
         {
             fogOfWar.RevealConeMesh(fov.GetWorldVertices());
             // Reveal a small circle around player for peripheral awareness
-            fogOfWar.Reveal(transform.position, circularRadius); // radius = 1.5 units
-
+            fogOfWar.RevealCircularBlocked(transform.position, circularRadius, LayerMask.GetMask("Obstacles"));
         }
     }
 

@@ -4,53 +4,58 @@ using UnityEngine;
 
 public class DASHController : MonoBehaviour
 {
-    //1. DASH Movement
+    // 1. DASH Movement
     public Rigidbody2D theRB;
     public float moveSpeed = 5;
     public Vector2 movement;
 
-    //2. Cone Vision
+    // 2. Vision System
     public FieldOfView fov;
     public FogOfWar fogOfWar;
-    
-    void Start()
-    {
-        
-    }
+    public float circularRadius = 4f;
+    public LayerMask obstacleMask; // Assign "Obstacles" layer in Inspector
+    public bool canSeeThroughWalls = true; // Can be toggled by future skills
 
     void Update()
     {
-        //1.1 Get movement input
+        // 1. Movement input
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
-        //1.2 Rotate to face the mouse cursor
+        // 2. Rotation toward mouse
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mousePos - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-        //2.1 Cone Vision
-        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 aimDir = (mouseWorld - transform.position).normalized;
+        // 3. Set full-circle field of view
+        if (fov != null)
+        {
+            fov.SetOrigin(transform.position);
+            fov.viewAngle = 360f; // full circle for DASH
+            fov.canSeeThroughWalls = canSeeThroughWalls;
+        }
 
-        fov.SetOrigin(transform.position);
-        fov.SetAimDirection(aimDir);
-
+        // !!NEED REVISED LOGIC 4. Reveal vision using full circle mesh and optionally reveal through walls 
         if (fogOfWar != null && fov != null)
         {
             fogOfWar.RevealConeMesh(fov.GetWorldVertices());
 
-            // Reveal a small circle around player for peripheral awareness
-            fogOfWar.Reveal(transform.position, 1.5f); // radius = 1.5 units
-
+            if (canSeeThroughWalls)
+            {
+                fogOfWar.Reveal(transform.position, circularRadius);    
+                
+            }
+            else
+            {
+                fogOfWar.RevealCircularBlocked(transform.position, circularRadius, obstacleMask);
+            }
         }
     }
 
     void FixedUpdate()
     {
-        //1.3 DASH movement
+        // 1.3 Move
         theRB.MovePosition(theRB.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);
     }
 }

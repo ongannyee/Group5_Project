@@ -4,176 +4,191 @@ using UnityEngine;
 
 public class FogOfWar : MonoBehaviour
 {
-    public int textureSize = 512;
-    public float worldSize = 50f;
-    public float revealRadius = 5f;
+    public int textureSize = 512;       //Size of the fog in pixels
+    public float worldSize = 50f;       //size of the fog area in Unity world units
 
-    private Texture2D fogTexture;
-    private Color32[] colors;
-    private byte[] revealMask;
-    private SpriteRenderer sr;
-    private float pixelPerUnit;
-
-    private bool[] hasBeenSeen;
-
+    private Texture2D fogTexture;       //actual texture storing fog visibility, modified at runtime to reveal/hide areas.
+    private Color32[] colors;           //Stores pixel color data for the fogTexture
+    private SpriteRenderer sr;          //component that renders the fog texture
+    private float pixelPerUnit;         //World-to-pixel conversion ratio
 
     private void Start()
     {
-        hasBeenSeen = new bool[textureSize * textureSize];
+        // Component & Texture Initialization
         sr = GetComponent<SpriteRenderer>();
         fogTexture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
         fogTexture.filterMode = FilterMode.Bilinear;
 
-        colors = new Color32[textureSize * textureSize];
-        revealMask = new byte[textureSize * textureSize];
 
+        // Set Texture to Fully Black
+        colors = new Color32[textureSize * textureSize];
         for (int i = 0; i < colors.Length; i++)
         {
             colors[i] = new Color32(0, 0, 0, 255); // fully black
-            revealMask[i] = 0; // 0 = never seen
         }
-
         fogTexture.SetPixels32(colors);
         fogTexture.Apply();
 
+        // Assign to SpriteRenderer. Show it visually in the game
         Sprite fogSprite = Sprite.Create(fogTexture, new Rect(0, 0, textureSize, textureSize), new Vector2(0.5f, 0.5f), textureSize / worldSize);
         sr.sprite = fogSprite;
+
+        // Track pixel/world conversion. Needed for revealing based on player/world position
         pixelPerUnit = textureSize / worldSize;
     }
 
-    public void Reveal(Vector3 worldPos)
-    {
-        Vector2Int center = WorldToTextureCoord(worldPos);
-
-        int radiusInPixels = Mathf.RoundToInt(revealRadius * pixelPerUnit);
-        int sqrRadius = radiusInPixels * radiusInPixels;
-
-        bool changed = false;
-
-        for (int y = -radiusInPixels; y <= radiusInPixels; y++)
-        {
-            for (int x = -radiusInPixels; x <= radiusInPixels; x++)
-            {
-                int px = center.x + x;
-                int py = center.y + y;
-
-                if (px < 0 || py < 0 || px >= textureSize || py >= textureSize)
-                    continue;
-
-                if (x * x + y * y <= sqrRadius)
-                {
-                    int index = py * textureSize + px;
-
-                    if (colors[index].a != 0)
-                    {
-                        colors[index].a = 0; // make fully transparent (visible)
-                        changed = true;
-                    }
-                }
-            }
-        }
-
-        if (changed)
-        {
-            fogTexture.SetPixels32(colors);
-            fogTexture.Apply();
-            Debug.Log("Reveal applied at: " + worldPos);
-        }
-    }
-
+    //reveals a circular area, not block by obstacles
     public void Reveal(Vector3 worldPos, float radius)
     {
-        Vector2Int center = WorldToTextureCoord(worldPos);
+        Vector2Int center = WorldToTextureCoord(worldPos);              //Converts the world position (e.g., player position) into texture coordinates (pixels).
 
-        int radiusInPixels = Mathf.RoundToInt(radius * pixelPerUnit);
-        int sqrRadius = radiusInPixels * radiusInPixels;
+        int radiusInPixels = Mathf.RoundToInt(radius * pixelPerUnit);   //Converts the world radius into texture pixels.
+        int sqrRadius = radiusInPixels * radiusInPixels;                //For checking x² + y² <= r², used to avoid square root calculations (for performance)
 
-        for (int y = -radiusInPixels; y <= radiusInPixels; y++)
+        for (int y = -radiusInPixels; y <= radiusInPixels; y++)         // Loops over a square around the center point
         {
-            for (int x = -radiusInPixels; x <= radiusInPixels; x++)
+            for (int x = -radiusInPixels; x <= radiusInPixels; x++)     // Loops over a square around the center point
             {
                 int px = center.x + x;
                 int py = center.y + y;
 
-                if (px < 0 || py < 0 || px >= textureSize || py >= textureSize)
+                if (px < 0 || py < 0 || px >= textureSize || py >= textureSize) //Bounds Checking
                     continue;
 
-                if (x * x + y * y <= sqrRadius)
+                if (x * x + y * y <= sqrRadius)                                 //Checks if the current pixel is inside the circle and set to alpha 0
                 {
                     int index = py * textureSize + px;
-                    colors[index].a = 0; // reveal fully
-                    hasBeenSeen[index] = true;
+                    colors[index].a = 0;                                        // reveal fully
                 }
             }
         }
     }
 
-
-    private void LateUpdate()
+    // Reveal in ciruclar blocked by obstacles
+    public void RevealCircularBlocked(Vector3 center, float radius, LayerMask obstacleMask, int rayCount = 360)
     {
-        // Dim everything that has been seen but is not currently visible
-        for (int i = 0; i < colors.Length; i++)
+        float angleStep = 360f / rayCount;      //Divides the full circle into equal segments.
+
+        for (int i = 0; i < rayCount; i++)
         {
-            if (revealMask[i] == 1 && colors[i].a > 0)
-            {
-                colors[i].a = 50; // dim
-            }
+            float angle = angleStep * i;
+            float rad = angle * Mathf.Deg2Rad;                               // Converts angle to radians.
+            Vector3 dir = new Vector3(Mathf.Cos(rad), Mathf.Sin(rad));       // Calculates the direction vector from angle
+
+            RaycastHit2D hit = Physics2D.Raycast(center, dir, radius, obstacleMask);    // Casts a ray from the center outward in that direction
+                                                                                        // If it hits something in the obstacleMask, it returns hit.distance.
+            
+            float distance = hit ? hit.distance : radius;   // Use full radius dis or hit radius dis
+            Vector3 endPoint = center + dir * distance;     // Compute the ray end: either at the obstacle or at full vision radius.
+            RevealLine(center, endPoint);                   // Reveal pixels along the ray line
         }
 
         fogTexture.SetPixels32(colors);
-        fogTexture.Apply();
+        fogTexture.Apply();                                 // Applying the changes
     }
 
+    // line-drawing algorithm: Bresenham's Line Algorithm
+    void RevealLine(Vector3 startWorld, Vector3 endWorld)
+    {
+        // Converts world space coordinates (e.g., player position, ray hit point) to pixel coordinates on the fog texture.
+        Vector2Int start = WorldToTextureCoord(startWorld);     
+        Vector2Int end = WorldToTextureCoord(endWorld);
+
+        //Differences and Directions
+        int dx = Mathf.Abs(end.x - start.x);
+        int dy = Mathf.Abs(end.y - start.y);
+
+        //Set step direction for x and y (left/right, up/down)
+        int sx = start.x < end.x ? 1 : -1;
+        int sy = start.y < end.y ? 1 : -1;
+
+        // Start point to draw, err for error correction(which pixel to draw next)
+        int err = dx - dy;
+        int x = start.x;
+        int y = start.y;
+
+        while (true)
+        {
+            //Calculate 1D index from 2D position. Makes that pixel transparent.
+            int index = y * textureSize + x;
+            if (index >= 0 && index < colors.Length)
+            {
+                colors[index].a = 0;
+            }
+
+            // Break if reach end
+            if (x == end.x && y == end.y)
+                break;
+
+            // Decides whether to step horizontally, vertically, or both, based on accumulated error. Ensures the line looks natural and continuous.
+            int e2 = 2 * err;
+            if (e2 > -dy) { err -= dy; x += sx; }
+            if (e2 < dx) { err += dx; y += sy; }
+        }
+    }
+
+    // map world positions to pixel positions for revealing or modify the fog
     Vector2Int WorldToTextureCoord(Vector3 worldPos)
     {
-        Vector3 localPos = transform.InverseTransformPoint(worldPos);
-        float halfSize = worldSize / 2f;
-        float normX = (localPos.x + halfSize) / worldSize;
+        Vector3 localPos = transform.InverseTransformPoint(worldPos);                       // Converts world position to local space relative to the fog object.
+        float halfSize = worldSize / 2f;                                                    // Shifts coordinates so the fog's center is treated as (0,0)
+        float normX = (localPos.x + halfSize) / worldSize;                                  // Normalizes x and y into values between 0 and 1.
         float normY = (localPos.y + halfSize) / worldSize;
 
-        int x = Mathf.Clamp(Mathf.RoundToInt(normX * textureSize), 0, textureSize - 1);
-        int y = Mathf.Clamp(Mathf.RoundToInt(normY * textureSize), 0, textureSize - 1);
+        int x = Mathf.Clamp(Mathf.RoundToInt(normX * textureSize), 0, textureSize - 1);     // Converts normalized (0-1) values to actual pixel coordinates on the texture
+        int y = Mathf.Clamp(Mathf.RoundToInt(normY * textureSize), 0, textureSize - 1);     
 
         return new Vector2Int(x, y);
     }
 
+    // Reveal cone vision
     public void RevealConeMesh(List<Vector3> worldVertices)
     {
-        DimPreviouslySeen(); // reset before applying new vision
+        // Reset Fog of war to black
+        ResetFogToBlack();
 
+        // reveal each triangle (3 vertices form a triangle)
         for (int i = 1; i < worldVertices.Count - 1; i++)
         {
             RevealTriangle(worldVertices[0], worldVertices[i], worldVertices[i + 1]);
         }
 
+        // Update pixel data
         fogTexture.SetPixels32(colors);
         fogTexture.Apply();
     }
 
+    // Reveal triangle vision so that they form into a cone
     void RevealTriangle(Vector3 a, Vector3 b, Vector3 c)
     {
+        // finds the smallest axis-aligned rectangle (bounding box) that contains the triangle defined by points a, b, and c.
         Bounds bounds = new Bounds(a, Vector3.zero);
         bounds.Encapsulate(b);
         bounds.Encapsulate(c);
 
+        // Converts the bounding box corners to texture coordinates.
         Vector2Int min = WorldToTextureCoord(bounds.min);
         Vector2Int max = WorldToTextureCoord(bounds.max);
 
+        // Iterates over every pixel within the bounding box.
         for (int y = min.y; y <= max.y; y++)
         {
             for (int x = min.x; x <= max.x; x++)
             {
+                // Converts texture pixel coordinates back to world position
                 Vector3 worldPoint = TextureCoordToWorld(x, y);
+
+                // check if the current pixel (in world space) is inside the triangle and reveals that pixel
                 if (PointInTriangle(worldPoint, a, b, c))
                 {
                     int index = y * textureSize + x;
                     colors[index].a = 0;
-                    hasBeenSeen[index] = true;
                 }
             }
         }
     }
 
+    // converts texture coordinates (pixel positions in the fog texture) back into world space positions
     Vector3 TextureCoordToWorld(int x, int y)
     {
         float halfSize = worldSize / 2f;
@@ -182,6 +197,7 @@ public class FogOfWar : MonoBehaviour
         return transform.TransformPoint(new Vector3(wx, wy));
     }
 
+    // checks whether a point p lies inside the triangle defined by the points a, b, and c, using the barycentric coordinate technique.
     bool PointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
     {
         // Barycentric technique
@@ -202,22 +218,15 @@ public class FogOfWar : MonoBehaviour
         float w = (d00 * d21 - d01 * d20) / denom;
         float u = 1.0f - v - w;
 
-        return (u >= 0) && (v >= 0) && (w >= 0);
+        return (u >= 0) && (v >= 0) && (w >= 0);    // Ensures the point lies inside or on the edge of the triangle.
     }
 
-    private void DimPreviouslySeen()
+    // Reset for to black
+    private void ResetFogToBlack()
     {
         for (int i = 0; i < colors.Length; i++)
         {
-            if (hasBeenSeen[i])
-            {
-                colors[i].a = 255; // dim alpha
-            }
-            else
-            {
-                colors[i].a = 255; // fully black
-            }
+            colors[i].a = 255; // fully black
         }
     }
-
 }
