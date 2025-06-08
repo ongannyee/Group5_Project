@@ -19,6 +19,8 @@ public class FieldOfView : MonoBehaviour
     private Vector3 origin; // set cone attach to obj
     private float angle;
 
+    PolygonCollider2D polygonCollider;
+
     public List<Transform> visibleTargets = new List<Transform>(); // visible targets list
 
     void Start()
@@ -26,6 +28,7 @@ public class FieldOfView : MonoBehaviour
         mesh = new Mesh();  // collection of vertices, edges, and triangles that define a 3D (or 2D) shape
         GetComponent<MeshFilter>().mesh = mesh;
         origin = Vector3.zero;
+        polygonCollider = GetComponent<PolygonCollider2D>();
     }
 
     void LateUpdate()
@@ -44,6 +47,9 @@ public class FieldOfView : MonoBehaviour
 
         List<Vector3> viewPoints = new List<Vector3>();
         viewPoints.Add(Vector3.zero); // center point of mesh
+
+        List<Vector2> colliderPoints = new List<Vector2>();
+        colliderPoints.Add(Vector2.zero); // origin for collider (in local space)
 
         // drawing the cone
         for (int i = 0; i <= rayCount; i++)
@@ -69,7 +75,9 @@ public class FieldOfView : MonoBehaviour
                 hitPoint = origin + dir * viewRadius;
             }
 
-            viewPoints.Add(transform.InverseTransformPoint(hitPoint));  // Save local-space hit point
+            Vector3 localPoint = transform.InverseTransformPoint(hitPoint); // Convert to local space
+            viewPoints.Add(localPoint);                                     // Save local-space hit point
+            colliderPoints.Add(new Vector2(localPoint.x, localPoint.y));
         }
 
         // draw the cone
@@ -90,6 +98,13 @@ public class FieldOfView : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
+
+        // Update PolygonCollider2D
+        if (polygonCollider != null)
+        {
+            polygonCollider.pathCount = 1;
+            polygonCollider.SetPath(0, colliderPoints.ToArray());
+        }
     }
 
     // Find target
@@ -116,7 +131,7 @@ public class FieldOfView : MonoBehaviour
             }
         }
 
-        // Sort manually to ensure Kieran comes before DASH
+        // !!NOT WORKING YET. Sort manually to ensure Kieran comes before DASH
         if (PlayerAlert.Kieran != null && tempTargets.Contains(PlayerAlert.Kieran))
             visibleTargets.Add(PlayerAlert.Kieran);
 

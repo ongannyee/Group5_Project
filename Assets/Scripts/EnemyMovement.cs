@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     public float patrolSpeed = 2f;
     public float chaseSpeed = 4f;
     private int currentPointIndex = 0;
+    private float investigateTimer = 0f;
 
     private Transform target;
     private FieldOfView fieldOfView;
@@ -79,9 +80,11 @@ public class EnemyMovement : MonoBehaviour
     void Investigate()
     {
         MoveTowards(investigateTarget, patrolSpeed);
+        investigateTimer += Time.deltaTime;
 
-        if (Vector2.Distance(transform.position, investigateTarget) < 0.2f)
+        if (Vector2.Distance(transform.position, investigateTarget) < 0.2f || investigateTimer >= 3f)
         {
+            investigateTimer = 0f;
             currentState = State.Patrolling;
         }
     }
@@ -127,7 +130,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (fieldOfView.visibleTargets.Count > 0)
         {
-            Transform highestPriorityTarget = fieldOfView.visibleTargets[0];
+            Transform highestPriorityTarget = PlayerAlert.GetVisiblePlayerToChase(fieldOfView.visibleTargets);
 
             // Always update target if it's different (i.e. switch to Kieran if seen)
             if (target != highestPriorityTarget)
@@ -153,7 +156,7 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    //Sees if any player cone is visible
+    // Sees if any player cone is visible
     void CheckForPlayerCone()
     {
         Collider2D[] cones = Physics2D.OverlapCircleAll(transform.position, fieldOfView.viewRadius);
