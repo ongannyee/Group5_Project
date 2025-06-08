@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerAlert : MonoBehaviour
 {
@@ -14,14 +15,15 @@ public class PlayerAlert : MonoBehaviour
             DASH = GameObject.FindWithTag("DASH")?.transform;
     }
 
-    public static Transform GetPlayerToChase()
+    // Returns the visible player to chase, prioritizing Kieran
+    public static Transform GetVisiblePlayerToChase(List<Transform> visibleTargets)
     {
-        if (Kieran != null && DASH != null)
-        {
-            // Example: prioritize Kieran if both are seen — change if needed
-            return Vector3.Distance(Kieran.position, DASH.position) < 1f ? DASH : Kieran;
-        }
+        if (visibleTargets.Contains(Kieran))
+            return Kieran;
 
-        return Kieran ?? DASH;
+        if (visibleTargets.Contains(DASH))
+            return DASH;
+
+        return null;
     }
 }

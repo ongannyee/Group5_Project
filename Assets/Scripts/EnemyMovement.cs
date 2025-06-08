@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    // Enemy patrolling, chasing initialization
     public Transform[] patrolPoints;
     public float patrolSpeed = 2f;
     public float chaseSpeed = 4f;
@@ -12,10 +13,12 @@ public class EnemyMovement : MonoBehaviour
     private Transform target;
     private FieldOfView fieldOfView;
 
-    private enum State { Patrolling, Investigating, Chasing }
-    private State currentState = State.Patrolling;
+    // State of the enemy
+    private enum State { Patrolling, Investigating, Chasing }   // 3 states
+    private State currentState = State.Patrolling;              
     private Vector3 investigateTarget;
 
+    // UI being shown on enemy corresponding to the state of enemy
     public GameObject alertIndicator;
     [SerializeField] private Transform spriteTransform;
 
@@ -35,7 +38,7 @@ public class EnemyMovement : MonoBehaviour
             case State.Patrolling:
                 Patrol();
                 CheckForPlayerCone();
-                CheckForPlayer(); // << Add this here to allow detection while patrolling
+                CheckForPlayer(); // Add this here to allow detection while patrolling
                 break;
 
             case State.Investigating:
@@ -51,9 +54,9 @@ public class EnemyMovement : MonoBehaviour
         if (alertIndicator.activeSelf)
         {
             // Offset in local space, e.g. (x = right, y = up)
-            Vector3 offset = new Vector3(1.0f, 2.5f, 0f); // tweak these values to position top-right
+            Vector3 offset = new Vector3(1.0f, 2.5f, 0f);                       // alert indicator position
             alertIndicator.transform.position = transform.position + offset;
-            alertIndicator.transform.rotation = Quaternion.identity; // Keeps the icon upright
+            alertIndicator.transform.rotation = Quaternion.identity;            // Keeps the icon upright
         }
 
     }
@@ -62,14 +65,12 @@ public class EnemyMovement : MonoBehaviour
     {
         if (patrolPoints.Length == 0) return;
 
-        Transform point = patrolPoints[currentPointIndex];
-        Debug.Log($"Moving to patrol point {currentPointIndex}: {point.name}");
+        Transform point = patrolPoints[currentPointIndex];                      // Predefined patrolling point
 
-        MoveTowards(point.position, patrolSpeed);
+        MoveTowards(point.position, patrolSpeed);                               // Move the the patrol point with patrol speed
 
-        if (Vector3.Distance(transform.position, point.position) <= 0.1f)
+        if (Vector3.Distance(transform.position, point.position) <= 0.1f)       // Move to next patrol point
         {
-            Debug.Log($"Reached patrol point {currentPointIndex}");
             currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
         }
 
@@ -107,10 +108,11 @@ public class EnemyMovement : MonoBehaviour
     {
         Vector3 dir = (position - transform.position).normalized;
         
+        // Rotate to face the target
         if (dir != Vector3.zero)
         {
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle); // This rotates the whole guard
+            transform.rotation = Quaternion.Euler(0, 0, angle); 
         }
 
         transform.position += dir * speed * Time.deltaTime;
@@ -120,18 +122,38 @@ public class EnemyMovement : MonoBehaviour
         fieldOfView.SetAimDirection(dir);
     }
 
-
-
-
+    //Checks if any player is in the field of view, prioritize Kieran
     void CheckForPlayer()
     {
         if (fieldOfView.visibleTargets.Count > 0)
         {
-            target = fieldOfView.visibleTargets[0];
-            currentState = State.Chasing;
+            Transform highestPriorityTarget = fieldOfView.visibleTargets[0];
+
+            // Always update target if it's different (i.e. switch to Kieran if seen)
+            if (target != highestPriorityTarget)
+            {
+                target = highestPriorityTarget;
+                currentState = State.Chasing;
+                Debug.Log("Switched target to: " + target.name);
+            }
+            else if (currentState != State.Chasing)
+            {
+                currentState = State.Chasing;
+                Debug.Log("Started chasing: " + target.name);
+            }
+        }
+        else
+        {
+            target = null;
+            if (currentState == State.Chasing)
+            {
+                currentState = State.Patrolling;
+                Debug.Log("Lost sight of target. Returning to patrol.");
+            }
         }
     }
 
+    //Sees if any player cone is visible
     void CheckForPlayerCone()
     {
         Collider2D[] cones = Physics2D.OverlapCircleAll(transform.position, fieldOfView.viewRadius);
@@ -147,6 +169,7 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    // Checks if a target is blocked by walls
     bool IsInLineOfSight(Transform target)
     {
         Vector3 dir = target.position - transform.position;

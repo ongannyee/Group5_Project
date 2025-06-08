@@ -146,15 +146,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2804351}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.564634, y: -4.646643, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11.970001, y: -3.2600002, z: -0.31869745}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1910441278}
   - {fileID: 1953203136}
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 500875189}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &160799164
 GameObject:
@@ -334,7 +334,7 @@ Transform:
   - {fileID: 909411079}
   - {fileID: 1144675130}
   m_Father: {fileID: 500875189}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &220695224
 GameObject:
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 220695225}
   - component: {fileID: 220695226}
   m_Layer: 0
-  m_Name: 'SpriteObject '
+  m_Name: Indicator_Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -555,10 +555,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2804352}
   - {fileID: 163973493}
   - {fileID: 990790693}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &547736683
 GameObject:
@@ -590,7 +591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8764daa9896c40f46b4cc464f226c0d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureSize: 512
+  textureSize: 256
   worldSize: 50
 --- !u!212 &547736685
 SpriteRenderer:
@@ -1576,7 +1577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4522036532966363503, guid: 5cc9562119706f64ca29f42da13b85a0, type: 3}
       propertyPath: targetMask.m_Bits
-      value: 5632
+      value: 1536
       objectReference: {fileID: 0}
     - target: {fileID: 4522036532966363503, guid: 5cc9562119706f64ca29f42da13b85a0, type: 3}
       propertyPath: obstacleMask.m_Bits
@@ -1662,9 +1663,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Guard
       objectReference: {fileID: 0}
+    - target: {fileID: 4522036534477502920, guid: 5cc9562119706f64ca29f42da13b85a0, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4522036534477502921, guid: 5cc9562119706f64ca29f42da13b85a0, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4522036534477502921, guid: 5cc9562119706f64ca29f42da13b85a0, type: 3}
       propertyPath: m_LocalPosition.x

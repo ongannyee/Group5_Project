@@ -26,7 +26,7 @@ public class DASHController : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mousePos - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        //transform.rotation = Quaternion.Euler(0f, 0f, angle);                   //Rotates the object to face the mouse (on Z axis, in 2D). not really need
+        transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
         // 3. Set full-circle field of view
         if (fov != null)

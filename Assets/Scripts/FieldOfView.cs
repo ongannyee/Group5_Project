@@ -96,7 +96,9 @@ public class FieldOfView : MonoBehaviour
     public void FindVisibleTargets()
     {
         visibleTargets.Clear(); // clear old data
-        Collider2D[] targetsInViewRadius = Physics2D.OverlapCircleAll(origin, viewRadius, targetMask);  //Get nearby targets in a circular area
+        Collider2D[] targetsInViewRadius = Physics2D.OverlapCircleAll(origin, viewRadius, targetMask);  //Get nearby targets in the area
+
+        List<Transform> tempTargets = new List<Transform>();    // For prioritization
 
         foreach (var target in targetsInViewRadius)
         {
@@ -109,10 +111,17 @@ public class FieldOfView : MonoBehaviour
 
                 if (canSeeThroughWalls || !Physics2D.Raycast(origin, dirToTarget, distToTarget, obstacleMask))
                 {
-                    visibleTargets.Add(target.transform); // add target as visible obj
+                    tempTargets.Add(target.transform); // add target as visible obj
                 }
             }
         }
+
+        // Sort manually to ensure Kieran comes before DASH
+        if (PlayerAlert.Kieran != null && tempTargets.Contains(PlayerAlert.Kieran))
+            visibleTargets.Add(PlayerAlert.Kieran);
+
+        if (PlayerAlert.DASH != null && tempTargets.Contains(PlayerAlert.DASH))
+            visibleTargets.Add(PlayerAlert.DASH);
     }
 
     // Set the cone position 

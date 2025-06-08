@@ -34,7 +34,6 @@ public class KieranController : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Converts mouse position from screen space to world space.
         Vector3 direction = mousePos - transform.position;                      //Gets a direction vector from the object to the mouse.
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;    //Converts that direction into an angle in degrees.
-
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
         //1.3 Toggle move speed with spacebar
