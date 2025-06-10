@@ -12,27 +12,43 @@ public class EnemyMovement : MonoBehaviour
     private float investigateTimer = 0f;
 
     private Transform target;
-    private FieldOfView fieldOfView;
+    private FieldOfView fov;
 
     // State of the enemy
-    private enum State { Patrolling, Investigating, Chasing }   // 3 states
+    private enum State { Patrolling, Investigating, Chasing,  Alarmed}   // 4 states
     private State currentState = State.Patrolling;              
     private Vector3 investigateTarget;
+    private bool alarmed = false;           // If this guard is alarmed
+    private float alarmDelay = 3f;          // Time to pause before chasing after seeing a player
+    private float alarmTimer = 0f;
+    private Transform alarmedTarget;        // Target after alarm delay
 
     // UI being shown on enemy corresponding to the state of enemy
     public GameObject alertIndicator;
     [SerializeField] private Transform spriteTransform;
 
+    // Z3ra Hacking Abilities helper variables
+    private bool commsDisabled = false;
+    private bool visionReduced = false;
+    private float originalViewAngle;
+    private float originalViewDistance;
+
     void Start()
     {
-        fieldOfView = GetComponentInChildren<FieldOfView>();
+        fov = GetComponentInChildren<FieldOfView>();
         target = null;
+
+        if (fov != null)
+        {
+            originalViewAngle = fov.viewAngle;
+            originalViewDistance = fov.viewRadius;
+        }
     }
 
     void Update()
     {
         // Show alert only if chasing
-        alertIndicator.SetActive(currentState == State.Chasing);
+        alertIndicator.SetActive(currentState == State.Chasing || currentState == State.Alarmed);
 
         switch (currentState)
         {
@@ -45,6 +61,10 @@ public class EnemyMovement : MonoBehaviour
             case State.Investigating:
                 Investigate();
                 CheckForPlayer();
+                break;
+
+            case State.Alarmed:
+                Alarmed(); // wait before chasing
                 break;
 
             case State.Chasing:
@@ -67,7 +87,6 @@ public class EnemyMovement : MonoBehaviour
         if (patrolPoints.Length == 0) return;
 
         Transform point = patrolPoints[currentPointIndex];                      // Predefined patrolling point
-
         MoveTowards(point.position, patrolSpeed);                               // Move the the patrol point with patrol speed
 
         if (Vector3.Distance(transform.position, point.position) <= 0.1f)       // Move to next patrol point
@@ -95,15 +114,21 @@ public class EnemyMovement : MonoBehaviour
         {
             MoveTowards(target.position, chaseSpeed);
 
-            if (!fieldOfView.visibleTargets.Contains(target))
+            if (!fov.visibleTargets.Contains(target))
             {
-                currentState = State.Patrolling;
-                target = null;
+                if (!alarmed)
+                {
+                    currentState = State.Patrolling;
+                    target = null;
+                    Debug.Log(name + " lost target, returning to patrol.");
+                }
+                // else: stay in chase mode even without visibility
             }
         }
         else
         {
-            currentState = State.Patrolling;
+            if (!alarmed)
+                currentState = State.Patrolling;
         }
     }
 
@@ -121,37 +146,30 @@ public class EnemyMovement : MonoBehaviour
         transform.position += dir * speed * Time.deltaTime;
 
         // Update Field of View origin and aim
-        fieldOfView.SetOrigin(transform.position);
-        fieldOfView.SetAimDirection(dir);
+        fov.SetOrigin(transform.position);
+        fov.SetAimDirection(dir);
     }
 
-    //Checks if any player is in the field of view, prioritize Kieran
+    //!!NOT WORKING YET. Checks if any player is in the field of view, prioritize Kieran
     void CheckForPlayer()
     {
-        if (fieldOfView.visibleTargets.Count > 0)
+        if (fov.visibleTargets.Count > 0)
         {
-            Transform highestPriorityTarget = PlayerAlert.GetVisiblePlayerToChase(fieldOfView.visibleTargets);
+            Transform priorityTarget = PlayerAlert.GetVisiblePlayerToChase(fov.visibleTargets);
 
-            // Always update target if it's different (i.e. switch to Kieran if seen)
-            if (target != highestPriorityTarget)
+            // If not already chasing or alarmed
+            if (!alarmed && currentState != State.Alarmed)
             {
-                target = highestPriorityTarget;
-                currentState = State.Chasing;
-                Debug.Log("Switched target to: " + target.name);
+                alarmTimer = 0f;
+                alarmedTarget = priorityTarget;
+                currentState = State.Alarmed;
+                Debug.Log(name + " saw " + priorityTarget.name + ", starting alarm delay!");
             }
-            else if (currentState != State.Chasing)
+            else if (alarmed)
             {
+                // Already alarmed, just update target
+                target = priorityTarget;
                 currentState = State.Chasing;
-                Debug.Log("Started chasing: " + target.name);
-            }
-        }
-        else
-        {
-            target = null;
-            if (currentState == State.Chasing)
-            {
-                currentState = State.Patrolling;
-                Debug.Log("Lost sight of target. Returning to patrol.");
             }
         }
     }
@@ -159,7 +177,7 @@ public class EnemyMovement : MonoBehaviour
     // Sees if any player cone is visible
     void CheckForPlayerCone()
     {
-        Collider2D[] cones = Physics2D.OverlapCircleAll(transform.position, fieldOfView.viewRadius);
+        Collider2D[] cones = Physics2D.OverlapCircleAll(transform.position, fov.viewRadius);
 
         foreach (var cone in cones)
         {
@@ -176,7 +194,82 @@ public class EnemyMovement : MonoBehaviour
     bool IsInLineOfSight(Transform target)
     {
         Vector3 dir = target.position - transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, dir.magnitude, fieldOfView.obstacleMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, dir.magnitude, fov.obstacleMask);
         return hit.collider == null;
+    }
+
+    // Called by NoiseEmitter on Kieran or DASH
+    public void HeardNoise(Vector3 noisePos)
+    {
+        if (currentState == State.Chasing || currentState == State.Alarmed || alarmed)  //ignore noise when chasing/alarmed
+            return;
+
+        investigateTarget = noisePos;
+        investigateTimer = 0f; // Reset timer when moving to new noise
+        currentState = State.Investigating;
+        Debug.Log(name + " heard a noise and is investigating.");
+    }
+
+    void Alarmed()
+    {
+        alarmTimer += Time.deltaTime;
+
+        if (alarmTimer >= alarmDelay)
+        {
+            alarmed = true;
+            currentState = State.Chasing;
+            target = alarmedTarget;
+            alarmedTarget = null;
+            Debug.Log(name + " is alarmed and chasing permanently!");
+        }
+    }
+
+    public void SetTarget(Transform t)
+    {
+        alarmed = true;
+        currentState = State.Chasing;
+        target = t;
+        Debug.Log(name + " forced to chase via CCTV alarm: " + t.name);
+    }
+
+    // Z3ra skills
+    public void DisableComms(float duration)
+    {
+        StartCoroutine(DisableCommsCoroutine(duration));
+    }
+
+    IEnumerator DisableCommsCoroutine(float duration)
+    {
+        commsDisabled = true;
+        yield return new WaitForSeconds(duration);
+        commsDisabled = false;
+    }
+
+    public bool AreCommsDisabled()
+    {
+        return commsDisabled;
+    }
+
+    public void ReduceVisionTemporarily(float duration)
+    {
+        if (fov != null)
+            StartCoroutine(ReduceVisionCoroutine(duration));
+    }
+
+    IEnumerator ReduceVisionCoroutine(float duration)
+    {
+        visionReduced = true;
+        if (fov != null)
+        {
+            fov.viewAngle *= 0.5f;
+            fov.viewRadius *= 0.5f;
+        }
+        yield return new WaitForSeconds(duration);
+        if (fov != null)
+        {
+            fov.viewAngle = originalViewAngle;
+            fov.viewRadius = originalViewDistance;
+        }
+        visionReduced = false;
     }
 }

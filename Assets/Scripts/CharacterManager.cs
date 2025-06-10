@@ -12,8 +12,16 @@ public class CharacterManager : MonoBehaviour
     private bool isControllingKieran = true;
     private bool dashDeployed = false;
 
+    public FogOfWar fogOfWar;
+    public LayerMask obstacleMask;
+
+    private KieranController kieranController;
+    private DASHController dashController;
+
     void Start()
     {
+        kieranController = kieran.GetComponent<KieranController>();
+        dashController = dash.GetComponent<DASHController>();
         kieran.SetActive(true);
         dash.SetActive(false); // DASH is not in the world yet
         SetActiveCharacter(kieran);
@@ -22,7 +30,7 @@ public class CharacterManager : MonoBehaviour
     void Update()
     {
         // Deploy DASH
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             if (!dashDeployed)
             {
@@ -40,6 +48,48 @@ public class CharacterManager : MonoBehaviour
             SwapControl();
         }
     }
+
+    void LateUpdate()
+    {
+        if (fogOfWar == null || kieran == null || dash == null) return;
+
+        List<List<Vector3>> coneMeshes = new List<List<Vector3>>();
+        List<Vector3> circularCenters = new List<Vector3>();
+        List<float> circularRadii = new List<float>();
+        List<bool> seesThroughWalls = new List<bool>();
+
+        // --- Always include Kieran if active
+        if (kieran.activeSelf)
+        {
+            fogOfWar.RevealConeMesh(kieranController.fov.GetWorldVertices());
+            fogOfWar.RevealCircularBlocked(kieran.transform.position, kieranController.circularRadius, LayerMask.GetMask("Obstacles"));
+        }
+
+        // --- Include DASH if active
+        if (dash.activeSelf)
+        {
+            coneMeshes.Add(dashController.fov.GetWorldVertices());
+            circularCenters.Add(dash.transform.position);
+            circularRadii.Add(dashController.circularRadius);
+            seesThroughWalls.Add(dashController.canSeeThroughWalls);
+        }
+        
+        // --- Reveal vision per character
+        for (int i = 0; i < coneMeshes.Count; i++)
+        {
+            //fogOfWar.RevealConeMesh(coneMeshes[i]);
+
+            if (seesThroughWalls[i])
+            {
+                fogOfWar.Reveal(circularCenters[i], circularRadii[i]);
+            }
+            else
+            {
+                fogOfWar.RevealCircularBlocked(circularCenters[i], circularRadii[i], obstacleMask);
+            }
+        }
+    }
+
 
     void DeployDash()
     {

@@ -229,4 +229,18 @@ public class FogOfWar : MonoBehaviour
             colors[i].a = 255; // fully black
         }
     }
+
+    //Handle Kieran and DASH vision
+    public void RevealFromMultipleSources(List<List<Vector3>> coneMeshes, List<Vector3> circularCenters, float radius, LayerMask obstacleMask)
+    {
+        foreach (var cone in coneMeshes)
+        {
+            RevealConeMesh(cone);
+        }
+
+        foreach (var center in circularCenters)
+        {
+            RevealCircularBlocked(center, radius, obstacleMask);
+        }
+    }
 }
