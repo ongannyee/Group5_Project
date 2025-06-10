@@ -7,6 +7,8 @@ TagManager:
   - PlayerVision
   - Kieran
   - DASH
+  - Guard
+  - CCTV
   layers:
   - Default
   - TransparentFX
@@ -23,7 +25,7 @@ TagManager:
   - Enemy
   - Guard
   - Router
-  - 
+  - CCTV
   - 
   - 
   - 
@@ -52,4 +54,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 953189147
+    locked: 0
+  - name: Enemy
+    uniqueID: 3019296135
     locked: 0

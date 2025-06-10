@@ -8,7 +8,7 @@ using System.Linq;
 public class FieldOfView : MonoBehaviour
 {
     // 1. Variables related to cone vision
-    public float viewRadius = 8f;
+    public float viewRadius;
     [Range(0, 360)] public float viewAngle = 90f;
     public int rayCount = 360;
     public LayerMask obstacleMask;  // to detect obstacles like walls

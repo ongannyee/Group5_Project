@@ -21,7 +21,6 @@ public class KieranController : MonoBehaviour
 
     // 3. Hacking and item system
     public GameObject z3raHackingUI;        // UI panel reference
-    public int overridePoints = 300;        // Starting OP, adjustable in Inspector
     public bool isLockedByScript = false;   // Unable to move while lockpicking
     public Z3raHackingManager z3ra;
 
@@ -91,7 +90,7 @@ public class KieranController : MonoBehaviour
         GetComponent<NoiseEmitter>().emitNoise = isMoving;
     }
 
-    //2.1 Cone Vision and Circular vision
+    //2.1 Cone Vision and Circular vision direction
     void HandleVisionReveal()
     {
         if (fov == null || fogOfWar == null) return;

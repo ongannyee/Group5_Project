@@ -53,10 +53,10 @@ public class CharacterManager : MonoBehaviour
     {
         if (fogOfWar == null || kieran == null || dash == null) return;
 
-        List<List<Vector3>> coneMeshes = new List<List<Vector3>>();
+/*         List<List<Vector3>> coneMeshes = new List<List<Vector3>>();
         List<Vector3> circularCenters = new List<Vector3>();
         List<float> circularRadii = new List<float>();
-        List<bool> seesThroughWalls = new List<bool>();
+        List<bool> seesThroughWalls = new List<bool>(); */
 
         // --- Always include Kieran if active
         if (kieran.activeSelf)
@@ -68,14 +68,22 @@ public class CharacterManager : MonoBehaviour
         // --- Include DASH if active
         if (dash.activeSelf)
         {
-            coneMeshes.Add(dashController.fov.GetWorldVertices());
-            circularCenters.Add(dash.transform.position);
-            circularRadii.Add(dashController.circularRadius);
-            seesThroughWalls.Add(dashController.canSeeThroughWalls);
+            //fogOfWar.RevealConeMesh(dashController.fov.GetWorldVertices());
+
+            if (dashController.canSeeThroughWalls)
+            {
+                //fogOfWar.Reveal(dash.transform.position, dashController.circularRadius);    
+                fogOfWar.RevealCircularBlocked(dash.transform.position, dashController.circularRadius, LayerMask.GetMask("Default"));
+                
+            }
+            else
+            {
+                fogOfWar.RevealCircularBlocked(dash.transform.position, dashController.circularRadius, obstacleMask);
+            }
         }
-        
+
         // --- Reveal vision per character
-        for (int i = 0; i < coneMeshes.Count; i++)
+/*         for (int i = 0; i < coneMeshes.Count; i++)
         {
             //fogOfWar.RevealConeMesh(coneMeshes[i]);
 
@@ -87,7 +95,7 @@ public class CharacterManager : MonoBehaviour
             {
                 fogOfWar.RevealCircularBlocked(circularCenters[i], circularRadii[i], obstacleMask);
             }
-        }
+        } */
     }
 
 

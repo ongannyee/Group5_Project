@@ -61,9 +61,9 @@ public class OfficeDoor : MonoBehaviour
 
     public void UnlockInstantly()
     {
-        StopAllCoroutines();
-        isLocked = false;
-        isBeingLockpicked = true;
+        //StopAllCoroutines();
+/*         isLocked = false;
+        isBeingLockpicked = true; */
         gameObject.SetActive(false);
     }
 }

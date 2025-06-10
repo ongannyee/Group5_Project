@@ -5,12 +5,13 @@ using UnityEngine;
 public class NoiseEmitter : MonoBehaviour
 {
     [Header("Regular Movement Noise")]
-    public float noiseRadius = 5f;         // Radius guards can hear noise while moving
+    public float baseNoiseRadius = 5f;         // Radius guards can hear noise while moving
+    public float maxNoiseRadius = 8f;
     public float noiseCooldown = 0.5f;     // Cooldown between each noise pulse
     public LayerMask enemyLayer;           // Detect guards within radius
     public bool emitNoise = false;         // Set true when character is moving
-
     private float noiseTimer = 0f;
+    private Rigidbody2D rb;
 
     [Header("One-Time Pulse (Play Noise Skill)")]
     public float pulseRadius = 10f;         // Radius of the noise pulse
@@ -19,8 +20,16 @@ public class NoiseEmitter : MonoBehaviour
     private float pulseTimer = 0f;
     private bool isPulsing = false;
 
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     void Update()
     {
+        float speed = rb.velocity.magnitude;
+        float noiseRadius = Mathf.Lerp(baseNoiseRadius, maxNoiseRadius, speed/12f);
+        
         // Regular movement-based noise emission
         if (emitNoise)
         {
@@ -67,4 +76,12 @@ public class NoiseEmitter : MonoBehaviour
         isPulsing = true;
         pulseTimer = pulseDuration;
     }
+
+    void OnDrawGizmos()
+{
+    Gizmos.color = Color.red;
+    Gizmos.DrawWireSphere(transform.position, baseNoiseRadius);
+    Gizmos.color = Color.yellow;
+    Gizmos.DrawWireSphere(transform.position, maxNoiseRadius);
+}
 }

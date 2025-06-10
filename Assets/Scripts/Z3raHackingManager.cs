@@ -6,13 +6,17 @@ using UnityEngine.UI;
 public class Z3raHackingManager : MonoBehaviour
 {
     //public Text overridePointText;                   // UI Text to display current OP
-    public int currentOP = 300;                      // Starting OP
+    public int currentOP = 10000;                      // Starting OP
 
+    public GameObject kieran;
+    public GameObject DASH;
     public DASHController dashController;            // Reference to DASH for thermal sweep
+
+    public float jamCommsDuration = 10f;
+    public float thermalSweepDuration = 3f;
+    public float routerPingDuration = 15f;
     public float flickerDuration = 3f;
     public float powerSurgeDuration = 10f;
-    public float thermalSweepDuration = 3f;
-    public float jamCommsDuration = 3f;
 
     // Unlock flags for abilities (can be used to unlock later during progression)
     public bool[] unlockedAbilities = new bool[6] { true, true, true, true, true, true }; 
@@ -33,6 +37,7 @@ public class Z3raHackingManager : MonoBehaviour
         if (!HasEnoughOP(150)) return;
         SpendOP(150);
         StartCoroutine(JamCommsRoutine());
+        Debug.Log("Jam Guard Communication");
     }
 
     IEnumerator JamCommsRoutine()
@@ -45,11 +50,12 @@ public class Z3raHackingManager : MonoBehaviour
         yield return new WaitForSeconds(jamCommsDuration);
     }
 
-    public  void TryThermalSweep()
+    public void TryThermalSweep()
     {
         if (!HasEnoughOP(100)) return;
         SpendOP(100);
         StartCoroutine(ThermalSweepRoutine());
+        Debug.Log("Thermal Sweep");
     }
 
     IEnumerator ThermalSweepRoutine()
@@ -65,8 +71,13 @@ public class Z3raHackingManager : MonoBehaviour
         Router[] routers = FindObjectsOfType<Router>();
         foreach (var router in routers)
         {
-            router.RevealEnemies(); 
+            if(router.isActivated)
+            {
+                Debug.Log("Ping progress");
+                router.RevealEnemies(routerPingDuration); 
+            }
         }
+        Debug.Log("Router Ping");
     }
 
     public void TryFlickerSurveillance()
@@ -78,6 +89,7 @@ public class Z3raHackingManager : MonoBehaviour
         {
             cam.Flicker(flickerDuration); // You will implement this on CCTV
         }
+        Debug.Log("Flicker Surveillance");
     }
 
     public void TryPowerSurge()
@@ -94,20 +106,30 @@ public class Z3raHackingManager : MonoBehaviour
         {
             guard.ReduceVisionTemporarily(powerSurgeDuration);
         }
+        Debug.Log("Power Surge end");
     }
 
     public void TryHackDoor()
     {
         if (!HasEnoughOP(150)) return;
-        SpendOP(150);
         OfficeDoor[] doors = FindObjectsOfType<OfficeDoor>();
+        
         foreach (var door in doors)
         {
-            if (Vector2.Distance(transform.position, door.transform.position) < 3f)
+            Debug.Log(door);
+            if (Vector2.Distance(kieran.transform.position, door.transform.position) < 3f)
             {
+                Debug.Log("Unlocking Door");
+                SpendOP(150);
                 door.UnlockInstantly();
                 break;
             }
+            else
+            {
+                Debug.Log("No doors found");
+                return;
+            }
         }
+        Debug.Log("Hack Door");
     }
 }

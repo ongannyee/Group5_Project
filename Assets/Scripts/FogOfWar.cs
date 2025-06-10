@@ -19,7 +19,6 @@ public class FogOfWar : MonoBehaviour
         fogTexture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
         fogTexture.filterMode = FilterMode.Bilinear;
 
-
         // Set Texture to Fully Black
         colors = new Color32[textureSize * textureSize];
         for (int i = 0; i < colors.Length; i++)
@@ -37,7 +36,7 @@ public class FogOfWar : MonoBehaviour
         pixelPerUnit = textureSize / worldSize;
     }
 
-    //reveals a circular area, not block by obstacles
+/*     //reveals a circular area, not block by obstacles
     public void Reveal(Vector3 worldPos, float radius)
     {
         Vector2Int center = WorldToTextureCoord(worldPos);              //Converts the world position (e.g., player position) into texture coordinates (pixels).
@@ -62,9 +61,9 @@ public class FogOfWar : MonoBehaviour
                 }
             }
         }
-    }
+    } */
 
-    // Reveal in ciruclar blocked by obstacles
+    // Reveal ciruclar vision
     public void RevealCircularBlocked(Vector3 center, float radius, LayerMask obstacleMask, int rayCount = 360)
     {
         float angleStep = 360f / rayCount;      //Divides the full circle into equal segments.
@@ -230,7 +229,7 @@ public class FogOfWar : MonoBehaviour
         }
     }
 
-    //Handle Kieran and DASH vision
+/*     //Handle Kieran and DASH vision
     public void RevealFromMultipleSources(List<List<Vector3>> coneMeshes, List<Vector3> circularCenters, float radius, LayerMask obstacleMask)
     {
         foreach (var cone in coneMeshes)
@@ -242,5 +241,5 @@ public class FogOfWar : MonoBehaviour
         {
             RevealCircularBlocked(center, radius, obstacleMask);
         }
-    }
+    } */
 }

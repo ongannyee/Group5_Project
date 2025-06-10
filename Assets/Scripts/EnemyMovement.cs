@@ -12,7 +12,7 @@ public class EnemyMovement : MonoBehaviour
     private float investigateTimer = 0f;
 
     private Transform target;
-    private FieldOfView fov;
+    public FieldOfView fov;
 
     // State of the enemy
     private enum State { Patrolling, Investigating, Chasing,  Alarmed}   // 4 states
@@ -29,18 +29,17 @@ public class EnemyMovement : MonoBehaviour
 
     // Z3ra Hacking Abilities helper variables
     private bool commsDisabled = false;
-    private bool visionReduced = false;
     private float originalViewAngle;
     private float originalViewDistance;
 
     void Start()
     {
-        fov = GetComponentInChildren<FieldOfView>();
+        //fov = GetComponentInChildren<FieldOfView>();
         target = null;
 
         if (fov != null)
         {
-            originalViewAngle = fov.viewAngle;
+            //originalViewAngle = fov.viewAngle;
             originalViewDistance = fov.viewRadius;
         }
     }
@@ -214,13 +213,19 @@ public class EnemyMovement : MonoBehaviour
     {
         alarmTimer += Time.deltaTime;
 
-        if (alarmTimer >= alarmDelay)
+        if (alarmTimer >= alarmDelay && !commsDisabled)
         {
-            alarmed = true;
-            currentState = State.Chasing;
-            target = alarmedTarget;
-            alarmedTarget = null;
-            Debug.Log(name + " is alarmed and chasing permanently!");
+            EnemyMovement[] allGuards = FindObjectsOfType<EnemyMovement>();
+            foreach (var guard in allGuards)
+            {
+                guard.SetTarget(alarmedTarget); 
+            }
+            Debug.Log(name + " is alarmed, all guards will will chase him permanently!"); 
+        }
+        else if (alarmTimer >= alarmDelay)
+        {
+            SetTarget(alarmedTarget);
+            Debug.Log("JamComms break down the communication. The only guard who detects " + name + "will chase him permanently!"); 
         }
     }
 
@@ -229,7 +234,6 @@ public class EnemyMovement : MonoBehaviour
         alarmed = true;
         currentState = State.Chasing;
         target = t;
-        Debug.Log(name + " forced to chase via CCTV alarm: " + t.name);
     }
 
     // Z3ra skills
@@ -245,10 +249,10 @@ public class EnemyMovement : MonoBehaviour
         commsDisabled = false;
     }
 
-    public bool AreCommsDisabled()
+/*     public bool AreCommsDisabled()
     {
         return commsDisabled;
-    }
+    } */
 
     public void ReduceVisionTemporarily(float duration)
     {
@@ -258,18 +262,18 @@ public class EnemyMovement : MonoBehaviour
 
     IEnumerator ReduceVisionCoroutine(float duration)
     {
-        visionReduced = true;
         if (fov != null)
         {
-            fov.viewAngle *= 0.5f;
+            //fov.viewAngle *= 0.5f;
             fov.viewRadius *= 0.5f;
+            Debug.Log("Enemy Vision is reduced!");
         }
         yield return new WaitForSeconds(duration);
         if (fov != null)
         {
-            fov.viewAngle = originalViewAngle;
+            //fov.viewAngle = originalViewAngle;
             fov.viewRadius = originalViewDistance;
+            Debug.Log("Enemy Vision is restored!");
         }
-        visionReduced = false;
     }
 }

@@ -7,6 +7,7 @@ public class CCTV : MonoBehaviour
     public FieldOfView fov;
     public bool isFlickering = false;
     private float flickerTimer;
+    private float originalViewDistance;
 
     public GameObject alertIndicator;
     [SerializeField] private Transform spriteTransform;
@@ -21,10 +22,19 @@ public class CCTV : MonoBehaviour
     void Start()
     {
         startRotation = transform.rotation;
+        originalViewDistance = fov.viewRadius;
     }
 
     void Update()
     {
+        if(isFlickering)
+        {
+            flickerTimer -= Time.deltaTime;
+            if (flickerTimer <= 0f)
+                StopFlicker();
+            return;
+        }
+
         // Show alert if player visible
         alertIndicator.SetActive(fov.visibleTargets.Count > 0);
 
@@ -46,12 +56,6 @@ public class CCTV : MonoBehaviour
 
         if (!isFlickering)
             CheckForPlayer();
-        else
-        {
-            flickerTimer -= Time.deltaTime;
-            if (flickerTimer <= 0f)
-                StopFlicker();
-        }
     }
 
     void CheckForPlayer()
@@ -78,13 +82,13 @@ public class CCTV : MonoBehaviour
     {
         isFlickering = true;
         flickerTimer = duration;
-        fov.enabled = false;
+        fov.viewRadius = 0f;
     }
 
     public void StopFlicker()
     {
         isFlickering = false;
-        fov.enabled = true;
+        fov.viewRadius = originalViewDistance;
     }
 
     public void Flicker(float duration)
@@ -94,8 +98,7 @@ public class CCTV : MonoBehaviour
 
     IEnumerator FlickerCoroutine(float duration)
     {
-        gameObject.SetActive(false);
+        StartFlicker(duration);
         yield return new WaitForSeconds(duration);
-        gameObject.SetActive(true);
     }
 }
