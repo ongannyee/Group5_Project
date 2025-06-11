@@ -10,7 +10,6 @@ public class CCTV : MonoBehaviour
     private float originalViewDistance;
 
     public GameObject alertIndicator;
-    [SerializeField] private Transform spriteTransform;
 
     public bool isRotate = true;
     public float rotateSpeed = 20f;

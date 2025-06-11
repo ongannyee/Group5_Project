@@ -52,7 +52,8 @@ public class KieranController : MonoBehaviour
     {
         //1.4 Player movement
         if (isLockedByScript) return;   //Unable movement while lockpicking
-        theRB.MovePosition(theRB.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);
+        //theRB.MovePosition(theRB.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);
+        theRB.velocity = movement.normalized * moveSpeed;
     }
 
     // 1.1 Get movement input

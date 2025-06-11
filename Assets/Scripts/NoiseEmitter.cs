@@ -5,8 +5,8 @@ using UnityEngine;
 public class NoiseEmitter : MonoBehaviour
 {
     [Header("Regular Movement Noise")]
-    public float baseNoiseRadius = 5f;         // Radius guards can hear noise while moving
-    public float maxNoiseRadius = 8f;
+    public float baseNoiseRadius;         // Radius guards can hear noise while moving
+    public float maxNoiseRadius;
     public float noiseCooldown = 0.5f;     // Cooldown between each noise pulse
     public LayerMask enemyLayer;           // Detect guards within radius
     public bool emitNoise = false;         // Set true when character is moving
@@ -36,6 +36,7 @@ public class NoiseEmitter : MonoBehaviour
             noiseTimer -= Time.deltaTime;
             if (noiseTimer <= 0f)
             {
+                Debug.Log($"Speed: {speed}, Lerp factor: {speed/12f}, NoiseRadius: {noiseRadius}");
                 EmitNoise(noiseRadius);
                 noiseTimer = noiseCooldown;
             }

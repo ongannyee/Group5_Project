@@ -21,13 +21,13 @@ public class DASHController : MonoBehaviour
     private bool isInCammo = false;
     private float cammoCooldown = 10f;
     private float cammoCooldownTimer = 0f;
+    private SpriteRenderer spriteRenderer;
+    private bool canMove = true;
 
     // Play Noise
     private float noiseCooldown = 10f;
     private float noiseCooldownTimer = 0f;
-    private NoiseEmitter noiseEmitter;
-    private SpriteRenderer spriteRenderer;
-    private bool canMove = true;
+    private NoiseEmitter noiseEmitter;  
 
     //Connect to Router
     public LayerMask routerLayer;
@@ -98,7 +98,8 @@ public class DASHController : MonoBehaviour
     void FixedUpdate()
     {
         // 1.3 Move
-        theRB.MovePosition(theRB.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);
+        //theRB.MovePosition(theRB.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);
+        theRB.velocity = movement.normalized * moveSpeed;
     }
 
     // 3. DASH SKILLS

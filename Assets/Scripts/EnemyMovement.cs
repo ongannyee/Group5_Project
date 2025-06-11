@@ -25,7 +25,7 @@ public class EnemyMovement : MonoBehaviour
 
     // UI being shown on enemy corresponding to the state of enemy
     public GameObject alertIndicator;
-    [SerializeField] private Transform spriteTransform;
+    //[SerializeField] private Transform spriteTransform;
 
     // Z3ra Hacking Abilities helper variables
     private bool commsDisabled = false;
@@ -74,7 +74,7 @@ public class EnemyMovement : MonoBehaviour
         if (alertIndicator.activeSelf)
         {
             // Offset in local space, e.g. (x = right, y = up)
-            Vector3 offset = new Vector3(1.0f, 2.5f, 0f);                       // alert indicator position
+            Vector3 offset = new Vector3(1.5f, 2.5f, 0f);                       // alert indicator position
             alertIndicator.transform.position = transform.position + offset;
             alertIndicator.transform.rotation = Quaternion.identity;            // Keeps the icon upright
         }
