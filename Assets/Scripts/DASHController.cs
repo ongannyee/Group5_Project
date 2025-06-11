@@ -105,7 +105,7 @@ public class DASHController : MonoBehaviour
     // === Skill 1: Cammo Mode ===
     void TryCammoMode()
     {
-        if (cammoCooldownTimer > 0) 
+        if (cammoCooldownTimer > 0 && !isInCammo) 
         {
             Debug.Log("Cooldown: " + cammoCooldownTimer);
             return;
@@ -119,13 +119,16 @@ public class DASHController : MonoBehaviour
             noiseEmitter.emitNoise = false;
             spriteRenderer.color = new Color(1, 1, 1, 0.3f); // translucent effect
             cammoCooldownTimer = cammoCooldown;
+            //need handle timer
+            spriteRenderer.sortingLayerName = "Camo";
         }
         else
         {
             // Exit Cammo manually
             isInCammo = false;
             canMove = true;
-            spriteRenderer.color = Color.white;
+            spriteRenderer.color = new Color(0, 0, 1, 1f);
+            spriteRenderer.sortingLayerName = "DASH";
         }
     }
 

@@ -24,6 +24,9 @@ public class KieranController : MonoBehaviour
     public bool isLockedByScript = false;   // Unable to move while lockpicking
     public Z3raHackingManager z3ra;
 
+    // 4. Reach Goal
+    private bool isNearGoal = false;
+
     void Start()
     {
         moveSpeed = normalSpeed; // Start at normal speed
@@ -42,6 +45,7 @@ public class KieranController : MonoBehaviour
         HandleVisionReveal();
         HandlePlayerAbilities();
         LockPickingOfficeDoor();
+        returnReplica();
     }
 
     void FixedUpdate()
@@ -162,6 +166,30 @@ public class KieranController : MonoBehaviour
                     break;
                 }
             }
+        }
+    }
+
+    void returnReplica()
+    {
+        if (isNearGoal && Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("You Win!");
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Goal"))
+        {
+            isNearGoal = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Goal"))
+        {
+            isNearGoal = false;
         }
     }
 }

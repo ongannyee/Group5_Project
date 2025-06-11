@@ -9,6 +9,7 @@ TagManager:
   - DASH
   - Guard
   - CCTV
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -26,8 +27,8 @@ TagManager:
   - Guard
   - Router
   - CCTV
-  - 
-  - 
+  - Goal
+  - Camo
   - 
   - 
   - 
