@@ -2,6 +2,14 @@
 using System.Collections;
 using UnityEngine;
 
+public enum GuardType
+{
+    None,
+    TypeA,
+    TypeB,
+    // Extendable
+}
+
 public class EnemyMovement : MonoBehaviour
 {
     // Enemy patrolling, chasing initialization
@@ -10,18 +18,23 @@ public class EnemyMovement : MonoBehaviour
     public float chaseSpeed = 4f;
     private int currentPointIndex = 0;
     private float investigateTimer = 0f;
+    private float maxInvestigateTimer;
+    private bool isChecked = false;
 
     private Transform target;
     public FieldOfView fov;
 
     // State of the enemy
-    private enum State { Patrolling, Investigating, Chasing,  Alarmed}   // 4 states
+    private enum State { Patrolling, Investigating, Chasing,  Alarmed, Sleep}   // 5 states
     private State currentState = State.Patrolling;              
     private Vector3 investigateTarget;
     private bool alarmed = false;           // If this guard is alarmed
     private float alarmDelay = 3f;          // Time to pause before chasing after seeing a player
     private float alarmTimer = 0f;
     private Transform alarmedTarget;        // Target after alarm delay
+    private bool isSleeping = false;
+    public Vector2 movement;
+    private SpriteRenderer sr;
 
     // UI being shown on enemy corresponding to the state of enemy
     public GameObject alertIndicator;
@@ -31,6 +44,12 @@ public class EnemyMovement : MonoBehaviour
     private bool commsDisabled = false;
     private float originalViewAngle;
     private float originalViewDistance;
+
+    // Actions on Sleeping Guard
+    [HideInInspector] public bool isBeingDragged = false;
+    [HideInInspector] public Transform draggedBy = null;
+    public GuardType guardType = GuardType.TypeA;
+
 
     void Start()
     {
@@ -42,6 +61,7 @@ public class EnemyMovement : MonoBehaviour
             //originalViewAngle = fov.viewAngle;
             originalViewDistance = fov.viewRadius;
         }
+        sr = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -54,7 +74,8 @@ public class EnemyMovement : MonoBehaviour
             case State.Patrolling:
                 Patrol();
                 CheckForPlayerCone();
-                CheckForPlayer(); // Add this here to allow detection while patrolling
+                CheckForPlayer(); 
+                InvestigateSleepingGuard();
                 break;
 
             case State.Investigating:
@@ -69,6 +90,15 @@ public class EnemyMovement : MonoBehaviour
             case State.Chasing:
                 Chase();
                 break;
+
+            case State.Sleep:
+                Sleep();
+                break;
+        }
+
+        if (currentState == State.Sleep && isBeingDragged && draggedBy != null)
+        {
+            transform.position = Vector3.Lerp(transform.position, draggedBy.position + new Vector3(-0.5f, -0.5f, 0f), 10f * Time.deltaTime);
         }
 
         if (alertIndicator.activeSelf)
@@ -97,19 +127,28 @@ public class EnemyMovement : MonoBehaviour
 
     void Investigate()
     {
-        MoveTowards(investigateTarget, patrolSpeed);
-        investigateTimer += Time.deltaTime;
-
-        if (Vector2.Distance(transform.position, investigateTarget) < 0.2f || investigateTimer >= 3f)
+        if(!isSleeping)
         {
-            investigateTimer = 0f;
-            currentState = State.Patrolling;
+     /*        Suppose stop and stare at sleeping guard
+            if(Vector2.Distance(transform.position, investigateTarget) < 0.2f)
+            {
+                movement = Vector2.zero;
+            } */
+            
+            MoveTowards(investigateTarget, patrolSpeed);
+            investigateTimer += Time.deltaTime;
+
+            if (investigateTimer >= maxInvestigateTimer)
+            {
+                investigateTimer = 0f;
+                currentState = State.Patrolling;
+            }
         }
     }
 
     void Chase()
     {
-        if (target != null)
+        if (target != null && !isSleeping)
         {
             MoveTowards(target.position, chaseSpeed);
 
@@ -129,6 +168,19 @@ public class EnemyMovement : MonoBehaviour
             if (!alarmed)
                 currentState = State.Patrolling;
         }
+    }
+
+    void Sleep()
+    {
+        movement = Vector2.zero;
+        fov.viewRadius = 0;
+        FieldOfView fieldofview = GetComponent<FieldOfView>();
+        if (fieldofview != null) 
+        {
+            fieldofview.enabled = false;
+        }
+        int guardSleepingLayer = LayerMask.NameToLayer("Guard-Sleeping");
+        gameObject.layer = guardSleepingLayer;
     }
 
     void MoveTowards(Vector3 position, float speed)
@@ -152,23 +204,51 @@ public class EnemyMovement : MonoBehaviour
     //!!NOT WORKING YET. Checks if any player is in the field of view, prioritize Kieran
     void CheckForPlayer()
     {
-        if (fov.visibleTargets.Count > 0)
+        foreach (Transform t in fov.visibleTargets)
         {
-            Transform priorityTarget = PlayerAlert.GetVisiblePlayerToChase(fov.visibleTargets);
+            KieranController kieran = t.GetComponent<KieranController>();
+            if (kieran != null)
+            {
+                float dist = Vector2.Distance(transform.position, kieran.transform.position);
+                bool overlapping = dist < 0.5f;
 
-            // If not already chasing or alarmed
-            if (!alarmed && currentState != State.Alarmed)
-            {
-                alarmTimer = 0f;
-                alarmedTarget = priorityTarget;
-                currentState = State.Alarmed;
-                Debug.Log(name + " saw " + priorityTarget.name + ", starting alarm delay!");
+                if (kieran.isDisguised && kieran.disguisedAs == this.guardType && !overlapping)
+                {
+                    // Kieran is disguised and not overlapping - skip detection
+                    continue;
+                }
+
+                // Not disguised or overlapping - trigger alarm
+                if (!alarmed && currentState != State.Alarmed)
+                {
+                    alarmTimer = 0f;
+                    alarmedTarget = kieran.transform;
+                    currentState = State.Alarmed;
+                    Debug.Log(name + " saw disguised or undisguised Kieran.");
+                }
+                else if (alarmed)
+                {
+                    target = kieran.transform;
+                    currentState = State.Chasing;
+                }
+                return;
             }
-            else if (alarmed)
+
+            // Detect DASH normally
+            if (t.name.Contains("DASH"))
             {
-                // Already alarmed, just update target
-                target = priorityTarget;
-                currentState = State.Chasing;
+                if (!alarmed)
+                {
+                    alarmTimer = 0f;
+                    alarmedTarget = t;
+                    currentState = State.Alarmed;
+                }
+                else
+                {
+                    target = t;
+                    currentState = State.Chasing;
+                }
+                return;
             }
         }
     }
@@ -183,6 +263,7 @@ public class EnemyMovement : MonoBehaviour
             if (cone.CompareTag("PlayerVision") && IsInLineOfSight(cone.transform))
             {
                 investigateTarget = cone.transform.position;
+                maxInvestigateTimer = 3f;
                 currentState = State.Investigating;
                 break;
             }
@@ -231,9 +312,12 @@ public class EnemyMovement : MonoBehaviour
 
     public void SetTarget(Transform t)
     {
-        alarmed = true;
-        currentState = State.Chasing;
-        target = t;
+        if(currentState != State.Sleep)
+        {
+            alarmed = true;
+            currentState = State.Chasing;
+            target = t;
+        }
     }
 
     // Z3ra skills
@@ -275,5 +359,41 @@ public class EnemyMovement : MonoBehaviour
             fov.viewRadius = originalViewDistance;
             Debug.Log("Enemy Vision is restored!");
         }
+    }
+
+    public void InvestigateSleepingGuard()
+    {
+        if (currentState == State.Sleep) return;
+
+        Collider2D[] sleepingGuards = Physics2D.OverlapCircleAll(transform.position, fov.viewRadius);
+
+        foreach (var sleepingGuardCollider in sleepingGuards)
+        {
+            EnemyMovement guardScript = sleepingGuardCollider.GetComponent<EnemyMovement>();
+
+            if (guardScript != null && guardScript.IsSleeping() && IsInLineOfSight(guardScript.transform))
+            {
+                if (!guardScript.isChecked)
+                {
+                    currentState = State.Investigating;
+                    investigateTarget = guardScript.transform.position;
+                    maxInvestigateTimer = 10f;
+                    guardScript.isChecked = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    public void GoToSleep()
+    {
+        if (isSleeping) return;
+        currentState = State.Sleep;
+        isSleeping = true;
+    }
+
+    public bool IsSleeping()
+    {
+        return isSleeping;
     }
 }

@@ -27,6 +27,20 @@ public class KieranController : MonoBehaviour
     // 4. Reach Goal
     private bool isNearGoal = false;
 
+    // 5. Items
+    public GameObject sleepingDartPrefab; // assign in Inspector
+    public Transform dartSpawnPoint;      // empty child transform in front of Kieran
+    public int dartQuantity = 3;
+
+    // 6. Actions on sleeping guard
+    //6.1 drag guard
+    public float dragRadius = 1.5f;
+    private EnemyMovement draggingGuard = null;
+    //6.2 wear uniform
+    public bool isDisguised = false;
+    public GuardType disguisedAs = GuardType.None;
+    public float disguiseRadius = 1.5f;
+
     void Start()
     {
         moveSpeed = normalSpeed; // Start at normal speed
@@ -45,6 +59,8 @@ public class KieranController : MonoBehaviour
         HandleVisionReveal();
         HandlePlayerAbilities();
         LockPickingOfficeDoor();
+        HandleDisguise();
+        HandleGuardDragging();
         returnReplica();
     }
 
@@ -132,13 +148,13 @@ public class KieranController : MonoBehaviour
         else
         {
             // Items (menu is closed)
-            if (Input.GetKeyDown(KeyCode.Alpha1)) UseItem(1);
+            if (Input.GetKeyDown(KeyCode.Alpha1)) TryShootDart();;
             if (Input.GetKeyDown(KeyCode.Alpha2)) UseItem(2);
             if (Input.GetKeyDown(KeyCode.Alpha3)) UseItem(3);
         }
     }
 
-     void ToggleZ3raHackingMenu()
+    void ToggleZ3raHackingMenu()
     {
         if (z3raHackingUI != null)
         {
@@ -151,6 +167,73 @@ public class KieranController : MonoBehaviour
     void UseItem(int slot)
     {
         Debug.Log("Use item slot " + slot + " (functionality coming in next cycle)");
+    }
+
+    void TryShootDart()
+    {
+        if(dartQuantity>0)
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 direction = (mousePos - dartSpawnPoint.position).normalized;
+
+            GameObject dart = Instantiate(sleepingDartPrefab, dartSpawnPoint.position, Quaternion.identity);
+            dart.GetComponent<SleepingDart>().Launch(direction);
+            dartQuantity--;
+        }
+        else
+        {Debug.Log("No Sleeping Dart left.");}
+    }
+
+    void HandleGuardDragging()
+    {
+        if (Input.GetMouseButton(0)) // Hold LMB to drag
+        {
+            if (draggingGuard == null)
+            {
+                // Try to find a sleeping guard nearby
+                Collider2D[] nearby = Physics2D.OverlapCircleAll(transform.position, dragRadius);
+                foreach (var col in nearby)
+                {
+                    EnemyMovement guard = col.GetComponent<EnemyMovement>();
+                    if (guard != null && guard.IsSleeping() && !guard.isBeingDragged)
+                    {
+                        draggingGuard = guard;
+                        guard.isBeingDragged = true;
+                        guard.draggedBy = transform;
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (draggingGuard != null)
+            {
+                draggingGuard.isBeingDragged = false;
+                draggingGuard.draggedBy = null;
+                draggingGuard = null;
+            }
+        }
+    }
+
+    void HandleDisguise()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && !isDisguised)
+        {
+            Collider2D[] nearby = Physics2D.OverlapCircleAll(transform.position, disguiseRadius);
+            foreach (var col in nearby)
+            {
+                EnemyMovement guard = col.GetComponent<EnemyMovement>();
+                if (guard != null && guard.IsSleeping())
+                {
+                    isDisguised = true;
+                    disguisedAs = guard.guardType;
+                    Debug.Log("Kieran disguised as " + disguisedAs);
+                    // Optional: Change Kieran's sprite or color
+                    break;
+                }
+            }
+        }
     }
 
     void LockPickingOfficeDoor()

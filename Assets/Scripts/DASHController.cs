@@ -121,7 +121,8 @@ public class DASHController : MonoBehaviour
             spriteRenderer.color = new Color(1, 1, 1, 0.3f); // translucent effect
             cammoCooldownTimer = cammoCooldown;
             //need handle timer
-            spriteRenderer.sortingLayerName = "Camo";
+            int dashCamoLayer = LayerMask.NameToLayer("Camo");
+            gameObject.layer = dashCamoLayer;
         }
         else
         {
@@ -129,7 +130,8 @@ public class DASHController : MonoBehaviour
             isInCammo = false;
             canMove = true;
             spriteRenderer.color = new Color(0, 0, 1, 1f);
-            spriteRenderer.sortingLayerName = "DASH";
+            int dashCamoLayer = LayerMask.NameToLayer("Camo");
+            gameObject.layer = dashCamoLayer;
         }
     }
 
