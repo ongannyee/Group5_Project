@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class KieranController : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class KieranController : MonoBehaviour
     public FieldOfView fov;
     public FogOfWar fogOfWar;
     public float circularRadius = 2f;
-    public float peripheralRadius = 2f; // Adjustable in Inspector
+    //public float peripheralRadius = 2f; // Adjustable in Inspector
 
     // 3. Hacking and item system
     public GameObject z3raHackingUI;        // UI panel reference
@@ -26,11 +27,13 @@ public class KieranController : MonoBehaviour
 
     // 4. Reach Goal
     private bool isNearGoal = false;
+    public GameObject winUI; // Assign a UI Panel with "You Win!" in inspector
 
     // 5. Items
     public GameObject sleepingDartPrefab; // assign in Inspector
     public Transform dartSpawnPoint;      // empty child transform in front of Kieran
-    public int dartQuantity = 3;
+    [SerializeField] private Transform dartPosition;
+    //public int dartQuantity = 3;
 
     // 6. Actions on sleeping guard
     //6.1 drag guard
@@ -62,6 +65,9 @@ public class KieranController : MonoBehaviour
         HandleDisguise();
         HandleGuardDragging();
         returnReplica();
+
+        // Item related
+        UpdateDartRotation();
     }
 
     void FixedUpdate()
@@ -148,7 +154,11 @@ public class KieranController : MonoBehaviour
         else
         {
             // Items (menu is closed)
-            if (Input.GetKeyDown(KeyCode.Alpha1)) TryShootDart();;
+            if (Input.GetKeyDown(KeyCode.Alpha1)) 
+            {
+                TryShootDart();
+                InventoryManager.Instance.UseItem(1);
+            }
             if (Input.GetKeyDown(KeyCode.Alpha2)) UseItem(2);
             if (Input.GetKeyDown(KeyCode.Alpha3)) UseItem(3);
         }
@@ -169,7 +179,7 @@ public class KieranController : MonoBehaviour
         Debug.Log("Use item slot " + slot + " (functionality coming in next cycle)");
     }
 
-    void TryShootDart()
+/*     void TryShootDart()
     {
         if(dartQuantity>0)
         {
@@ -182,7 +192,41 @@ public class KieranController : MonoBehaviour
         }
         else
         {Debug.Log("No Sleeping Dart left.");}
+    } */
+
+    void TryShootDart()
+    {
+        // Check if player has at least 1 Sleeping Dart in inventory
+        for (int i = 0; i < 5; i++)
+        {
+            InventorySlot slot = InventoryManager.Instance.GetSlot(i);
+            if (slot.item != null && slot.item.itemName == "Sleeping Dart")
+            {
+                // Consume dart
+                InventoryManager.Instance.UseItem(i);
+
+                // Fire towards mouse direction
+                Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 direction = (mouseWorldPos - (Vector2)dartSpawnPoint.position).normalized;
+
+                GameObject dart = Instantiate(sleepingDartPrefab, dartSpawnPoint.position, Quaternion.identity);
+                dart.GetComponent<SleepingDart>().Launch(direction);
+                return;
+            }
+        }
+
+        Debug.Log("No Sleeping Dart available");
     }
+
+    private void UpdateDartRotation()
+    {
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 aimDirection = mouseWorldPos - dartPosition.position;
+        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+
+        dartPosition.rotation = Quaternion.Euler(0f, 0f, angle);
+    }
+
 
     void HandleGuardDragging()
     {
@@ -257,7 +301,24 @@ public class KieranController : MonoBehaviour
     {
         if (isNearGoal && Input.GetKeyDown(KeyCode.F))
         {
+            // Check if any guard is still chasing or alarmed
+            EnemyMovement[] allGuards = FindObjectsOfType<EnemyMovement>();
+            bool anyChasing = allGuards.Any(g => 
+                g.currentState == EnemyMovement.State.Chasing || 
+                g.currentState == EnemyMovement.State.Alarmed);
+
+            if (anyChasing)
+            {
+                Debug.Log("Cannot return yet! Guards are chasing you.");
+                return;
+            }
+
+            // All clear, you win
             Debug.Log("You Win!");
+            if (winUI != null)
+                winUI.SetActive(true);
+
+            Time.timeScale = 0f; // Pause game
         }
     }
 

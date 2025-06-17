@@ -132,4 +132,12 @@ public class Z3raHackingManager : MonoBehaviour
         }
         Debug.Log("Hack Door");
     }
+
+    // For override item +points
+    public void AddOverridePoints(int amount)
+    {
+        currentOP += amount;
+        Debug.Log($"Gained {amount} Override Points! Total OP: {currentOP}");
+    }
+
 }

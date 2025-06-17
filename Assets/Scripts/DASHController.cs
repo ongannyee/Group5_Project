@@ -18,7 +18,7 @@ public class DASHController : MonoBehaviour
 
     // 3. DASH Skills
     // Camo Mode
-    private bool isInCammo = false;
+    public bool isInCammo = false;
     private float cammoCooldown = 10f;
     private float cammoCooldownTimer = 0f;
     private SpriteRenderer spriteRenderer;
@@ -130,7 +130,7 @@ public class DASHController : MonoBehaviour
             isInCammo = false;
             canMove = true;
             spriteRenderer.color = new Color(0, 0, 1, 1f);
-            int dashCamoLayer = LayerMask.NameToLayer("Camo");
+            int dashCamoLayer = LayerMask.NameToLayer("DASH");
             gameObject.layer = dashCamoLayer;
         }
     }

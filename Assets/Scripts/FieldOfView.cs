@@ -23,6 +23,9 @@ public class FieldOfView : MonoBehaviour
 
     public List<Transform> visibleTargets = new List<Transform>(); // visible targets list
 
+    // For player vision type while wearing guard uniform
+    public GuardType ownerType = GuardType.None;
+
     void Start()
     {
         mesh = new Mesh();  // collection of vertices, edges, and triangles that define a 3D (or 2D) shape
@@ -51,7 +54,7 @@ public class FieldOfView : MonoBehaviour
         List<Vector2> colliderPoints = new List<Vector2>();
         colliderPoints.Add(Vector2.zero); // origin for collider (in local space)
 
-        // drawing the cone
+        // find cone vertices
         for (int i = 0; i <= rayCount; i++)
         {
             float currentAngle = angleStart + angleStep * i;
@@ -104,6 +107,33 @@ public class FieldOfView : MonoBehaviour
         {
             polygonCollider.pathCount = 1;
             polygonCollider.SetPath(0, colliderPoints.ToArray());
+        }
+  
+        if (transform.parent != null && transform.parent.CompareTag("Kieran"))
+        {
+            KieranController kieran = transform.parent.GetComponent<KieranController>();
+            if (kieran != null && kieran.isDisguised)
+            {
+                Debug.Log("Update ownertype same as kieran");
+                ownerType = kieran.disguisedAs;
+            }
+        }
+
+        if (transform.parent != null && transform.parent.CompareTag("DASH"))
+        {
+            DASHController dash = transform.parent.GetComponent<DASHController>();
+            if (dash != null && dash.isInCammo)
+            {
+                Debug.Log("Update DASH vision layer");
+                int DASHVisionLayer = LayerMask.NameToLayer("Camo");
+                gameObject.layer = DASHVisionLayer;
+            }
+            else
+            {
+                Debug.Log("Change DASH vision back");
+                int DASHVisionLayer = LayerMask.NameToLayer("Vision");
+                gameObject.layer = DASHVisionLayer;
+            }
         }
     }
 

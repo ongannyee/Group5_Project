@@ -53,54 +53,81 @@ public class Router : MonoBehaviour
 
     IEnumerator RouterPingCoroutine(float duration)
     {
-        // Define which layers to check (Guards and CCTV)
         LayerMask enemyLayers = LayerMask.GetMask("Guard", "CCTV");
-        
-        // Only detect colliders on the specified layers
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, routerRadius, enemyLayers);
-        
-        // Store original layers to revert later
+
+        // Store original sorting layers
         Dictionary<GameObject, string> originalLayers = new Dictionary<GameObject, string>();
-        
-        foreach (var hit in hits)
+        HashSet<GameObject> currentlyVisible = new HashSet<GameObject>();
+
+        float timer = 0f;
+
+        while (timer < duration)
         {
-            if (hit == null) continue;
-            
-            SpriteRenderer sr = hit.GetComponent<SpriteRenderer>();
-            if (sr == null) continue;
-            
-            // Store original layer
-            originalLayers[hit.gameObject] = sr.sortingLayerName;
-            
-            // Change to enemy layer
-            sr.sortingLayerName = "Enemy";
-            
-            // Check which layer the hit object is on
-            if (hit.gameObject.layer == LayerMask.NameToLayer("Guard"))
+            // Find objects in range
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, routerRadius, enemyLayers);
+
+            HashSet<GameObject> detectedThisFrame = new HashSet<GameObject>();
+
+            foreach (var hit in hits)
             {
-                Debug.Log($"Pinged enemy: {hit.name}");
-                // Additional logic for Guards
+                GameObject obj = hit.gameObject;
+                detectedThisFrame.Add(obj);
+
+                SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+                if (sr == null) continue;
+
+                if (!originalLayers.ContainsKey(obj))
+                {
+                    originalLayers[obj] = sr.sortingLayerName;
+                }
+
+                sr.sortingLayerName = "Enemy"; // Temporarily visible layer
+                currentlyVisible.Add(obj);
+
+                // Optional Debug
+                if (obj.layer == LayerMask.NameToLayer("Guard"))
+                    Debug.Log($"Pinged enemy: {obj.name}");
+                else if (obj.layer == LayerMask.NameToLayer("CCTV"))
+                    Debug.Log($"Pinged CCTV: {obj.name}");
             }
-            else if (hit.gameObject.layer == LayerMask.NameToLayer("CCTV"))
+
+            // Check for objects that left the range
+            List<GameObject> toRemove = new List<GameObject>();
+            foreach (var obj in currentlyVisible)
             {
-                Debug.Log($"Pinged CCTV: {hit.name}");
-                // Additional logic for CCTV
+                if (!detectedThisFrame.Contains(obj))
+                {
+                    SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+                    if (sr != null && originalLayers.ContainsKey(obj))
+                    {
+                        sr.sortingLayerName = originalLayers[obj];
+                    }
+                    toRemove.Add(obj);
+                }
             }
+
+            // Clean up exited objects
+            foreach (var obj in toRemove)
+            {
+                currentlyVisible.Remove(obj);
+            }
+
+            timer += 0.2f; // Scan interval
+            yield return new WaitForSeconds(0.2f);
         }
-        
-        yield return new WaitForSeconds(duration);
-        
-        // Revert all objects to their original layers
-        foreach (var kvp in originalLayers)
+
+        // Revert any remaining objects
+        foreach (var obj in currentlyVisible)
         {
-            if (kvp.Key != null)
+            if (obj != null && originalLayers.ContainsKey(obj))
             {
-                SpriteRenderer sr = kvp.Key.GetComponent<SpriteRenderer>();
+                SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
-                    sr.sortingLayerName = kvp.Value;
+                    sr.sortingLayerName = originalLayers[obj];
                 }
             }
         }
     }
+
 }

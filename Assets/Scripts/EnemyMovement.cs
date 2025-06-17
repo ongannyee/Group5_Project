@@ -25,8 +25,8 @@ public class EnemyMovement : MonoBehaviour
     public FieldOfView fov;
 
     // State of the enemy
-    private enum State { Patrolling, Investigating, Chasing,  Alarmed, Sleep}   // 5 states
-    private State currentState = State.Patrolling;              
+    public enum State { Patrolling, Investigating, Chasing,  Alarmed, Sleep}   // 5 states
+    public State currentState = State.Patrolling;              
     private Vector3 investigateTarget;
     private bool alarmed = false;           // If this guard is alarmed
     private float alarmDelay = 3f;          // Time to pause before chasing after seeing a player
@@ -35,6 +35,7 @@ public class EnemyMovement : MonoBehaviour
     private bool isSleeping = false;
     public Vector2 movement;
     private SpriteRenderer sr;
+    public float captureRadius = 0.5f;
 
     // UI being shown on enemy corresponding to the state of enemy
     public GameObject alertIndicator;
@@ -96,11 +97,13 @@ public class EnemyMovement : MonoBehaviour
                 break;
         }
 
+        //sleeping guard setup
         if (currentState == State.Sleep && isBeingDragged && draggedBy != null)
         {
             transform.position = Vector3.Lerp(transform.position, draggedBy.position + new Vector3(-0.5f, -0.5f, 0f), 10f * Time.deltaTime);
         }
 
+        // Setup alert indicator
         if (alertIndicator.activeSelf)
         {
             // Offset in local space, e.g. (x = right, y = up)
@@ -109,6 +112,11 @@ public class EnemyMovement : MonoBehaviour
             alertIndicator.transform.rotation = Quaternion.identity;            // Keeps the icon upright
         }
 
+        // Capture DASH or Kieran consider lose
+        if (currentState == State.Chasing || currentState == State.Alarmed)
+        {
+            CheckCapture();
+        }
     }
 
     void Patrol()
@@ -127,15 +135,30 @@ public class EnemyMovement : MonoBehaviour
 
     void Investigate()
     {
-        if(!isSleeping)
+        if (!isSleeping)
         {
-     /*        Suppose stop and stare at sleeping guard
-            if(Vector2.Distance(transform.position, investigateTarget) < 0.2f)
+            float distance = Vector2.Distance(transform.position, investigateTarget);
+
+            // If close enough, stop and rotate left/right
+            if (distance < 0.2f)
             {
                 movement = Vector2.zero;
-            } */
-            
-            MoveTowards(investigateTarget, patrolSpeed);
+
+                // Rotate left and right like inspecting
+                float angle = Mathf.PingPong(Time.time * 60f, 90f) - 45f; // -45 to 45 degrees
+                transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+                // Update FOV direction based on angle
+                float radians = angle * Mathf.Deg2Rad;
+                Vector2 direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+                fov.SetAimDirection(direction);
+            }
+            else
+            {
+                // Move toward sleeping guard
+                MoveTowards(investigateTarget, patrolSpeed);
+            }
+
             investigateTimer += Time.deltaTime;
 
             if (investigateTimer >= maxInvestigateTimer)
@@ -168,6 +191,8 @@ public class EnemyMovement : MonoBehaviour
             if (!alarmed)
                 currentState = State.Patrolling;
         }
+
+        
     }
 
     void Sleep()
@@ -257,15 +282,19 @@ public class EnemyMovement : MonoBehaviour
     void CheckForPlayerCone()
     {
         Collider2D[] cones = Physics2D.OverlapCircleAll(transform.position, fov.viewRadius);
-
+        int visionLayer = LayerMask.NameToLayer("Vision");
         foreach (var cone in cones)
         {
-            if (cone.CompareTag("PlayerVision") && IsInLineOfSight(cone.transform))
+            if (cone.gameObject.layer == visionLayer && IsInLineOfSight(cone.transform))
             {
-                investigateTarget = cone.transform.position;
-                maxInvestigateTimer = 3f;
-                currentState = State.Investigating;
-                break;
+                FieldOfView vision = cone.GetComponent<FieldOfView>();
+                if (vision != null && vision.ownerType != guardType) // Ignore same type
+                {
+                    investigateTarget = cone.transform.position;
+                    maxInvestigateTimer = 3f;
+                    currentState = State.Investigating;
+                    break;
+                }
             }
         }
     }
@@ -396,4 +425,30 @@ public class EnemyMovement : MonoBehaviour
     {
         return isSleeping;
     }
+
+    void CheckCapture()
+    {
+        if (PlayerAlert.Kieran != null)
+        {
+            float distToKieran = Vector2.Distance(transform.position, PlayerAlert.Kieran.position);
+            if (distToKieran <= captureRadius)
+            {
+                Debug.Log("Captured Kieran!");
+                GameManager.Instance.TriggerGameOver();
+                return;
+            }
+        }
+
+        if (PlayerAlert.DASH != null)
+        {
+            float distToDASH = Vector2.Distance(transform.position, PlayerAlert.DASH.position);
+            if (distToDASH <= captureRadius)
+            {
+                Debug.Log("Captured DASH!");
+                GameManager.Instance.TriggerGameOver();
+                return;
+            }
+        }
+    }
+
 }
