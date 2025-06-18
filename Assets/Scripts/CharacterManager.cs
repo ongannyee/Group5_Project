@@ -5,6 +5,9 @@ using UnityEngine;
 // Swapping control between Kieran and DASH
 public class CharacterManager : MonoBehaviour
 {
+    public Animator animator;
+    public Animator animator2;
+
     public GameObject kieran;
     public GameObject dash;
     public FollowCamera followCamera;
@@ -35,6 +38,8 @@ public class CharacterManager : MonoBehaviour
             if (!dashDeployed)
             {
                 DeployDash();
+                animator2.SetTrigger("deploy");
+                animator.SetTrigger("toDash");
             }
             else if (isControllingKieran && IsOverlapping(kieran, dash))
             {
@@ -46,6 +51,7 @@ public class CharacterManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab) && dashDeployed)
         {
             SwapControl();
+            animator.SetTrigger("toDash");
         }
     }
 

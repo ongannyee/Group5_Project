@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class OfficeDoor : MonoBehaviour
 {
+    public Animator animator;
+
     public bool isLocked = true;
     public float lockpickDuration = 7f;
     private Coroutine lockpickRoutine;
@@ -52,6 +54,7 @@ public class OfficeDoor : MonoBehaviour
 
     public void UnlockDoor()
     {
+        animator.SetBool("interaction", false);
         isLocked = false;
         isBeingLockpicked = false;
         if (kieran != null) kieran.isLockedByScript = false;
