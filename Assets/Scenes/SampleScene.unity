@@ -547,10 +547,11 @@ GameObject:
   m_Component:
   - component: {fileID: 160799167}
   - component: {fileID: 160799166}
-  - component: {fileID: 160799165}
   - component: {fileID: 160799169}
   - component: {fileID: 160799168}
   - component: {fileID: 160799170}
+  - component: {fileID: 160799165}
+  - component: {fileID: 160799171}
   m_Layer: 10
   m_Name: DASH_test_mod
   m_TagString: DASH
@@ -570,6 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b03c88f56cfbe438f07b785deb1ae9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 160799171}
   theRB: {fileID: 160799168}
   moveSpeed: 10
   movement: {x: 0, y: 0}
@@ -625,8 +627,8 @@ SpriteRenderer:
   m_SortingLayerID: 953189147
   m_SortingLayer: 3
   m_SortingOrder: 10
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  m_Color: {r: 0, g: 0.15960464, b: 0.9811321, a: 1}
+  m_Sprite: {fileID: 272147855, guid: 66b1c7080fcb8ab4d9714e330930cac0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -686,8 +688,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Offset: {x: -0.031000495, y: -0.0028984249}
+  m_Size: {x: 0.57976985, y: 0.8622195}
   m_Direction: 0
 --- !u!114 &160799170
 MonoBehaviour:
@@ -710,6 +712,27 @@ MonoBehaviour:
   emitNoise: 0
   pulseRadius: 10
   pulseDuration: 3
+--- !u!95 &160799171
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160799164}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2306e58a63db5a44cbe8829804d8d2d1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &201551453
 GameObject:
   m_ObjectHideFlags: 0
@@ -2560,6 +2583,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b849157d875d84f872f244300fb961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 160799171}
+  animator2: {fileID: 1282095729}
   kieran: {fileID: 1282095722}
   dash: {fileID: 160799164}
   followCamera: {fileID: 1687587007}
@@ -3392,6 +3417,7 @@ GameObject:
   - component: {fileID: 1282095724}
   - component: {fileID: 1282095723}
   - component: {fileID: 1282095728}
+  - component: {fileID: 1282095729}
   m_Layer: 9
   m_Name: Kieran_test_mod
   m_TagString: Kieran
@@ -3433,8 +3459,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Offset: {x: -0.010707021, y: -0.053535715}
+  m_Size: {x: 1.0856569, y: 1.0856569}
   m_Direction: 0
 --- !u!114 &1282095725
 MonoBehaviour:
@@ -3448,6 +3474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01974ef1d83b10747b56a2bd15d2728c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1282095729}
   theRB: {fileID: 1282095723}
   normalSpeed: 5
   fastSpeed: 8
@@ -3508,8 +3535,8 @@ SpriteRenderer:
   m_SortingLayerID: 953189147
   m_SortingLayer: 3
   m_SortingOrder: 10
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  m_Color: {r: 0.14866497, g: 0.9056604, b: 0.15618455, a: 1}
+  m_Sprite: {fileID: -294093178, guid: ef2f49f655b2a8049bbee30a3b113d7b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3558,6 +3585,27 @@ MonoBehaviour:
   emitNoise: 0
   pulseRadius: 3
   pulseDuration: 3
+--- !u!95 &1282095729
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1282095722}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 41cbead0fcccd594aa699db31b6da2f8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1410377973
 GameObject:
   m_ObjectHideFlags: 0
@@ -3647,6 +3695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35666025c002c5c4e99387d52e29e99d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1282095729}
   isLocked: 1
   lockpickDuration: 7
 --- !u!212 &1426688475

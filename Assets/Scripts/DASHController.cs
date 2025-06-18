@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DASHController : MonoBehaviour
 {
+    public Animator animator;
+
     // 1. DASH Movement
     public Rigidbody2D theRB;
     public float moveSpeed = 5;
@@ -49,6 +51,18 @@ public class DASHController : MonoBehaviour
         {
             movement.x = Input.GetAxisRaw("Horizontal");
             movement.y = Input.GetAxisRaw("Vertical");
+            bool itsMoving;
+
+            if (movement.x != 0 || movement.y != 0)
+            {
+                itsMoving = true;
+            }
+            else
+            {
+                itsMoving = false;
+            }
+
+            animator.SetBool("itsMoving", itsMoving);
         }
         else
         {
@@ -59,7 +73,7 @@ public class DASHController : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mousePos - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
         // 1.3 Noise
         bool isMoving = movement.sqrMagnitude > 0.01f;
@@ -115,10 +129,10 @@ public class DASHController : MonoBehaviour
         if (!isInCammo)
         {
             // Enter Cammo
+            animator.SetBool("Camo", true);
             isInCammo = true;
             canMove = false;
             noiseEmitter.emitNoise = false;
-            spriteRenderer.color = new Color(1, 1, 1, 0.3f); // translucent effect
             cammoCooldownTimer = cammoCooldown;
             //need handle timer
             int dashCamoLayer = LayerMask.NameToLayer("Camo");
@@ -129,9 +143,9 @@ public class DASHController : MonoBehaviour
             // Exit Cammo manually
             isInCammo = false;
             canMove = true;
-            spriteRenderer.color = new Color(0, 0, 1, 1f);
             int dashCamoLayer = LayerMask.NameToLayer("DASH");
             gameObject.layer = dashCamoLayer;
+            animator.SetBool("Camo", false);
         }
     }
 

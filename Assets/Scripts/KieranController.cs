@@ -5,6 +5,8 @@ using System.Linq;
 
 public class KieranController : MonoBehaviour
 {
+    public Animator animator;
+
     //1. Player Movement
     public Rigidbody2D theRB;
     public float normalSpeed = 5f;
@@ -83,6 +85,19 @@ public class KieranController : MonoBehaviour
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+
+        //animation
+        bool isMoving;
+
+        if(movement.x != 0 || movement.y != 0)
+        {
+            isMoving = true;
+        }
+        else
+        {
+            isMoving = false;
+        }
+        animator.SetBool("isMoving", isMoving);
     }
 
     //1.2 Rotate to face the mouse cursor
@@ -91,7 +106,7 @@ public class KieranController : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mousePos - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        transform.rotation = Quaternion.Euler(0f, 0f, angle + 90);
     }
 
     //1.3 Toggle move speed with spacebar
@@ -107,6 +122,7 @@ public class KieranController : MonoBehaviour
                 case 2: moveSpeed = fasterSpeed; break;
             }
             Debug.Log("Speed state: " + speedState + " | Speed: " + moveSpeed);
+            animator.SetInteger("speedState", speedState);
         }
     }
 
@@ -290,6 +306,7 @@ public class KieranController : MonoBehaviour
                 OfficeDoor door = c.GetComponentInParent<OfficeDoor>();
                 if (door != null)
                 {
+                    animator.SetBool("interaction", true);
                     door.TryLockpick(this);
                     break;
                 }
