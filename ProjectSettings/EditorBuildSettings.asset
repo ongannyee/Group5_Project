@@ -4,9 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-<<<<<<< Updated upstream
+
   m_Scenes: []
-=======
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
@@ -32,5 +31,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LevelSelection.unity
     guid: a5d3e6e9227ff4845b1d169d3a706421
->>>>>>> Stashed changes
   m_configObjects: {}
