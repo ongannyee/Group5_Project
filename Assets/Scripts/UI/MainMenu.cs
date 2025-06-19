@@ -2,43 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    public Button[] buttons;
+
+    private void Awake()
+    {
+        int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
+
+        for(int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].interactable = false;
+        }
+        
+        for(int i = 0; i < unlockedLevel; i++)
+        {
+            buttons[i].interactable = true;
+        }
+    }
+
     public void LevelSelection()
     {
         SceneManager.LoadScene("LevelSelection");
     }
 
-    public void LevelOne()
+    public void OpenLevel(int levelId)
     {
-        SceneManager.LoadScene("SampleScene");
-        //SceneManager.LoadScene("Level1");
-    }
-
-    public void LevelTwo()
-    {
-        SceneManager.LoadScene("Level2");
-    }
-
-    public void LevelThree()
-    {
-        SceneManager.LoadScene("Level3");
-    }
-
-    public void LevelFour()
-    {
-        SceneManager.LoadScene("Level4");
-    }
-
-    public void LevelFive()
-    {
-        SceneManager.LoadScene("Level5");
-    }
-
-    public void GoToSettingMenu()
-    {
-        SceneManager.LoadScene("SettingMenu");
+        string levelName = "Level" + levelId;
+        SceneManager.LoadScene(levelName);
     }
 
     public void GoToMainMenu()
