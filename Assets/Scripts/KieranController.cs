@@ -57,19 +57,21 @@ public class KieranController : MonoBehaviour
 
     void Update()
     {
-        HandleMovementInput();
-        HandleRotation();
-        HandleSpeedToggle();
-        HandleNoiseEmission();
-        HandleVisionReveal();
-        HandlePlayerAbilities();
-        LockPickingOfficeDoor();
-        HandleDisguise();
-        HandleGuardDragging();
-        returnReplica();
+        if(!PauseMenu.isPaused){
+            HandleMovementInput();
+            HandleRotation();
+            HandleSpeedToggle();
+            HandleNoiseEmission();
+            HandleVisionReveal();
+            HandlePlayerAbilities();
+            LockPickingOfficeDoor();
+            HandleDisguise();
+            HandleGuardDragging();
+            returnReplica();
 
-        // Item related
-        UpdateDartRotation();
+            // Item related
+            UpdateDartRotation();
+        }
     }
 
     void FixedUpdate()
