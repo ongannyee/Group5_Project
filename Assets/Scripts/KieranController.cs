@@ -1,4 +1,4 @@
-using System.Collections;
+    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -29,7 +29,7 @@ public class KieranController : MonoBehaviour
 
     // 4. Reach Goal
     private bool isNearGoal = false;
-    public GameObject winUI; // Assign a UI Panel with "You Win!" in inspector
+    // Assign a UI Panel with "You Win!" in inspector
 
     // 5. Items
     public GameObject sleepingDartPrefab; // assign in Inspector
@@ -57,16 +57,17 @@ public class KieranController : MonoBehaviour
 
     void Update()
     {
-        HandleMovementInput();
-        HandleRotation();
-        HandleSpeedToggle();
-        HandleNoiseEmission();
-        HandleVisionReveal();
-        HandlePlayerAbilities();
-        LockPickingOfficeDoor();
-        HandleDisguise();
-        HandleGuardDragging();
-        returnReplica();
+        if(!GameManager.isPaused){
+            HandleMovementInput();
+            HandleRotation();
+            HandleSpeedToggle();
+            HandleNoiseEmission();
+            HandleVisionReveal();
+            HandlePlayerAbilities();
+            LockPickingOfficeDoor();
+            HandleDisguise();
+            HandleGuardDragging();
+            returnReplica();
 
         // Item related
         UpdateDartRotation();
@@ -331,11 +332,8 @@ public class KieranController : MonoBehaviour
             }
 
             // All clear, you win
-            Debug.Log("You Win!");
-            if (winUI != null)
-                winUI.SetActive(true);
-
-            Time.timeScale = 0f; // Pause game
+            GameManager.Instance.TriggerVictory();
+            return;
         }
     }
 
