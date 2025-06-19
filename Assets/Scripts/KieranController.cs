@@ -57,7 +57,7 @@ public class KieranController : MonoBehaviour
 
     void Update()
     {
-        if(!GameManager.isPaused){
+        if(!PauseMenu.isPaused){
             HandleMovementInput();
             HandleRotation();
             HandleSpeedToggle();
@@ -68,9 +68,8 @@ public class KieranController : MonoBehaviour
             HandleDisguise();
             HandleGuardDragging();
             returnReplica();
-
-        // Item related
-        UpdateDartRotation();
+            // Item related
+            UpdateDartRotation();
         }
     }
 
