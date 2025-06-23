@@ -24,6 +24,16 @@ public class InventoryManager : MonoBehaviour
         initiateItem();
     }
 
+    //testing refresh UI
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            InventoryUI.Instance?.RefreshUI();
+        }
+    }
+
+
     // Add item to inventory
     public bool AddItem(Item newItem, int amount = 1)
     {
@@ -58,6 +68,11 @@ public class InventoryManager : MonoBehaviour
             if (inventorySlots[i].item == newItem && newItem.maxStack > 1)
             {
                 inventorySlots[i].quantity += amount;
+                if (InventoryUI.Instance != null)
+                {
+                    InventoryUI.Instance.RefreshUI();
+                }
+
                 return true;
             }
         }
@@ -68,6 +83,10 @@ public class InventoryManager : MonoBehaviour
             {
                 inventorySlots[i].item = newItem;
                 inventorySlots[i].quantity = amount;
+                if (InventoryUI.Instance != null)
+                {
+                    InventoryUI.Instance.RefreshUI();
+                }
                 return true;
             }
         }
@@ -92,6 +111,11 @@ public class InventoryManager : MonoBehaviour
             slot.quantity--;
             if (slot.quantity <= 0)
                 slot.Clear();
+
+            if (InventoryUI.Instance != null)
+            {
+                InventoryUI.Instance.RefreshUI();
+            }
         }
 
         // For KeyItem, it stays (or triggers scene logic)
@@ -107,6 +131,12 @@ public class InventoryManager : MonoBehaviour
         if (sleepingDartItem != null)
         {
             AddItem(sleepingDartItem, 5); // Add 5 darts on start
+
+            if (InventoryUI.Instance != null)
+            {
+                InventoryUI.Instance.RefreshUI();
+            }
+
             Debug.Log("Sleeping Darts added to inventory.");
         }
         else

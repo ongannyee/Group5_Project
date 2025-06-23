@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293909e9350c230489b569ea08c434b6, type: 3}
   m_Name: Keycard_Level_1
   m_EditorClassIdentifier: 
-  itemName: 
-  icon: {fileID: 0}
+  itemName: Level 1 KeyCard
+  icon: {fileID: 21300000, guid: ecd0975eee2243b4a8106b0e3e4b0700, type: 3}
   type: 1
   maxStack: 1
   keycardLevel: 1
