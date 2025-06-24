@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Keycard_1
   m_EditorClassIdentifier: 
   itemName: 
-  icon: {fileID: 0}
-  type: 0
+  icon: {fileID: 21300000, guid: ecd0975eee2243b4a8106b0e3e4b0700, type: 3}
+  type: 1
   maxStack: 1
   keycardLevel: 1

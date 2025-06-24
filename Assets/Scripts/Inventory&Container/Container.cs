@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Container : MonoBehaviour
 {
-    [SerializeField]public List<InventorySlot> containerSlots = new List<InventorySlot>(4); // 4 slots
+    [SerializeField] public List<InventorySlot> containerSlots = new List<InventorySlot>(4); // 4 slots
     public Transform interactionPoint;
     public float interactionRadius = 1.5f;
 
@@ -27,7 +27,6 @@ public class Container : MonoBehaviour
         if (isPlayerNearby && Input.GetKeyDown(KeyCode.R))
         {
             bool isKieran = playerInRange.CompareTag("Kieran");
-            Debug.Log(isKieran);
             ContainerUI.Instance.OpenContainer(this, isKieran);
         }
         else if(!isPlayerNearby)

@@ -3941,6 +3941,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e072f985174d31b4bad19c2f7b5fb60e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingItems:
+  - item: {fileID: 11400000, guid: d352267ba515c894fb262493c8ee6d53, type: 2}
+    quantity: 3
+  - item: {fileID: 11400000, guid: 2f11639fbb4d1614a98df4f5ef57f6c3, type: 2}
+    quantity: 0
+  - item: {fileID: 11400000, guid: c00f5683cacf64944b521632fe61d1e6, type: 2}
+    quantity: 0
+  - item: {fileID: 0}
+    quantity: 0
+  - item: {fileID: 0}
+    quantity: 0
   containerSlots:
   - item: {fileID: 11400000, guid: d352267ba515c894fb262493c8ee6d53, type: 2}
     quantity: 3
