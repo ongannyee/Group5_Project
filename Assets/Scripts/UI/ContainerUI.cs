@@ -52,8 +52,10 @@ public class ContainerUI : MonoBehaviour
 
         if (InventoryManager.Instance.AddItem(slot.item, slot.quantity))
         {
-            currentContainer.RemoveItem(index);
-            UpdateUI(); // Refresh
+            Debug.Log($"Taken: {slot.item.itemName}");
+            currentContainer.RemoveItem(index);         
+            UpdateUI();
+            InventoryUI.Instance.RefreshUI();           
         }
     }
 }

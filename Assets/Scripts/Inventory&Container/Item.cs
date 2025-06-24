@@ -9,6 +9,7 @@ public enum ItemType
     OverrideChip,
 }
 
+// for sleeping dart
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class Item : ScriptableObject
 {
@@ -16,10 +17,4 @@ public class Item : ScriptableObject
     public Sprite icon;
     public ItemType type;
     public int maxStack = 1; // >1 for consumables like darts
-}
-
-[CreateAssetMenu(fileName = "OverrideChip", menuName = "Items/Override Chip")]
-public class OverrideChipData : Item
-{
-    public int level;  // Level 1, 2, or 3
 }

@@ -3925,10 +3925,10 @@ MonoBehaviour:
   containerSlots:
   - item: {fileID: 11400000, guid: d352267ba515c894fb262493c8ee6d53, type: 2}
     quantity: 2
+  - item: {fileID: 11400000, guid: d10cc585fd92c3a41970ed93a98c15fc, type: 2}
+    quantity: 1
   - item: {fileID: 11400000, guid: 666f3ec9609aef7429205511cce8e7ac, type: 2}
-    quantity: 0
-  - item: {fileID: 11400000, guid: d352267ba515c894fb262493c8ee6d53, type: 2}
-    quantity: 0
+    quantity: 1
   - item: {fileID: 0}
     quantity: 0
   interactionPoint: {fileID: 1919965639}

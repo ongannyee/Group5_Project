@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 293909e9350c230489b569ea08c434b6, type: 3}
-  m_Name: Keycard_Level_1
+  m_Script: {fileID: 11500000, guid: f3f6278b45626ff45afbb53fb97489a6, type: 3}
+  m_Name: OverrideChip_1
   m_EditorClassIdentifier: 
-  itemName: Level 1 KeyCard
-  icon: {fileID: 21300000, guid: ecd0975eee2243b4a8106b0e3e4b0700, type: 3}
-  type: 1
+  itemName: 
+  icon: {fileID: 0}
+  type: 0
   maxStack: 1
-  keycardLevel: 1
+  level: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Container : MonoBehaviour
 {
-    public List<InventorySlot> containerSlots = new List<InventorySlot>(4); // 4 slots
+    [SerializeField]public List<InventorySlot> containerSlots = new List<InventorySlot>(4); // 4 slots
     public Transform interactionPoint;
     public float interactionRadius = 1.5f;
 

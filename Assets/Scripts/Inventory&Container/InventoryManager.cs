@@ -20,19 +20,12 @@ public class InventoryManager : MonoBehaviour
         {
             inventorySlots[i] = new InventorySlot();
         }
+    }
 
+    private void Start()
+    {
         initiateItem();
     }
-
-    //testing refresh UI
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            InventoryUI.Instance?.RefreshUI();
-        }
-    }
-
 
     // Add item to inventory
     public bool AddItem(Item newItem, int amount = 1)
@@ -135,9 +128,8 @@ public class InventoryManager : MonoBehaviour
             if (InventoryUI.Instance != null)
             {
                 InventoryUI.Instance.RefreshUI();
+                Debug.Log("Refresh UI");
             }
-
-            Debug.Log("Sleeping Darts added to inventory.");
         }
         else
         {
