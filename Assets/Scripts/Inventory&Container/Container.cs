@@ -28,10 +28,12 @@ public class Container : MonoBehaviour
         {
             bool isKieran = playerInRange.CompareTag("Kieran");
             ContainerUI.Instance.OpenContainer(this, isKieran);
+            InspectPromptManager.Instance.HidePrompt();
         }
         else if(!isPlayerNearby)
         {
             ContainerUI.Instance.CloseContainer();
+            InspectPromptManager.Instance.HidePrompt();
         }
     }
 
@@ -46,6 +48,8 @@ public class Container : MonoBehaviour
             {
                 isPlayerNearby = true;
                 playerInRange = col.gameObject;
+
+                InspectPromptManager.Instance.ShowPrompt();
                 return;
             }
         }
