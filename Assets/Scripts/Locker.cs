@@ -16,6 +16,7 @@ public class Locker : MonoBehaviour
             guard.isBeingDragged = false;
             guard.draggedBy = null;
             Destroy(guard.gameObject); // Or use SetActive(false) if you want to reuse it later
+            InspectPromptManager.Instance.HidePromptGuard();
             Debug.Log("Guard has been stored in locker.");
         }
     }

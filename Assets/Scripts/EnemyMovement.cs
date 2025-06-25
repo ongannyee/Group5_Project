@@ -224,15 +224,11 @@ public class EnemyMovement : MonoBehaviour
 
         if (kieranFound)
         {
-            Debug.Log("Prompt");
             InspectPromptManager.Instance.ShowPromptGuard();
-            Debug.Log("Prompt done");
         }
         else
         {
-            Debug.Log("Error prompt");
             InspectPromptManager.Instance.HidePromptGuard();
-            Debug.Log("Error prompt done");
         }
     }
 
