@@ -1017,6 +1017,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 580783971048842210, guid: 66c5bf841c08c464f96418fdb6b8cce2, type: 3}
+      propertyPath: textureSize
+      value: 2048
+      objectReference: {fileID: 0}
     - target: {fileID: 580783971048842213, guid: 66c5bf841c08c464f96418fdb6b8cce2, type: 3}
       propertyPath: m_Name
       value: FogOfWar

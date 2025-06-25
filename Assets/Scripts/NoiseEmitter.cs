@@ -78,11 +78,11 @@ public class NoiseEmitter : MonoBehaviour
         pulseTimer = pulseDuration;
     }
 
- /*    void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, baseNoiseRadius);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, maxNoiseRadius);
-    } */
+    }
 }
