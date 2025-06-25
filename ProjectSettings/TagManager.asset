@@ -47,6 +47,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 2348773859
+    locked: 0
+  - name: Solid
+    uniqueID: 3819799463
+    locked: 0
   - name: FOG
     uniqueID: 466721221
     locked: 0
