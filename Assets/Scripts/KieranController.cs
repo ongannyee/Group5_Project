@@ -67,7 +67,7 @@ public class KieranController : MonoBehaviour
             LockPickingOfficeDoor();
             HandleDisguise();
             HandleGuardDragging();
-            returnReplica();
+            returnToGoals();
             // Item related
             UpdateDartRotation();
         }
@@ -290,7 +290,6 @@ public class KieranController : MonoBehaviour
                     isDisguised = true;
                     disguisedAs = guard.guardType;
                     Debug.Log("Kieran disguised as " + disguisedAs);
-                    // Optional: Change Kieran's sprite or color
                     break;
                 }
             }
@@ -315,7 +314,7 @@ public class KieranController : MonoBehaviour
         }
     }
 
-    void returnReplica()
+    void returnToGoals()
     {
         if (isNearGoal && Input.GetKeyDown(KeyCode.F))
         {
@@ -342,6 +341,7 @@ public class KieranController : MonoBehaviour
         if (other.CompareTag("Goal"))
         {
             isNearGoal = true;
+            InspectPromptManager.Instance.ShowPromptGoal();
         }
     }
 
@@ -350,6 +350,7 @@ public class KieranController : MonoBehaviour
         if (other.CompareTag("Goal"))
         {
             isNearGoal = false;
+            InspectPromptManager.Instance.HidePromptGoal();
         }
     }
 }

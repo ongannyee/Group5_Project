@@ -7,6 +7,8 @@ public enum GuardType
     None,
     TypeA,
     TypeB,
+    TypeC,
+    TypeD
     // Extendable
 }
 
@@ -206,6 +208,32 @@ public class EnemyMovement : MonoBehaviour
         }
         int guardSleepingLayer = LayerMask.NameToLayer("Guard-Sleeping");
         gameObject.layer = guardSleepingLayer;
+
+        Collider2D[] nearby = Physics2D.OverlapCircleAll(transform.position, 1.5f);
+        bool kieranFound = false;
+
+        foreach (var collider in nearby)
+        {
+            KieranController kieran = collider.GetComponent<KieranController>();
+            if (kieran != null)
+            {
+                kieranFound = true;
+                break; // Exit loop once we find Kieran
+            }
+        }
+
+        if (kieranFound)
+        {
+            Debug.Log("Prompt");
+            InspectPromptManager.Instance.ShowPromptGuard();
+            Debug.Log("Prompt done");
+        }
+        else
+        {
+            Debug.Log("Error prompt");
+            InspectPromptManager.Instance.HidePromptGuard();
+            Debug.Log("Error prompt done");
+        }
     }
 
     void MoveTowards(Vector3 position, float speed)
@@ -226,7 +254,7 @@ public class EnemyMovement : MonoBehaviour
         fov.SetAimDirection(dir);
     }
 
-    //!!NOT WORKING YET. Checks if any player is in the field of view, prioritize Kieran
+    //Checks if any player is in the field of view, prioritize Kieran
     void CheckForPlayer()
     {
         foreach (Transform t in fov.visibleTargets)

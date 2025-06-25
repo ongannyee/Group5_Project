@@ -207,7 +207,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb1281995a54924f9b3c22c72e69212, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  promptUI: {fileID: 0}
+  promptUI_container: {fileID: 0}
+  promptUI_guard: {fileID: 0}
+  promptUI_goal: {fileID: 0}
 --- !u!1 &971066461983902089
 GameObject:
   m_ObjectHideFlags: 0
