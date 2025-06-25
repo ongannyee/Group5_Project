@@ -258,7 +258,7 @@ PrefabInstance:
     - target: {fileID: 971066461179709222, guid: b72b70860ba63a24c976329838d07859, type: 3}
       propertyPath: kieran
       value: 
-      objectReference: {fileID: 2118997932}
+      objectReference: {fileID: 1700882450245000986, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
     - target: {fileID: 971066461179709222, guid: b72b70860ba63a24c976329838d07859, type: 3}
       propertyPath: dashController
       value: 
@@ -14390,6 +14390,14 @@ PrefabInstance:
       propertyPath: fogOfWar
       value: 
       objectReference: {fileID: 730380060}
+    - target: {fileID: 8003352003067174034, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
+      propertyPath: moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8003352003067174034, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
+      propertyPath: circularRadius
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8003352003067174035, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
       propertyPath: m_Name
       value: DASH
@@ -14555,6 +14563,18 @@ PrefabInstance:
       propertyPath: fogOfWar
       value: 
       objectReference: {fileID: 730380060}
+    - target: {fileID: 1700882450245000989, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
+      propertyPath: fastSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1700882450245000989, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
+      propertyPath: fasterSpeed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1700882450245000989, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
+      propertyPath: normalSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1700882450245000991, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
       propertyPath: m_RootOrder
       value: 1

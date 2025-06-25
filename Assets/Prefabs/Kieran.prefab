@@ -245,9 +245,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1700882450245000961}
   theRB: {fileID: 1700882450245000987}
-  normalSpeed: 5
-  fastSpeed: 8
-  fasterSpeed: 12
+  normalSpeed: 1
+  fastSpeed: 5
+  fasterSpeed: 7
   movement: {x: 0, y: 0}
   fov: {fileID: 1700882449612652669}
   fogOfWar: {fileID: 0}
