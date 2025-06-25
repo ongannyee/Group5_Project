@@ -1019,7 +1019,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 580783971048842210, guid: 66c5bf841c08c464f96418fdb6b8cce2, type: 3}
       propertyPath: textureSize
-      value: 2048
+      value: 1024
       objectReference: {fileID: 0}
     - target: {fileID: 580783971048842213, guid: 66c5bf841c08c464f96418fdb6b8cce2, type: 3}
       propertyPath: m_Name
@@ -2158,6 +2158,10 @@ PrefabInstance:
     - target: {fileID: 8003352003067174035, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
       propertyPath: m_Name
       value: DASH
+      objectReference: {fileID: 0}
+    - target: {fileID: 8003352003398520231, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
+      propertyPath: viewRadius
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
