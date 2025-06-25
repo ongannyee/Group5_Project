@@ -48,7 +48,7 @@ public class KieranController : MonoBehaviour
 
     void Start()
     {
-        moveSpeed = normalSpeed; // Start at normal speed
+        moveSpeed = fastSpeed; // Start at normal speed
 
         // Ensure Z3ra hacking UI is initially hidden
         if (z3raHackingUI != null)
