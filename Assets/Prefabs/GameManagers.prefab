@@ -49,6 +49,8 @@ MonoBehaviour:
   kieran: {fileID: 0}
   dash: {fileID: 0}
   followCamera: {fileID: 0}
+  isControllingKieran: 1
+  dashDeployed: 0
   fogOfWar: {fileID: 0}
   obstacleMask:
     serializedVersion: 2
@@ -151,6 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f51568fd672ca94e81de9827564d487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  opc: {fileID: 0}
   inventorySlots:
   - item: {fileID: 0}
     quantity: 0
