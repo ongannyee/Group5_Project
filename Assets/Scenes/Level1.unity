@@ -154,6 +154,11 @@ Transform:
   m_Father: {fileID: 1020816702}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &91609120 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 91609120, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+  m_PrefabInstance: {fileID: 714651966}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &93991470
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -164,6 +169,10 @@ PrefabInstance:
     - target: {fileID: 4156628993525073177, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
       propertyPath: m_Name
       value: In-game UI Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156628993525073177, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4156628993525073181, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
       propertyPath: m_Pivot.x
@@ -314,6 +323,18 @@ PrefabInstance:
       propertyPath: promptUI_container
       value: 
       objectReference: {fileID: 1606498156}
+    - target: {fileID: 971066461983902091, guid: b72b70860ba63a24c976329838d07859, type: 3}
+      propertyPath: winUI
+      value: 
+      objectReference: {fileID: 478307174}
+    - target: {fileID: 971066461983902091, guid: b72b70860ba63a24c976329838d07859, type: 3}
+      propertyPath: loseUI
+      value: 
+      objectReference: {fileID: 91609120}
+    - target: {fileID: 971066461983902091, guid: b72b70860ba63a24c976329838d07859, type: 3}
+      propertyPath: pauseUI
+      value: 
+      objectReference: {fileID: 597449816}
     - target: {fileID: 971066462174375282, guid: b72b70860ba63a24c976329838d07859, type: 3}
       propertyPath: m_Name
       value: GameManagers
@@ -486,6 +507,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &478307174 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 478307174, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+  m_PrefabInstance: {fileID: 714651966}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &537636642 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 971066461179709222, guid: b72b70860ba63a24c976329838d07859, type: 3}
@@ -12873,6 +12899,11 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &597449816 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8914557195831126922, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+  m_PrefabInstance: {fileID: 714651966}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &688786863 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5308883847240776704, guid: a62b28bde835bf24fa761d7284084c1d, type: 3}
@@ -12891,6 +12922,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4115981315002782883, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1344352390}
+    - target: {fileID: 4781985758241753093, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1344352390}
+    - target: {fileID: 4781985758385817408, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1344352390}
+    - target: {fileID: 4781985758495001268, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1344352390}
+    - target: {fileID: 4781985758518226764, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1344352390}
+    - target: {fileID: 4781985759496842682, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1344352390}
+    - target: {fileID: 4781985760033598398, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1344352390}
+    - target: {fileID: 5061550563218502846, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1344352390}
+    - target: {fileID: 8637116616318030832, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1344352390}
     - target: {fileID: 8914557195560247811, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -12978,10 +13045,6 @@ PrefabInstance:
     - target: {fileID: 8914557195560247815, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
       propertyPath: m_Name
       value: PauseCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 8914557195560247815, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
@@ -17363,6 +17426,17 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &1344352390 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 971066461983902091, guid: b72b70860ba63a24c976329838d07859, type: 3}
+  m_PrefabInstance: {fileID: 238452012}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca717b31cf4a19940a0e4cbc5153ab52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1386202085
 PrefabInstance:
   m_ObjectHideFlags: 0
