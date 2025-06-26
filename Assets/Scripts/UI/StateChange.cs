@@ -29,8 +29,8 @@ public class StateChange : MonoBehaviour
     }
     void Start()
     {
-        crouch.SetActive(true);
-        walk.SetActive(false);
+        crouch.SetActive(false);
+        walk.SetActive(true);
         run.SetActive(false);
         motor.SetActive(false);
         camo.SetActive(false);
