@@ -98,6 +98,7 @@ public class EnemyMovement : MonoBehaviour
                 break;
 
             case State.Sleep:
+                animator.SetTrigger("sleep");
                 Sleep();
                 break;
         }

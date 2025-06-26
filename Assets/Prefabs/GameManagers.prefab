@@ -49,6 +49,8 @@ MonoBehaviour:
   kieran: {fileID: 0}
   dash: {fileID: 0}
   followCamera: {fileID: 0}
+  inventory: {fileID: 0}
+  dashAbility: {fileID: 0}
   isControllingKieran: 1
   dashDeployed: 0
   fogOfWar: {fileID: 0}
