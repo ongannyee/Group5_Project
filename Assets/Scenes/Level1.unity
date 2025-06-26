@@ -17637,6 +17637,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DASH
       objectReference: {fileID: 0}
+    - target: {fileID: 8003352003067174125, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
+      propertyPath: dc
+      value: 
+      objectReference: {fileID: 1528108583}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
 --- !u!114 &1528108582 stripped
@@ -17963,6 +17967,10 @@ PrefabInstance:
       propertyPath: viewRadius
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1700882450245000960, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
+      propertyPath: dc
+      value: 
+      objectReference: {fileID: 1528108583}
     - target: {fileID: 1700882450245000986, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
       propertyPath: m_Name
       value: Kieran

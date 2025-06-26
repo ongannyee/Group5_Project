@@ -182,9 +182,12 @@ public class DASHController : MonoBehaviour
         }
 
         noiseEmitter.EmitOneTimePulse(); // Custom method, will create next
-        noiseCooldownTimer = noiseCooldown;
     }
 
+    public void startNoiseTimer()
+    {
+        noiseCooldownTimer = noiseCooldown;
+    }
     // === Skill 3: Connect to Router ===
     void TryConnectToRouter()
     {

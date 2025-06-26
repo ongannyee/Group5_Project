@@ -17,8 +17,16 @@ public class NoiseEmitter : MonoBehaviour
     public float pulseRadius = 10f;         // Radius of the noise pulse
     public float pulseDuration = 3f;       // Duration of the noise pulse effect
 
-    private float pulseTimer = 0f;
+    public float pulseTimer = 0f;
     private bool isPulsing = false;
+
+    DASHController dashController;
+    [SerializeField] GameObject dc;
+
+    void Awake()
+    {
+        dashController = dc.GetComponent<DASHController>();
+    }
 
     void Start()
     {
@@ -53,6 +61,7 @@ public class NoiseEmitter : MonoBehaviour
             else
             {
                 isPulsing = false;
+                dashController.startNoiseTimer();
             }
         }
     }
