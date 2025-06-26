@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class DASHController : MonoBehaviour
 {
+    public GameObject sdSprite;
     public Animator animator;
+    public Animator sdAnimator;
     public Text visionCD;
     public Text noiseCD;
 
@@ -40,6 +42,7 @@ public class DASHController : MonoBehaviour
 
     void Start()
     {
+        sdSprite.SetActive(false);
         noiseEmitter = GetComponent<NoiseEmitter>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -182,6 +185,8 @@ public class DASHController : MonoBehaviour
         }
 
         noiseEmitter.EmitOneTimePulse(); // Custom method, will create next
+        sdSprite.SetActive(true);
+        animator.SetTrigger("soundDistraction");
     }
 
     public void startNoiseTimer()
