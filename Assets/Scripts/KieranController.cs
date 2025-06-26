@@ -6,6 +6,9 @@ using System.Linq;
 public class KieranController : MonoBehaviour
 {
     public Animator animator;
+    public AudioSource audioSource;
+    public AudioClip walkingClip;
+    private bool wasMovingLastFrame = false;
 
     //1. Player Movement
     public Rigidbody2D theRB;
@@ -49,7 +52,7 @@ public class KieranController : MonoBehaviour
     void Start()
     {
         moveSpeed = normalSpeed; // Start at normal speed
-
+        UpdateWalkingAudioPitch(); // Set initial pitch
         // Ensure Z3ra hacking UI is initially hidden
         if (z3raHackingUI != null)
             z3raHackingUI.SetActive(false);
@@ -87,18 +90,30 @@ public class KieranController : MonoBehaviour
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
-        //animation
-        bool isMoving;
+        bool isMoving = (movement.x != 0 || movement.y != 0);
+        animator.SetBool("isMoving", isMoving);
 
-        if(movement.x != 0 || movement.y != 0)
+        // Play/stop walking sound
+        if (isMoving)
         {
-            isMoving = true;
+            if (walkingClip != null && audioSource != null)
+            {
+                if (audioSource.clip != walkingClip)
+                {
+                    audioSource.clip = walkingClip;
+                    audioSource.loop = true;
+                }
+                if (!audioSource.isPlaying)
+                    audioSource.Play();
+            }
         }
         else
         {
-            isMoving = false;
+            if (audioSource != null && audioSource.isPlaying && audioSource.clip == walkingClip)
+                audioSource.Stop();
         }
-        animator.SetBool("isMoving", isMoving);
+
+        wasMovingLastFrame = isMoving;
     }
 
     //1.2 Rotate to face the mouse cursor
@@ -124,6 +139,26 @@ public class KieranController : MonoBehaviour
             }
             Debug.Log("Speed state: " + speedState + " | Speed: " + moveSpeed);
             animator.SetInteger("speedState", speedState);
+            UpdateWalkingAudioPitch(); // Update pitch when speed changes
+        }
+    }
+
+    private void UpdateWalkingAudioPitch()
+    {
+        if (audioSource != null)
+        {
+            switch (speedState)
+            {
+                case 0: // normal
+                    audioSource.pitch = 1.0f;
+                    break;
+                case 1: // fast
+                    audioSource.pitch = 1.2f;
+                    break;
+                case 2: // faster
+                    audioSource.pitch = 1.5f;
+                    break;
+            }
         }
     }
 
