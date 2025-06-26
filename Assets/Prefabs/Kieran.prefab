@@ -423,6 +423,9 @@ MonoBehaviour:
   emitNoise: 0
   pulseRadius: 3
   pulseDuration: 3
+  pulseTimer: 0
+  sdSprite: {fileID: 0}
+  dc: {fileID: 0}
 --- !u!95 &1700882450245000961
 Animator:
   serializedVersion: 5

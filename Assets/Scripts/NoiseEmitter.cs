@@ -20,6 +20,7 @@ public class NoiseEmitter : MonoBehaviour
     public float pulseTimer = 0f;
     private bool isPulsing = false;
 
+    public GameObject sdSprite;
     DASHController dashController;
     [SerializeField] GameObject dc;
 
@@ -61,6 +62,7 @@ public class NoiseEmitter : MonoBehaviour
             else
             {
                 isPulsing = false;
+                sdSprite.SetActive(false);
                 dashController.startNoiseTimer();
             }
         }

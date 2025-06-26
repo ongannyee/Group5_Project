@@ -14,6 +14,7 @@ public enum GuardType
 
 public class EnemyMovement : MonoBehaviour
 {
+    public Animator animator;
     // Enemy patrolling, chasing initialization
     public Transform[] patrolPoints;
     public float patrolSpeed = 2f;
@@ -87,14 +88,17 @@ public class EnemyMovement : MonoBehaviour
                 break;
 
             case State.Alarmed:
+                animator.SetBool("isInvestigate", true);
                 Alarmed(); // wait before chasing
                 break;
 
             case State.Chasing:
+                animator.SetBool("isInvestigate", false);
                 Chase();
                 break;
 
             case State.Sleep:
+                animator.SetTrigger("sleep");
                 Sleep();
                 break;
         }
@@ -240,7 +244,7 @@ public class EnemyMovement : MonoBehaviour
         if (dir != Vector3.zero)
         {
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle); 
+            transform.rotation = Quaternion.Euler(0, 0, angle - 90); 
         }
 
         transform.position += dir * speed * Time.deltaTime;
