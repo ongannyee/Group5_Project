@@ -251,7 +251,7 @@ MonoBehaviour:
   movement: {x: 0, y: 0}
   fov: {fileID: 1700882449612652669}
   fogOfWar: {fileID: 0}
-  circularRadius: 1.5
+  circularRadius: 1
   z3raHackingUI: {fileID: 1700882451469666869}
   isLockedByScript: 0
   z3ra: {fileID: 0}
