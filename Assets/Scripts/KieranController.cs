@@ -13,7 +13,7 @@ public class KieranController : MonoBehaviour
     public float fastSpeed = 8f;
     public float fasterSpeed = 12f;
     private float moveSpeed;
-    private int speedState = 0; // 0: normal, 1: fast, 2: faster
+    public int speedState = 0; // 0: normal, 1: fast, 2: faster
     public Vector2 movement;
 
     //2. Cone Vision and circular vision
@@ -113,7 +113,7 @@ public class KieranController : MonoBehaviour
     //1.3 Toggle move speed with spacebar
     void HandleSpeedToggle()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             speedState = (speedState + 1) % 3;
             switch (speedState)
