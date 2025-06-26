@@ -15,7 +15,7 @@ public class KieranController : MonoBehaviour
     public float fastSpeed = 8f;
     public float fasterSpeed = 12f;
     private float moveSpeed;
-    public int speedState = 0; // 0: normal, 1: fast, 2: faster
+    public int speedState = 1; // 0: normal, 1: fast, 2: faster
     public Vector2 movement;
 
     //2. Cone Vision and circular vision
