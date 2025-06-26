@@ -166,86 +166,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4156628991757912108, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628991757912108, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628991757912108, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628991757912108, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628992098670230, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628992098670230, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628992098670230, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628992098670230, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628992988601390, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628992988601390, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628992988601390, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628992988601390, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628993143193819, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628993143193819, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628993143193819, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628993143193819, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628993360015165, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628993360015165, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628993360015165, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628993360015165, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4156628993525073177, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
       propertyPath: m_Name
       value: In-game UI Canvas
@@ -372,9 +292,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1528108583}
     - target: {fileID: 971066461179709222, guid: b72b70860ba63a24c976329838d07859, type: 3}
+      propertyPath: kieran
+      value: 
+      objectReference: {fileID: 1700882450245000986, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
+    - target: {fileID: 971066461179709222, guid: b72b70860ba63a24c976329838d07859, type: 3}
+      propertyPath: currentOP
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 971066461179709222, guid: b72b70860ba63a24c976329838d07859, type: 3}
       propertyPath: dashController
       value: 
       objectReference: {fileID: 1528108582}
+    - target: {fileID: 971066461470145556, guid: b72b70860ba63a24c976329838d07859, type: 3}
+      propertyPath: promptUI
+      value: 
+      objectReference: {fileID: 1606498156}
     - target: {fileID: 971066461470145556, guid: b72b70860ba63a24c976329838d07859, type: 3}
       propertyPath: promptUI_goal
       value: 
@@ -13120,7 +13052,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914557195560247815, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
@@ -17768,6 +17700,10 @@ PrefabInstance:
       propertyPath: fogOfWar
       value: 
       objectReference: {fileID: 730380060}
+    - target: {fileID: 8003352003067174034, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
+      propertyPath: circularRadius
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8003352003067174035, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
       propertyPath: m_Name
       value: DASH
@@ -18057,6 +17993,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 580783971048842210, guid: 66c5bf841c08c464f96418fdb6b8cce2, type: 3}
+      propertyPath: textureSize
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 580783971048842213, guid: 66c5bf841c08c464f96418fdb6b8cce2, type: 3}
       propertyPath: m_Name
       value: FogOfWar
@@ -18070,6 +18010,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1700882449612652669, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
+      propertyPath: viewRadius
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1700882450245000986, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
       propertyPath: m_Name
       value: Kieran
@@ -18082,6 +18026,10 @@ PrefabInstance:
       propertyPath: fogOfWar
       value: 
       objectReference: {fileID: 730380060}
+    - target: {fileID: 1700882450245000989, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
+      propertyPath: circularRadius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1700882450245000991, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
       propertyPath: m_RootOrder
       value: 1
