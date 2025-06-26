@@ -12,8 +12,8 @@ public class CharacterManager : MonoBehaviour
     public GameObject dash;
     public FollowCamera followCamera;
 
-    private bool isControllingKieran = true;
-    private bool dashDeployed = false;
+    public bool isControllingKieran = true;
+    public bool dashDeployed = false;
 
     public FogOfWar fogOfWar;
     public LayerMask obstacleMask;
