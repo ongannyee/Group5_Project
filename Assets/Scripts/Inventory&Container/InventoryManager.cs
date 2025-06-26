@@ -5,6 +5,8 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
+    OPCounter opCounter;
+    public GameObject opc;
 
     public InventorySlot[] inventorySlots = new InventorySlot[5];
 
@@ -13,6 +15,8 @@ public class InventoryManager : MonoBehaviour
 
     private void Awake()
     {
+        opCounter = opc.GetComponent<OPCounter>();
+
         if (Instance == null) Instance = this;
 
         // Initialize empty slots
@@ -46,6 +50,7 @@ public class InventoryManager : MonoBehaviour
             if (hackingManager != null)
             {
                 hackingManager.AddOverridePoints(opAmount);
+                opCounter.counterUpdate();
             }
             else
             {
