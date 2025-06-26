@@ -130,38 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 564177885, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -21.359116
-      objectReference: {fileID: 0}
-    - target: {fileID: 564177885, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 96.447624
-      objectReference: {fileID: 0}
-    - target: {fileID: 1620830756, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -23.000011
-      objectReference: {fileID: 0}
-    - target: {fileID: 1620830756, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 95.500015
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628991634121788, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -33.91471
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628991634121788, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 95.50002
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628991962049859, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.8999939
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156628991962049859, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 30.800003
-      objectReference: {fileID: 0}
     - target: {fileID: 4156628993525073177, guid: bb8e3be153b4ffb41839d7cae5cc08b4, type: 3}
       propertyPath: m_Name
       value: In-game UI Canvas
