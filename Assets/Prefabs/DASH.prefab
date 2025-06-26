@@ -166,7 +166,7 @@ MonoBehaviour:
   movement: {x: 0, y: 0}
   fov: {fileID: 8003352003398520231}
   fogOfWar: {fileID: 0}
-  circularRadius: 3
+  circularRadius: 6
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
