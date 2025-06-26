@@ -66,6 +66,8 @@ public class FogOfWar : MonoBehaviour
     // Reveal ciruclar vision
     public void RevealCircularBlocked(Vector3 center, float radius, LayerMask obstacleMask, int rayCount = 360)
     {
+
+        int radiusInPixels = Mathf.RoundToInt(radius * pixelPerUnit);
         float angleStep = 360f / rayCount;      //Divides the full circle into equal segments.
 
         for (int i = 0; i < rayCount; i++)
@@ -79,7 +81,7 @@ public class FogOfWar : MonoBehaviour
             
             float distance = hit ? hit.distance : radius;   // Use full radius dis or hit radius dis
             Vector3 endPoint = center + dir * distance;     // Compute the ray end: either at the obstacle or at full vision radius.
-            RevealLine(center, endPoint);                   // Reveal pixels along the ray line
+            RevealLine(center, endPoint, radiusInPixels);                 // Reveal pixels along the ray line
         }
 
         fogTexture.SetPixels32(colors);
@@ -87,7 +89,7 @@ public class FogOfWar : MonoBehaviour
     }
 
     // line-drawing algorithm: Bresenham's Line Algorithm
-    void RevealLine(Vector3 startWorld, Vector3 endWorld)
+    void RevealLine(Vector3 startWorld, Vector3 endWorld, int radiusInPixels)
     {
         // Converts world space coordinates (e.g., player position, ray hit point) to pixel coordinates on the fog texture.
         Vector2Int start = WorldToTextureCoord(startWorld);     
@@ -112,7 +114,16 @@ public class FogOfWar : MonoBehaviour
             int index = y * textureSize + x;
             if (index >= 0 && index < colors.Length)
             {
-                colors[index].a = 0;
+                Vector2Int center = WorldToTextureCoord(startWorld);
+                float dx_ = x - center.x;
+                float dy_ = y - center.y;
+                float distanceRatio = Mathf.Sqrt(dx * dx + dy * dy) / (radiusInPixels); // normalize distance
+                // distanceRatio = Mathf.Clamp01(distanceRatio); // prevent overexposure
+
+                // Invert so it's 1 near center, 0 at edges
+                float falloff = 1f - Mathf.SmoothStep(0f, 0.5f, distanceRatio);
+                byte softAlpha = (byte)(152 * Mathf.Clamp(falloff, 0f, 1f)); // keep at least 10% fog if desired
+                colors[index].a = (byte)Mathf.Min(colors[index].a, softAlpha); // take minimum to preserve fading
             }
 
             // Break if reach end
@@ -157,43 +168,53 @@ public class FogOfWar : MonoBehaviour
         fogTexture.Apply();
     }
 
-    // Reveal triangle vision so that they form into a cone
-    void RevealTriangle(Vector3 a, Vector3 b, Vector3 c)
-    {
-        // finds the smallest axis-aligned rectangle (bounding box) that contains the triangle defined by points a, b, and c.
-        Bounds bounds = new Bounds(a, Vector3.zero);
-        bounds.Encapsulate(b);
-        bounds.Encapsulate(c);
-
-        // Converts the bounding box corners to texture coordinates.
-        Vector2Int min = WorldToTextureCoord(bounds.min);
-        Vector2Int max = WorldToTextureCoord(bounds.max);
-
-        // Iterates over every pixel within the bounding box.
-        for (int y = min.y; y <= max.y; y++)
-        {
-            for (int x = min.x; x <= max.x; x++)
-            {
-                // Converts texture pixel coordinates back to world position
-                Vector3 worldPoint = TextureCoordToWorld(x, y);
-
-                // check if the current pixel (in world space) is inside the triangle and reveals that pixel
-                if (PointInTriangle(worldPoint, a, b, c))
-                {
-                    int index = y * textureSize + x;
-                    colors[index].a = 0;
-                }
-            }
-        }
-    }
-
-    // converts texture coordinates (pixel positions in the fog texture) back into world space positions
     Vector3 TextureCoordToWorld(int x, int y)
     {
         float halfSize = worldSize / 2f;
         float wx = ((float)x / textureSize) * worldSize - halfSize;
         float wy = ((float)y / textureSize) * worldSize - halfSize;
-        return transform.TransformPoint(new Vector3(wx, wy));
+        return transform.TransformPoint(new Vector3(wx, wy, 0));
+    }
+
+    // Reveal triangle vision so that they form into a cone
+    void RevealTriangle(Vector3 a, Vector3 b, Vector3 c)
+    {
+        Bounds bounds = new Bounds(a, Vector3.zero);
+        bounds.Encapsulate(b);
+        bounds.Encapsulate(c);
+
+        Vector2Int min = WorldToTextureCoord(bounds.min);
+        Vector2Int max = WorldToTextureCoord(bounds.max);
+
+        Vector3 center = (a + b + c) / 3f; // approximate center for distance calculation
+        Vector2Int centerTex = WorldToTextureCoord(center);
+
+        float maxDist = Vector3.Distance(center, a); // approximate max distance for normalization
+        float maxDistTex = maxDist * pixelPerUnit;
+
+        for (int y = min.y; y <= max.y; y++)
+        {
+            for (int x = min.x; x <= max.x; x++)
+            {
+                Vector3 worldPoint = TextureCoordToWorld(x, y);
+                if (PointInTriangle(worldPoint, a, b, c))
+                {
+                    int index = y * textureSize + x;
+                    if (index >= 0 && index < colors.Length)
+                    {
+                        float dx = x - centerTex.x;
+                        float dy = y - centerTex.y;
+                        float distance = Mathf.Sqrt(dx * dx + dy * dy);
+
+                        float distanceRatio = distance / maxDistTex;
+                        float falloff = 1f - Mathf.SmoothStep(0f, 0.5f, distanceRatio);
+                        byte softAlpha = (byte)(152 * Mathf.Clamp(falloff, 0f, 1f));
+
+                        colors[index].a = (byte)Mathf.Min(colors[index].a, softAlpha);
+                    }
+                }
+            }
+        }
     }
 
     // checks whether a point p lies inside the triangle defined by the points a, b, and c, using the barycentric coordinate technique.

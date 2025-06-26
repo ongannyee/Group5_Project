@@ -65,7 +65,7 @@ public class KieranController : MonoBehaviour
     void Update()
     {
         if(!GameManager.isPaused){
-            Debug.Log("kieran work");
+            // Debug.Log("kieran work");
             HandleMovementInput();
             HandleRotation();
             HandleSpeedToggle();
