@@ -596,6 +596,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Guard - TypeA (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4101082489443129706, guid: c44b40768ce80f84db6c9e7dadc82cb1, type: 3}
+      propertyPath: viewRadius
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4101082490676096187, guid: c44b40768ce80f84db6c9e7dadc82cb1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -26.99
@@ -13121,6 +13125,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1344352390}
+    - target: {fileID: 4781985758479103500, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
+      propertyPath: m_text
+      value: Retry
+      objectReference: {fileID: 0}
     - target: {fileID: 4781985758495001268, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -13235,7 +13243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914557195560247815, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b86680f2c27eb745bb3f420c69933a5, type: 3}
@@ -13316,6 +13324,10 @@ PrefabInstance:
     - target: {fileID: 4101082488998663729, guid: c44b40768ce80f84db6c9e7dadc82cb1, type: 3}
       propertyPath: m_Name
       value: Guard - TypeA (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101082489443129706, guid: c44b40768ce80f84db6c9e7dadc82cb1, type: 3}
+      propertyPath: viewRadius
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4101082490676096187, guid: c44b40768ce80f84db6c9e7dadc82cb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17797,6 +17809,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Guard - TypeA
       objectReference: {fileID: 0}
+    - target: {fileID: 4101082489443129706, guid: c44b40768ce80f84db6c9e7dadc82cb1, type: 3}
+      propertyPath: viewRadius
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4101082490676096187, guid: c44b40768ce80f84db6c9e7dadc82cb1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -19.75
@@ -17875,6 +17891,10 @@ PrefabInstance:
       propertyPath: fogOfWar
       value: 
       objectReference: {fileID: 730380060}
+    - target: {fileID: 8003352003067174034, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
+      propertyPath: circularRadius
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8003352003067174035, guid: d11207c61bb003f4c8347fb6baefd0a9, type: 3}
       propertyPath: m_Name
       value: DASH
@@ -18183,7 +18203,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1700882449612652669, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
       propertyPath: viewRadius
-      value: 4
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1700882450245000986, guid: 9db1afe39f66f2041b4f7c9e0a9d72e8, type: 3}
       propertyPath: m_Name

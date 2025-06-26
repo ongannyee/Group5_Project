@@ -21,9 +21,9 @@ public class DASHController : MonoBehaviour
     // 3. DASH Skills
     // Camo Mode
     public bool isInCammo = false;
-    private float cammoCooldown = 10f;
+    private float cammoCooldown = 7f;
     private float cammoCooldownTimer = 0f;
-    private float cammoReturnTimer = 5f;
+    //private float cammoReturnTimer = 5f;
     private SpriteRenderer spriteRenderer;
     private bool canMove = true;
 
@@ -46,7 +46,7 @@ public class DASHController : MonoBehaviour
         // --- Skill Cooldowns ---
         if (cammoCooldownTimer > 0) cammoCooldownTimer -= Time.deltaTime;
         if (noiseCooldownTimer > 0) noiseCooldownTimer -= Time.deltaTime;
-        if (isInCammo) cammoReturnTimer-=Time.deltaTime;
+/*         if (isInCammo) cammoReturnTimer-=Time.deltaTime;
         
         if(cammoReturnTimer<0.1f)
         {
@@ -56,7 +56,7 @@ public class DASHController : MonoBehaviour
             int dashCamoLayer = LayerMask.NameToLayer("DASH");
             gameObject.layer = dashCamoLayer;
             animator.SetBool("Camo", false);
-        }
+        } */
 
         // 1.1 Movement input
         if (canMove)
@@ -146,7 +146,7 @@ public class DASHController : MonoBehaviour
             canMove = false;
             noiseEmitter.emitNoise = false;
             cammoCooldownTimer = cammoCooldown;
-            cammoReturnTimer = 5f;
+            //cammoReturnTimer = 5f;
             int dashCamoLayer = LayerMask.NameToLayer("Camo");
             gameObject.layer = dashCamoLayer;
         }
