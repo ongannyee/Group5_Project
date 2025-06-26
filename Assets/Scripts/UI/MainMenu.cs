@@ -25,11 +25,13 @@ public class MainMenu : MonoBehaviour
 
     public void LevelSelection()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("LevelSelection");
     }
 
     public void OpenLevel(int levelId)
     {
+        Time.timeScale = 1f;
         string levelName = "Level" + levelId;
         SceneManager.LoadScene(levelName);
     }

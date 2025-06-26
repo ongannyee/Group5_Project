@@ -12,6 +12,9 @@ public class CharacterManager : MonoBehaviour
     public GameObject dash;
     public FollowCamera followCamera;
 
+    public GameObject inventory;
+    public GameObject dashAbility;
+
     public bool isControllingKieran = true;
     public bool dashDeployed = false;
 
@@ -23,6 +26,8 @@ public class CharacterManager : MonoBehaviour
 
     void Start()
     {
+        dashAbility.SetActive(false);
+        inventory.SetActive(true);
         kieranController = kieran.GetComponent<KieranController>();
         dashController = dash.GetComponent<DASHController>();
         kieran.SetActive(true);
@@ -112,6 +117,8 @@ public class CharacterManager : MonoBehaviour
         dashDeployed = true;
         SetActiveCharacter(dash);
         isControllingKieran = false;
+        dashAbility.SetActive(true);
+        inventory.SetActive(false);
     }
 
     void WithdrawDash()
@@ -127,10 +134,14 @@ public class CharacterManager : MonoBehaviour
         if (isControllingKieran)
         {
             SetActiveCharacter(dash);
+            dashAbility.SetActive(true);
+            inventory.SetActive(false);
         }
         else
         {
             SetActiveCharacter(kieran);
+            inventory.SetActive(true);
+            dashAbility.SetActive(false);
         }
         isControllingKieran = !isControllingKieran;
     }

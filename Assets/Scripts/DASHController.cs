@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DASHController : MonoBehaviour
 {
     public Animator animator;
+    public Text visionCD;
+    public Text noiseCD;
 
     // 1. DASH Movement
     public Rigidbody2D theRB;
@@ -44,8 +47,16 @@ public class DASHController : MonoBehaviour
     void Update()
     {
         // --- Skill Cooldowns ---
-        if (cammoCooldownTimer > 0) cammoCooldownTimer -= Time.deltaTime;
-        if (noiseCooldownTimer > 0) noiseCooldownTimer -= Time.deltaTime;
+        if (cammoCooldownTimer > 0){
+            visionCD.text = cammoCooldownTimer.ToString();
+            cammoCooldownTimer -= Time.deltaTime;
+            if(cammoCooldownTimer < 0.5f) visionCD.text = "";
+        }
+        if (noiseCooldownTimer > 0){
+            noiseCD.text = noiseCooldownTimer.ToString();
+            noiseCooldownTimer -= Time.deltaTime;
+            if(noiseCooldownTimer < 0.5f) noiseCD.text = "";
+        }
 /*         if (isInCammo) cammoReturnTimer-=Time.deltaTime;
         
         if(cammoReturnTimer<0.1f)
@@ -145,7 +156,6 @@ public class DASHController : MonoBehaviour
             isInCammo = true;
             canMove = false;
             noiseEmitter.emitNoise = false;
-            cammoCooldownTimer = cammoCooldown;
             //cammoReturnTimer = 5f;
             int dashCamoLayer = LayerMask.NameToLayer("Camo");
             gameObject.layer = dashCamoLayer;
@@ -153,6 +163,7 @@ public class DASHController : MonoBehaviour
         else
         {
             // Exit Cammo manually
+            cammoCooldownTimer = cammoCooldown;
             isInCammo = false;
             canMove = true;
             int dashCamoLayer = LayerMask.NameToLayer("DASH");
@@ -171,9 +182,12 @@ public class DASHController : MonoBehaviour
         }
 
         noiseEmitter.EmitOneTimePulse(); // Custom method, will create next
-        noiseCooldownTimer = noiseCooldown;
     }
 
+    public void startNoiseTimer()
+    {
+        noiseCooldownTimer = noiseCooldown;
+    }
     // === Skill 3: Connect to Router ===
     void TryConnectToRouter()
     {
