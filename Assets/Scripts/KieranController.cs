@@ -6,6 +6,8 @@ using System.Linq;
 public class KieranController : MonoBehaviour
 {
     public Animator animator;
+    OPCounter opCounter;
+    public GameObject opc;
 
     //1. Player Movement
     public Rigidbody2D theRB;
@@ -13,7 +15,7 @@ public class KieranController : MonoBehaviour
     public float fastSpeed = 8f;
     public float fasterSpeed = 12f;
     private float moveSpeed;
-    public int speedState = 0; // 0: normal, 1: fast, 2: faster
+    public int speedState = 1; // 0: normal, 1: fast, 2: faster
     public Vector2 movement;
 
     //2. Cone Vision and circular vision
@@ -45,6 +47,11 @@ public class KieranController : MonoBehaviour
     public bool isDisguised = false;
     public GuardType disguisedAs = GuardType.None;
     public float disguiseRadius = 1.5f;
+
+    void Awake()
+    {
+        opCounter = opc.GetComponent<OPCounter>();
+    }
 
     void Start()
     {
@@ -167,6 +174,7 @@ public class KieranController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha4)) z3ra.TryFlickerSurveillance();
             if (Input.GetKeyDown(KeyCode.Alpha5)) z3ra.TryPowerSurge();
             if (Input.GetKeyDown(KeyCode.Alpha6)) z3ra.TryHackDoor();
+            opCounter.counterUpdate();
         }
         else
         {
