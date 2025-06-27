@@ -256,7 +256,10 @@ MonoBehaviour:
   draggedBy: {fileID: 0}
   guardType: 4
   walkingClip: {fileID: 8300000, guid: f42453f2da5700c428f988e132cb0091, type: 3}
-  alarmClip: {fileID: 8300000, guid: db217dd7b440cdb4dac7f6d488ef08df, type: 3}
+  communicationClip: {fileID: 8300000, guid: b31707ed121b3464bb5ad5710626bd65, type: 3}
+  commMinInterval: 1
+  commMaxInterval: 7
+  commHearRadius: 10
 --- !u!114 &3434838388159740110
 MonoBehaviour:
   m_ObjectHideFlags: 0

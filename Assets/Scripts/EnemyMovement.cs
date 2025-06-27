@@ -58,6 +58,13 @@ public class EnemyMovement : MonoBehaviour
     private AudioSource audioSource;
     private bool wasMoving = false;
 
+    public AudioClip communicationClip;
+    private AudioSource commAudioSource;
+    public float commMinInterval = 8f;
+    public float commMaxInterval = 20f;
+    public float commHearRadius = 20f;
+    private float commTimer = 0f;
+
     void Start()
     {
         //fov = GetComponentInChildren<FieldOfView>();
@@ -78,6 +85,12 @@ public class EnemyMovement : MonoBehaviour
         }
         audioSource.loop = true;
         audioSource.playOnAwake = false;
+
+        // Communication sound setup
+        commAudioSource = gameObject.AddComponent<AudioSource>();
+        commAudioSource.loop = false;
+        commAudioSource.playOnAwake = false;
+        ResetCommTimer();
     }
 
     void Update()
@@ -177,6 +190,26 @@ public class EnemyMovement : MonoBehaviour
             audioSource.pitch = pitch;
         }
         wasMoving = isMoving;
+
+        // Guard communication sound logic
+        commTimer -= Time.deltaTime;
+        if (commTimer <= 0f)
+        {
+            Transform kieran = PlayerAlert.Kieran;
+            if (kieran != null && Vector2.Distance(transform.position, kieran.position) <= commHearRadius)
+            {
+                if (communicationClip != null)
+                {
+                    commAudioSource.PlayOneShot(communicationClip);
+                }
+            }
+            ResetCommTimer();
+        }
+    }
+
+    private void ResetCommTimer()
+    {
+        commTimer = Random.Range(commMinInterval, commMaxInterval);
     }
 
     void Patrol()
