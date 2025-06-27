@@ -46,6 +46,11 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Game Over!");
         Time.timeScale = 0f;
+        // Stop alarm sound
+        if (AlarmManager.Instance != null)
+        {
+            AlarmManager.Instance.StopAlarm();
+        }
     }
 
     public void TriggerVictory()
