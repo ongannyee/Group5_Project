@@ -58,9 +58,6 @@ public class EnemyMovement : MonoBehaviour
     private AudioSource audioSource;
     private bool wasMoving = false;
 
-    public AudioClip alarmClip;
-    private AudioSource alarmAudioSource;
-
     void Start()
     {
         //fov = GetComponentInChildren<FieldOfView>();
@@ -81,11 +78,6 @@ public class EnemyMovement : MonoBehaviour
         }
         audioSource.loop = true;
         audioSource.playOnAwake = false;
-
-        // Alarm sound setup
-        alarmAudioSource = gameObject.AddComponent<AudioSource>();
-        alarmAudioSource.loop = false;
-        alarmAudioSource.playOnAwake = false;
     }
 
     void Update()
@@ -413,10 +405,10 @@ public class EnemyMovement : MonoBehaviour
     {
         alarmTimer += Time.deltaTime;
 
-        // Play alarm sound once when entering Alarmed state
-        if (alarmClip != null && !alarmAudioSource.isPlaying)
+        // Play alarm sound globally
+        if (AlarmManager.Instance != null)
         {
-            alarmAudioSource.PlayOneShot(alarmClip);
+            AlarmManager.Instance.TriggerAlarm();
         }
 
         if (alarmTimer >= alarmDelay && !commsDisabled)
