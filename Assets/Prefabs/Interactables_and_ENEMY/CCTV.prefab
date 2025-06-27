@@ -256,6 +256,7 @@ MonoBehaviour:
   isRotate: 1
   rotateSpeed: 20
   rotateAngle: 45
+  alarmClip: {fileID: 8300000, guid: db217dd7b440cdb4dac7f6d488ef08df, type: 3}
 --- !u!50 &5991718993628183623
 Rigidbody2D:
   serializedVersion: 4
@@ -294,7 +295,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5, y: 1.4375}
+    oldSize: {x: 0.75, y: 0.71875}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

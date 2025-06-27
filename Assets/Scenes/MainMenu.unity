@@ -638,6 +638,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a1cb356a3b6f4dadab9fdd8bc8878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttons: []
+  backgroundMusic: {fileID: 8300000, guid: a27aa647d941fa94e92dbc0f92780405, type: 3}
+  clickClip: {fileID: 8300000, guid: d8e40b0392d17bc4a8659ecab86e4e2c, type: 3}
 --- !u!224 &1359667404 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4781985758491531307, guid: 4ebe99601e2d36441bedd767449e8640, type: 3}

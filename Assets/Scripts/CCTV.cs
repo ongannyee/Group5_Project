@@ -18,10 +18,17 @@ public class CCTV : MonoBehaviour
     private float direction = 1f;
     private Quaternion startRotation;
 
+    public AudioClip alarmClip;
+    private AudioSource alarmAudioSource;
+
     void Start()
     {
         startRotation = transform.rotation;
         originalViewDistance = fov.viewRadius;
+        // Alarm sound setup
+        alarmAudioSource = gameObject.AddComponent<AudioSource>();
+        alarmAudioSource.loop = false;
+        alarmAudioSource.playOnAwake = false;
     }
 
     void Update()
@@ -70,6 +77,10 @@ public class CCTV : MonoBehaviour
     void Alarm(Transform target)
     {
         Debug.Log("CCTV triggered alarm on " + target.name);
+        if (alarmClip != null)
+        {
+            alarmAudioSource.PlayOneShot(alarmClip);
+        }
         EnemyMovement[] allGuards = FindObjectsOfType<EnemyMovement>();
         foreach (var guard in allGuards)
         {

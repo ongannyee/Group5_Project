@@ -134,6 +134,7 @@ MonoBehaviour:
   requiredKeycardLevel: 1
   doorVisual: {fileID: 4325178856304714349}
   doorCollider: {fileID: 4325178857194957152}
+  openDoorClip: {fileID: 8300000, guid: 5205ebedb1155e34981f4da9924278ae, type: 3}
 --- !u!61 &4325178857194957152
 BoxCollider2D:
   m_ObjectHideFlags: 0

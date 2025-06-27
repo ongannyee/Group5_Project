@@ -48,9 +48,32 @@ public class KieranController : MonoBehaviour
     public GuardType disguisedAs = GuardType.None;
     public float disguiseRadius = 1.5f;
 
+    public AudioClip walkingClip;
+    private AudioSource audioSource;
+    private bool wasMoving = false;
+    public AudioClip disguiseClip;
+    private AudioSource disguiseAudioSource;
+    public AudioClip dragBodyClip;
+    private AudioSource dragAudioSource;
+
     void Awake()
     {
         opCounter = opc.GetComponent<OPCounter>();
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
+        // Setup disguise sound source
+        disguiseAudioSource = gameObject.AddComponent<AudioSource>();
+        disguiseAudioSource.loop = false;
+        disguiseAudioSource.playOnAwake = false;
+        // Setup drag sound source
+        dragAudioSource = gameObject.AddComponent<AudioSource>();
+        dragAudioSource.loop = true;
+        dragAudioSource.playOnAwake = false;
     }
 
     void Start()
@@ -107,6 +130,38 @@ public class KieranController : MonoBehaviour
             isMoving = false;
         }
         animator.SetBool("isMoving", isMoving);
+
+        // Walking sound logic
+        if (isMoving && !wasMoving)
+        {
+            if (walkingClip != null)
+            {
+                audioSource.clip = walkingClip;
+                // Set pitch based on speedState
+                switch (speedState)
+                {
+                    case 0: audioSource.pitch = 0.9f; break; // crouch/slow
+                    case 1: audioSource.pitch = 1.0f; break; // walk/normal
+                    case 2: audioSource.pitch = 1.2f; break; // run/fast
+                }
+                audioSource.Play();
+            }
+        }
+        else if (!isMoving && wasMoving)
+        {
+            audioSource.Stop();
+        }
+        // If already moving, update pitch if speedState changed
+        if (isMoving && audioSource.isPlaying)
+        {
+            switch (speedState)
+            {
+                case 0: audioSource.pitch = 0.9f; break;
+                case 1: audioSource.pitch = 1.0f; break;
+                case 2: audioSource.pitch = 1.2f; break;
+            }
+        }
+        wasMoving = isMoving;
     }
 
     //1.2 Rotate to face the mouse cursor
@@ -270,6 +325,12 @@ public class KieranController : MonoBehaviour
                         draggingGuard = guard;
                         guard.isBeingDragged = true;
                         guard.draggedBy = transform;
+                        // Play drag sound
+                        if (dragBodyClip != null && !dragAudioSource.isPlaying)
+                        {
+                            dragAudioSource.clip = dragBodyClip;
+                            dragAudioSource.Play();
+                        }
                         break;
                     }
                 }
@@ -282,6 +343,11 @@ public class KieranController : MonoBehaviour
                 draggingGuard.isBeingDragged = false;
                 draggingGuard.draggedBy = null;
                 draggingGuard = null;
+            }
+            // Stop drag sound
+            if (dragAudioSource.isPlaying)
+            {
+                dragAudioSource.Stop();
             }
         }
     }
@@ -299,6 +365,10 @@ public class KieranController : MonoBehaviour
                     isDisguised = true;
                     disguisedAs = guard.guardType;
                     Debug.Log("Kieran disguised as " + disguisedAs);
+                    if (disguiseClip != null)
+                    {
+                        disguiseAudioSource.PlayOneShot(disguiseClip);
+                    }
                     break;
                 }
             }
