@@ -128,7 +128,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (sleepingDartItem != null)
         {
-            AddItem(sleepingDartItem, 5); // Add 5 darts on start
+            AddItem(sleepingDartItem, 10000); // Add 5 darts on start
 
             if (InventoryUI.Instance != null)
             {

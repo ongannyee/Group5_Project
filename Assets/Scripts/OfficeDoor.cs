@@ -34,6 +34,7 @@ public class OfficeDoor : MonoBehaviour
         {
             if (!isBeingLockpicked) yield break; // In case cancelled
             timer += Time.deltaTime;
+            Debug.Log(timer);
             yield return null;
         }
 

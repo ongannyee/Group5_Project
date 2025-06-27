@@ -38,7 +38,7 @@ public class SleepingDart : MonoBehaviour
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer("Obstacles"))
         {
-            Destroy(gameObject); // Hit wall, destroy
+           Destroy(gameObject); // Hit wall, destroy
         }
     }
 }
