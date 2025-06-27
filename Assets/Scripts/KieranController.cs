@@ -236,7 +236,7 @@ public class KieranController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha4)) { z3ra.TryFlickerSurveillance(); PlayHackingSound(); }
             if (Input.GetKeyDown(KeyCode.Alpha5)) { z3ra.TryPowerSurge(); PlayHackingSound(); }
             if (Input.GetKeyDown(KeyCode.Alpha6)) { z3ra.TryHackDoor(); PlayHackingSound(); }
-            opCounter.counterUpdate();`
+            opCounter.counterUpdate();
         }
         else
         {
