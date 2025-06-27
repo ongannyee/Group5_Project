@@ -321,6 +321,7 @@ GameObject:
   - component: {fileID: 2045224370615399558}
   - component: {fileID: 2045224370615399559}
   - component: {fileID: 2045224370615399556}
+  - component: {fileID: 6850320781135377744}
   m_Layer: 13
   m_Name: Guard_behaviour
   m_TagString: Untagged
@@ -385,7 +386,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8f566afae60b4424b8b5a7b365450c0a, type: 3}
   m_Color: {r: 0.509434, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -408,6 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad0f36d8bd904f478bd5a43a693551f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 6850320781135377744}
   patrolPoints:
   - {fileID: 2045224370974298231}
   - {fileID: 2045224370246789680}
@@ -421,6 +423,8 @@ MonoBehaviour:
   isBeingDragged: 0
   draggedBy: {fileID: 0}
   guardType: 2
+  walkingClip: {fileID: 8300000, guid: f42453f2da5700c428f988e132cb0091, type: 3}
+  alarmClip: {fileID: 8300000, guid: db217dd7b440cdb4dac7f6d488ef08df, type: 3}
 --- !u!114 &2045224370615399558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,8 +453,8 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.28866667}
-    oldSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -482,6 +486,27 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &6850320781135377744
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045224370615399562}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0bfaa6d100ace7b48a4508fce86ca74a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2045224370974298228
 GameObject:
   m_ObjectHideFlags: 0
