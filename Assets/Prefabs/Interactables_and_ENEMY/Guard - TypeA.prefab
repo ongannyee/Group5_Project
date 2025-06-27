@@ -215,6 +215,8 @@ MonoBehaviour:
   isBeingDragged: 0
   draggedBy: {fileID: 0}
   guardType: 1
+  walkingClip: {fileID: 8300000, guid: f42453f2da5700c428f988e132cb0091, type: 3}
+  alarmClip: {fileID: 8300000, guid: db217dd7b440cdb4dac7f6d488ef08df, type: 3}
 --- !u!114 &4101082488972801893
 MonoBehaviour:
   m_ObjectHideFlags: 0

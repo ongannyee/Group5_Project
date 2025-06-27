@@ -22,6 +22,7 @@ public class InspectPromptManager : MonoBehaviour
     public void ShowPromptContainer()
     {
         promptUI_container.SetActive(true);
+
     }
 
     public void HidePromptContainer()

@@ -7,6 +7,8 @@ public class SecurityDoor : MonoBehaviour
     public int requiredKeycardLevel = 1;
     public GameObject doorVisual; // the sprite/animation part
     public Collider2D doorCollider;
+    public AudioClip openDoorClip;
+    private AudioSource audioSource;
 
     private bool isOpen = false;
 
@@ -14,6 +16,14 @@ public class SecurityDoor : MonoBehaviour
     {
         if (doorCollider == null)
             doorCollider = GetComponent<Collider2D>();
+        // Setup audio source
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
     }
 
     void OnTriggerStay2D(Collider2D other)
@@ -47,5 +57,9 @@ public class SecurityDoor : MonoBehaviour
         if (doorVisual != null)
             doorVisual.SetActive(false); // optionally disable sprite/visual
         Debug.Log("Door Opened!");
+        if (openDoorClip != null)
+        {
+            audioSource.PlayOneShot(openDoorClip);
+        }
     }
 }

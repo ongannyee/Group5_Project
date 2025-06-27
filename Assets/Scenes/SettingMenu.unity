@@ -459,6 +459,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a1cb356a3b6f4dadab9fdd8bc8878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttons: []
+  backgroundMusic: {fileID: 8300000, guid: a27aa647d941fa94e92dbc0f92780405, type: 3}
 --- !u!1 &7073544194688996100
 GameObject:
   m_ObjectHideFlags: 0

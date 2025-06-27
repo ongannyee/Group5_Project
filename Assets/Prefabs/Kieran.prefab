@@ -365,6 +365,9 @@ MonoBehaviour:
   isDisguised: 0
   disguisedAs: 0
   disguiseRadius: 1.5
+  walkingClip: {fileID: 8300000, guid: 52c5b45d94b30704584cc1d1413833fc, type: 3}
+  disguiseClip: {fileID: 8300000, guid: 39d0d1894148da74894fd1df96901d69, type: 3}
+  dragBodyClip: {fileID: 8300000, guid: 2fed9c48fc2dc2b44b1ab6c8049b1e32, type: 3}
 --- !u!70 &1700882450245000988
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

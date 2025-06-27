@@ -70,6 +70,10 @@ public class CCTV : MonoBehaviour
     void Alarm(Transform target)
     {
         Debug.Log("CCTV triggered alarm on " + target.name);
+        if (AlarmManager.Instance != null)
+        {
+            AlarmManager.Instance.TriggerAlarm();
+        }
         EnemyMovement[] allGuards = FindObjectsOfType<EnemyMovement>();
         foreach (var guard in allGuards)
         {

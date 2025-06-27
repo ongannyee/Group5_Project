@@ -54,6 +54,9 @@ public class EnemyMovement : MonoBehaviour
     [HideInInspector] public Transform draggedBy = null;
     public GuardType guardType = GuardType.TypeA;
 
+    public AudioClip walkingClip;
+    private AudioSource audioSource;
+    private bool wasMoving = false;
 
     void Start()
     {
@@ -66,6 +69,15 @@ public class EnemyMovement : MonoBehaviour
             originalViewDistance = fov.viewRadius;
         }
         sr = GetComponent<SpriteRenderer>();
+
+        // Walking sound setup
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
     }
 
     void Update()
@@ -123,6 +135,48 @@ public class EnemyMovement : MonoBehaviour
         {
             CheckCapture();
         }
+
+        // Walking sound logic
+        bool isMoving = false;
+        float pitch = 1.0f;
+        switch (currentState)
+        {
+            case State.Patrolling:
+                isMoving = movement.sqrMagnitude > 0.01f;
+                pitch = 1.0f; // normal
+                break;
+            case State.Investigating:
+                isMoving = movement.sqrMagnitude > 0.01f;
+                pitch = 1.1f; // slightly faster
+                break;
+            case State.Chasing:
+            case State.Alarmed:
+                isMoving = movement.sqrMagnitude > 0.01f;
+                pitch = 1.25f; // fastest
+                break;
+            default:
+                isMoving = false;
+                break;
+        }
+        if (isMoving && !wasMoving)
+        {
+            if (walkingClip != null)
+            {
+                audioSource.clip = walkingClip;
+                audioSource.pitch = pitch;
+                audioSource.Play();
+            }
+        }
+        else if (!isMoving && wasMoving)
+        {
+            audioSource.Stop();
+        }
+        // If already moving, update pitch if state changed
+        if (isMoving && audioSource.isPlaying)
+        {
+            audioSource.pitch = pitch;
+        }
+        wasMoving = isMoving;
     }
 
     void Patrol()
@@ -350,6 +404,12 @@ public class EnemyMovement : MonoBehaviour
     void Alarmed()
     {
         alarmTimer += Time.deltaTime;
+
+        // Play alarm sound globally
+        if (AlarmManager.Instance != null)
+        {
+            AlarmManager.Instance.TriggerAlarm();
+        }
 
         if (alarmTimer >= alarmDelay && !commsDisabled)
         {
