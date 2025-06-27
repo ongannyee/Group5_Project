@@ -55,6 +55,8 @@ public class KieranController : MonoBehaviour
     private AudioSource disguiseAudioSource;
     public AudioClip dragBodyClip;
     private AudioSource dragAudioSource;
+    public AudioClip hackingClip;
+    private AudioSource hackingAudioSource;
 
     void Awake()
     {
@@ -74,6 +76,10 @@ public class KieranController : MonoBehaviour
         dragAudioSource = gameObject.AddComponent<AudioSource>();
         dragAudioSource.loop = true;
         dragAudioSource.playOnAwake = false;
+        // Setup hacking sound source
+        hackingAudioSource = gameObject.AddComponent<AudioSource>();
+        hackingAudioSource.loop = false;
+        hackingAudioSource.playOnAwake = false;
     }
 
     void Start()
@@ -224,12 +230,12 @@ public class KieranController : MonoBehaviour
         if (z3raHackingUI.activeSelf)
         {
             // Z3ra abilities (E menu is open)
-            if (Input.GetKeyDown(KeyCode.Alpha1)) z3ra.TryJamComms();
-            if (Input.GetKeyDown(KeyCode.Alpha2)) z3ra.TryThermalSweep();
-            if (Input.GetKeyDown(KeyCode.Alpha3)) z3ra.TryRouterPing();
-            if (Input.GetKeyDown(KeyCode.Alpha4)) z3ra.TryFlickerSurveillance();
-            if (Input.GetKeyDown(KeyCode.Alpha5)) z3ra.TryPowerSurge();
-            if (Input.GetKeyDown(KeyCode.Alpha6)) z3ra.TryHackDoor();
+            if (Input.GetKeyDown(KeyCode.Alpha1)) { z3ra.TryJamComms(); PlayHackingSound(); }
+            if (Input.GetKeyDown(KeyCode.Alpha2)) { z3ra.TryThermalSweep(); PlayHackingSound(); }
+            if (Input.GetKeyDown(KeyCode.Alpha3)) { z3ra.TryRouterPing(); PlayHackingSound(); }
+            if (Input.GetKeyDown(KeyCode.Alpha4)) { z3ra.TryFlickerSurveillance(); PlayHackingSound(); }
+            if (Input.GetKeyDown(KeyCode.Alpha5)) { z3ra.TryPowerSurge(); PlayHackingSound(); }
+            if (Input.GetKeyDown(KeyCode.Alpha6)) { z3ra.TryHackDoor(); PlayHackingSound(); }
             opCounter.counterUpdate();
         }
         else
@@ -430,6 +436,14 @@ public class KieranController : MonoBehaviour
         {
             isNearGoal = false;
             InspectPromptManager.Instance.HidePromptGoal();
+        }
+    }
+
+    private void PlayHackingSound()
+    {
+        if (hackingClip != null)
+        {
+            hackingAudioSource.PlayOneShot(hackingClip);
         }
     }
 }
