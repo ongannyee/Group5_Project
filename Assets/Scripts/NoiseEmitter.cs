@@ -45,7 +45,7 @@ public class NoiseEmitter : MonoBehaviour
             noiseTimer -= Time.deltaTime;
             if (noiseTimer <= 0f)
             {
-                Debug.Log($"Speed: {speed}, Lerp factor: {speed/12f}, NoiseRadius: {noiseRadius}");
+                //Debug.Log($"Speed: {speed}, Lerp factor: {speed/12f}, NoiseRadius: {noiseRadius}");
                 EmitNoise(noiseRadius);
                 noiseTimer = noiseCooldown;
             }
@@ -89,11 +89,11 @@ public class NoiseEmitter : MonoBehaviour
         pulseTimer = pulseDuration;
     }
 
-    void OnDrawGizmos()
+/*     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, baseNoiseRadius);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, maxNoiseRadius);
-    }
+    } */
 }

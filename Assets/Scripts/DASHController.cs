@@ -132,7 +132,7 @@ public class DASHController : MonoBehaviour
         // 3. Skill Input
         if (Input.GetKeyDown(KeyCode.Alpha1)) TryCammoMode();
         if (Input.GetKeyDown(KeyCode.Alpha2)) TryPlayNoise();
-        if (Input.GetKeyDown(KeyCode.Alpha3)) TryConnectToRouter();
+        if (Input.GetKeyDown(KeyCode.R)) TryConnectToRouter();
     }
 
     void FixedUpdate()

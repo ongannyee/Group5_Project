@@ -13,7 +13,7 @@ EditorBuildSettings:
     guid: 34544073ec2c81f4789114cb35721b0c
   - enabled: 1
     path: Assets/Scenes/Level2.unity
-    guid: 64dd8d3ea0c2a6f4584e2319e248aa54
+    guid: 7739580510bbce24caeaa6ac3f62ea83
   - enabled: 1
     path: Assets/Scenes/Level3.unity
     guid: 03064d8383c2256449197993be23e7d9
@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LevelSelection.unity
     guid: a5d3e6e9227ff4845b1d169d3a706421
+  - enabled: 1
+    path: Assets/Scenes/StartingCutscene.unity
+    guid: 64aa069b078378d4cab5f4acb3369f32
   m_configObjects: {}

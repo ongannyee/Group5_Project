@@ -84,7 +84,7 @@ public class CharacterManager : MonoBehaviour
             if (dashController.canSeeThroughWalls)
             {
                 //fogOfWar.Reveal(dash.transform.position, dashController.circularRadius);    
-                fogOfWar.RevealCircularBlocked(dash.transform.position, dashController.circularRadius, LayerMask.GetMask("Default"));
+                fogOfWar.RevealCircularBlocked(dash.transform.position, dashController.circularRadius, LayerMask.GetMask("None"));
                 
             }
             else

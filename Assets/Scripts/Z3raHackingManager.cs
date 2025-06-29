@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Z3raHackingManager : MonoBehaviour
 {
     //public Text overridePointText;                   // UI Text to display current OP
-    public int currentOP = 10000;                      // Starting OP
+    public int currentOP = 300;                      // Starting OP
 
     public GameObject kieran;
     public GameObject DASH;
@@ -34,7 +34,7 @@ public class Z3raHackingManager : MonoBehaviour
 
     public void TryJamComms()
     {
-        if (!HasEnoughOP(150)) return;
+        if (!HasEnoughOP(150) || unlockedAbilities[0]==false) return;
         SpendOP(150);
         StartCoroutine(JamCommsRoutine());
         Debug.Log("Jam Guard Communication");
@@ -52,7 +52,7 @@ public class Z3raHackingManager : MonoBehaviour
 
     public void TryThermalSweep()
     {
-        if (!HasEnoughOP(100)) return;
+        if (!HasEnoughOP(100) || unlockedAbilities[1]==false) return;
         SpendOP(100);
         StartCoroutine(ThermalSweepRoutine());
         Debug.Log("Thermal Sweep");
@@ -66,7 +66,7 @@ public class Z3raHackingManager : MonoBehaviour
 
     public void TryRouterPing()
     {
-        if (!HasEnoughOP(50)) return;
+        if (!HasEnoughOP(50) || unlockedAbilities[2]==false) return;
         SpendOP(50);
         Router[] routers = FindObjectsOfType<Router>();
         foreach (var router in routers)
@@ -82,7 +82,7 @@ public class Z3raHackingManager : MonoBehaviour
 
     public void TryFlickerSurveillance()
     {
-        if (!HasEnoughOP(150)) return;
+        if (!HasEnoughOP(150) || unlockedAbilities[3]==false) return;
         SpendOP(150);
         CCTV[] cctvs = FindObjectsOfType<CCTV>();
         foreach (var cam in cctvs)
@@ -94,7 +94,7 @@ public class Z3raHackingManager : MonoBehaviour
 
     public void TryPowerSurge()
     {
-        if (!HasEnoughOP(450)) return;
+        if (!HasEnoughOP(450) || unlockedAbilities[4]==false) return;
         SpendOP(450);
         CCTV[] cctvs = FindObjectsOfType<CCTV>();
         foreach (var cam in cctvs)
@@ -111,7 +111,7 @@ public class Z3raHackingManager : MonoBehaviour
 
     public void TryHackDoor()
     {
-        if (!HasEnoughOP(150)) return;
+        if (!HasEnoughOP(150) || unlockedAbilities[5]==false) return;
         OfficeDoor[] doors = FindObjectsOfType<OfficeDoor>();
         
         foreach (var door in doors)

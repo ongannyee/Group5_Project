@@ -8,6 +8,8 @@ public class Router : MonoBehaviour
 
     public GameObject visualOn;
     public GameObject visualOff;
+    public GameObject dash;
+    private Vector2 dashPosition;
 
     public float connectionRadius = 3f; //For DASH to connect
     public float routerRadius = 10f;    //For Z3ra Router Ping ability
@@ -15,6 +17,35 @@ public class Router : MonoBehaviour
     void Start()
     {
         UpdateVisual();
+
+    }
+
+    void Update()
+    {
+        dash = GameObject.Find("DASH");
+        
+        if (dash != null)
+        {
+            dashPosition = dash.transform.position;
+        }
+        else
+        {
+            Debug.LogError("DASH GameObject not found in scene!");
+        }
+
+        if (dash == null) return; // Safety check
+        
+        // Update dash position in case it moves
+        dashPosition = dash.transform.position;
+        
+        if (IsInRange(dashPosition))
+        {
+            InspectPromptManager.Instance.ShowPromptRouter();
+        }
+        else
+        {
+            InspectPromptManager.Instance.HidePromptRouter();
+        }    
     }
 
     public void Activate()

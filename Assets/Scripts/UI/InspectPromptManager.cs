@@ -8,6 +8,7 @@ public class InspectPromptManager : MonoBehaviour
     public GameObject promptUI_container;
     public GameObject promptUI_guard;
     public GameObject promptUI_goal;
+    public GameObject promptUI_router;
 
     private void Awake()
     {
@@ -17,6 +18,7 @@ public class InspectPromptManager : MonoBehaviour
         promptUI_container.SetActive(false);
         promptUI_guard.SetActive(false);
         promptUI_goal.SetActive(false);
+        promptUI_router.SetActive(false);
     }
 
     public void ShowPromptContainer()
@@ -48,5 +50,15 @@ public class InspectPromptManager : MonoBehaviour
     public void HidePromptGoal()
     {
         promptUI_goal.SetActive(false);
+    }
+
+    public void ShowPromptRouter()
+    {
+        promptUI_router.SetActive(true);
+    }
+
+    public void HidePromptRouter()
+    {
+        promptUI_router.SetActive(false);
     }
 }

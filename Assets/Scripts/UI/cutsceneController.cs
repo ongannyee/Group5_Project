@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class cutsceneController : MonoBehaviour
 {
@@ -63,6 +64,12 @@ public class cutsceneController : MonoBehaviour
             {
                 GoToNextLineOrSlide();
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("Level1");
         }
     }
 

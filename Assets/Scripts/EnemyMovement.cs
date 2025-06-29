@@ -239,7 +239,7 @@ public class EnemyMovement : MonoBehaviour
 
                 // Rotate left and right like inspecting
                 float angle = Mathf.PingPong(Time.time * 60f, 90f) - 45f; // -45 to 45 degrees
-                transform.rotation = Quaternion.Euler(0f, 0f, angle);
+                transform.rotation = Quaternion.Euler(0f, 0f, angle-90f);
 
                 // Update FOV direction based on angle
                 float radians = angle * Mathf.Deg2Rad;

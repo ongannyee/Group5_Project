@@ -12,6 +12,9 @@ public class InventoryManager : MonoBehaviour
 
     // Initiating items
     public Item sleepingDartItem;
+    public GameObject sleepingDartPrefab; // assign in Inspector
+    public Transform dartSpawnPoint;      // empty child transform in front of Kieran
+    //[SerializeField] private Transform dartPosition;
 
     private void Awake()
     {
@@ -98,10 +101,19 @@ public class InventoryManager : MonoBehaviour
     {
         if (slotIndex < 0 || slotIndex >= inventorySlots.Length) return;
 
-        InventorySlot slot = inventorySlots[slotIndex];
+        InventorySlot slot = inventorySlots[slotIndex-1];
         if (slot.IsEmpty) return;
 
         Debug.Log($"Used: {slot.item.itemName}");
+
+        if (slot.item.itemName == "Sleeping Dart")
+        {
+            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 direction = (mouseWorldPos - (Vector2)dartSpawnPoint.position).normalized;
+
+            GameObject dart = Instantiate(sleepingDartPrefab, dartSpawnPoint.position, Quaternion.identity);
+            dart.GetComponent<SleepingDart>().Launch(direction);
+        }
 
         // Handle item effect here (custom per item)
         if (slot.item.type == ItemType.Consumable)
@@ -116,7 +128,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        // For KeyItem, it stays (or triggers scene logic)
+
     }
 
     public InventorySlot GetSlot(int index)
@@ -128,7 +140,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (sleepingDartItem != null)
         {
-            AddItem(sleepingDartItem, 10000); // Add 5 darts on start
+            AddItem(sleepingDartItem, 1); // Add 1 darts on start
 
             if (InventoryUI.Instance != null)
             {

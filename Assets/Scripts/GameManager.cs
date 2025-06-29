@@ -33,6 +33,15 @@ public class GameManager : MonoBehaviour
                 PauseGame();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.P)) // Press 'P' to reset (for testing)
+        {
+            ResetProgress();
+        }
+        if (Input.GetKeyDown(KeyCode.O)) // Press 'P' to reset (for testing)
+        {
+            UnlockAllLevel();
+        }
     }
 
     public void TriggerGameOver()
@@ -112,5 +121,21 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("UnlockedLevel", PlayerPrefs.GetInt("UnlockedLevel", 1) + 1);
             PlayerPrefs.Save();
         }
+    }
+
+    public void ResetProgress()
+    {
+        PlayerPrefs.SetInt("UnlockedLevel", 1);  // Reset to Level 1
+        PlayerPrefs.SetInt("ReachedIndex", 1);   // Reset highest reached level
+        PlayerPrefs.Save();                     // Save changes immediately
+        Debug.Log("Progress reset to Level 1!");
+    }
+
+    public void UnlockAllLevel()
+    {
+        PlayerPrefs.SetInt("UnlockedLevel", 5);  // Reset to Level 1
+        PlayerPrefs.SetInt("ReachedIndex", 5);   // Reset highest reached level
+        PlayerPrefs.Save();                     // Save changes immediately
+        Debug.Log("Progress open to Level 5!");
     }
 }

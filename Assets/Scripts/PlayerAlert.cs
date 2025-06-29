@@ -15,7 +15,7 @@ public class PlayerAlert : MonoBehaviour
             DASH = GameObject.FindWithTag("DASH")?.transform;
     }
 
-    // !!NOT WORKING YET. Returns the visible player to chase, prioritizing Kieran
+    // Returns the visible player to chase
     public static Transform GetVisiblePlayerToChase(List<Transform> visibleTargets)
     {
         if (Kieran != null && visibleTargets.Contains(Kieran))

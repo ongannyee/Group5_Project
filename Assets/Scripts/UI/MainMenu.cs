@@ -57,9 +57,30 @@ public class MainMenu : MonoBehaviour
 
     public void OpenLevel(int levelId)
     {
+        // Ensure normal time scale (in case paused)
         Time.timeScale = 1f;
+
+        // Load "StartingCutscene" only if Level1 is selected
+        if (levelId == 1)
+        {
+            SceneManager.LoadScene("StartingCutscene");
+            return; // Exit early to avoid double-loading
+        }
+
+        // Construct level name (e.g., "Level2", "Level3")
         string levelName = "Level" + levelId;
-        SceneManager.LoadScene(levelName);
+
+        // Check if the scene exists before loading
+        if (Application.CanStreamedLevelBeLoaded(levelName))
+        {
+            SceneManager.LoadScene(levelName);
+        }
+        else
+        {
+            Debug.LogError("Scene not found: " + levelName);
+            // Fallback: Load menu or a default level
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     public void GoToMainMenu()

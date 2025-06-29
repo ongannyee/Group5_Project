@@ -34,9 +34,9 @@ public class KieranController : MonoBehaviour
     // Assign a UI Panel with "You Win!" in inspector
 
     // 5. Items
-    public GameObject sleepingDartPrefab; // assign in Inspector
-    public Transform dartSpawnPoint;      // empty child transform in front of Kieran
-    [SerializeField] private Transform dartPosition;
+/*     public GameObject sleepingDartPrefab; // assign in Inspector
+    public Transform dartSpawnPoint;      // empty child transform in front of Kieran */
+    [SerializeField] private Transform dartPosition; 
     //public int dartQuantity = 3;
 
     // 6. Actions on sleeping guard
@@ -243,11 +243,17 @@ public class KieranController : MonoBehaviour
             // Items (menu is closed)
             if (Input.GetKeyDown(KeyCode.Alpha1)) 
             {
-                TryShootDart();
+                //TryShootDart();
                 InventoryManager.Instance.UseItem(1);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha2)) UseItem(2);
-            if (Input.GetKeyDown(KeyCode.Alpha3)) UseItem(3);
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                InventoryManager.Instance.UseItem(2);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                InventoryManager.Instance.UseItem(3);
+            }
         }
     }
 
@@ -281,7 +287,7 @@ public class KieranController : MonoBehaviour
         {Debug.Log("No Sleeping Dart left.");}
     } */
 
-    void TryShootDart()
+/*     void TryShootDart()
     {
         // Check if player has at least 1 Sleeping Dart in inventory
         for (int i = 0; i < 5; i++)
@@ -303,7 +309,7 @@ public class KieranController : MonoBehaviour
         }
 
         Debug.Log("No Sleeping Dart available");
-    }
+    } */
 
     private void UpdateDartRotation()
     {
