@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     public GameObject loseUI;
     public GameObject winUI;
     public GameObject pauseUI;
+    public AudioClip loseSound;
+    public AudioClip winSound;
+    private AudioSource audioSource;
 
     public static bool isPaused;
     private bool gameEnded = false;
@@ -20,6 +23,7 @@ public class GameManager : MonoBehaviour
         winUI.SetActive(false);
         if (Instance == null)
             Instance = this;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -53,6 +57,9 @@ public class GameManager : MonoBehaviour
             loseUI.SetActive(true);
             isPaused = true;
 
+        if (loseSound != null && audioSource != null)
+            audioSource.PlayOneShot(loseSound);
+
         Debug.Log("Game Over!");
         Time.timeScale = 0f;
         // Stop alarm sound
@@ -70,6 +77,9 @@ public class GameManager : MonoBehaviour
         if (winUI != null)
             winUI.SetActive(true);
             isPaused = true;
+
+        if (winSound != null && audioSource != null)
+            audioSource.PlayOneShot(winSound);
 
             Debug.Log("You Win!");
             UnlockNewLevel();
