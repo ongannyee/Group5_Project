@@ -15,6 +15,7 @@ public class cutsceneController : MonoBehaviour
     }
 
     public CutsceneSlide[] slides;
+    private int counter = 0;
 
     public Image cutsceneImage;
     public TextMeshProUGUI dialogueText;
@@ -133,10 +134,13 @@ public class cutsceneController : MonoBehaviour
 
     void EndCutscene()
     {
-        // You can add logic to load a new scene, enable gameplay, etc.
         dialogueText.text = "";
         cutsceneImage.enabled = false;
         enabled = false;
         Debug.Log("Cutscene ended.");
+
+        // Load next scene
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Level1");
     }
 }

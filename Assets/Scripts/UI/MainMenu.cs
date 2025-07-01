@@ -90,7 +90,7 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("Game Exitted");
+        Debug.Log("Game Exited");
         Application.Quit();
     }
 }
