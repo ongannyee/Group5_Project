@@ -265,6 +265,8 @@ MonoBehaviour:
   loseUI: {fileID: 0}
   winUI: {fileID: 0}
   pauseUI: {fileID: 0}
+  loseSound: {fileID: 8300000, guid: dacf737bca3d7f147bbc6c376b5e8c5c, type: 3}
+  winSound: {fileID: 8300000, guid: f503c8cde41cbd747b058e17435a8273, type: 3}
 --- !u!1 &971066462174375282
 GameObject:
   m_ObjectHideFlags: 0
