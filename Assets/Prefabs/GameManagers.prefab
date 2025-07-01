@@ -110,7 +110,7 @@ MonoBehaviour:
   routerPingDuration: 15
   flickerDuration: 3
   powerSurgeDuration: 10
-  unlockedAbilities: 000000000000
+  unlockedAbilities: 010101000000
 --- !u!1 &971066461372503021
 GameObject:
   m_ObjectHideFlags: 0
