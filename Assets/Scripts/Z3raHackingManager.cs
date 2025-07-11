@@ -117,7 +117,9 @@ public class Z3raHackingManager : MonoBehaviour
         foreach (var door in doors)
         {
             Debug.Log(door);
-            if (Vector2.Distance(kieran.transform.position, door.transform.position) < 3f)
+            Debug.Log($"Distance to door: {Vector2.Distance(kieran.transform.position, door.transform.position)}");
+
+            if (Vector2.Distance(kieran.transform.position, door.transform.position) < 300f)
             {
                 Debug.Log("Unlocking Door");
                 SpendOP(150);

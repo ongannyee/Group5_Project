@@ -134,8 +134,9 @@ MonoBehaviour:
   isActivated: 0
   visualOn: {fileID: 5293962193515586092}
   visualOff: {fileID: 5293962192720274737}
+  dash: {fileID: 0}
   connectionRadius: 3
-  routerRadius: 7
+  routerRadius: 1000
 --- !u!58 &5293962193454573622
 CircleCollider2D:
   m_ObjectHideFlags: 0

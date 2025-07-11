@@ -12,7 +12,9 @@ public class Router : MonoBehaviour
     private Vector2 dashPosition;
 
     public float connectionRadius = 3f; //For DASH to connect
-    public float routerRadius = 10f;    //For Z3ra Router Ping ability
+    public float routerRadius ;    //For Z3ra Router Ping ability
+    private bool hasShownPrompt = false;
+
 
     void Start()
     {
@@ -40,12 +42,21 @@ public class Router : MonoBehaviour
         
         if (IsInRange(dashPosition))
         {
-            InspectPromptManager.Instance.ShowPromptRouter();
+            if (!hasShownPrompt)
+            {
+                hasShownPrompt = true;
+                InspectPromptManager.Instance.ShowPromptRouter();
+            }
         }
         else
         {
-            InspectPromptManager.Instance.HidePromptRouter();
-        }    
+            if (hasShownPrompt)
+            {
+                hasShownPrompt = false;
+                InspectPromptManager.Instance.HidePromptRouter();
+            }
+        }
+   
     }
 
     public void Activate()
@@ -86,79 +97,72 @@ public class Router : MonoBehaviour
     {
         LayerMask enemyLayers = LayerMask.GetMask("Guard", "CCTV");
 
-        // Store original sorting layers
-        Dictionary<GameObject, string> originalLayers = new Dictionary<GameObject, string>();
-        HashSet<GameObject> currentlyVisible = new HashSet<GameObject>();
+        Dictionary<GameObject, string> originalLayers = new();
+        HashSet<GameObject> currentlyVisible = new();
 
         float timer = 0f;
 
         while (timer < duration)
         {
-            // Find objects in range
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, routerRadius, enemyLayers);
-
-            HashSet<GameObject> detectedThisFrame = new HashSet<GameObject>();
+            HashSet<GameObject> detectedThisFrame = new();
 
             foreach (var hit in hits)
             {
                 GameObject obj = hit.gameObject;
                 detectedThisFrame.Add(obj);
 
-                SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
-                if (sr == null) continue;
-
                 if (!originalLayers.ContainsKey(obj))
                 {
-                    originalLayers[obj] = sr.sortingLayerName;
+                    SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+                    if (sr != null)
+                    {
+                        originalLayers[obj] = sr.sortingLayerName;
+                        sr.sortingLayerName = "Enemy"; // Make temporarily visible
+                        currentlyVisible.Add(obj);
+
+                        if (obj.layer == LayerMask.NameToLayer("Guard"))
+                            Debug.Log($"Pinged enemy: {obj.name}");
+                        else if (obj.layer == LayerMask.NameToLayer("CCTV"))
+                            Debug.Log($"Pinged CCTV: {obj.name}");
+                    }
                 }
-
-                sr.sortingLayerName = "Enemy"; // Temporarily visible layer
-                currentlyVisible.Add(obj);
-
-                // Optional Debug
-                if (obj.layer == LayerMask.NameToLayer("Guard"))
-                    Debug.Log($"Pinged enemy: {obj.name}");
-                else if (obj.layer == LayerMask.NameToLayer("CCTV"))
-                    Debug.Log($"Pinged CCTV: {obj.name}");
             }
 
-            // Check for objects that left the range
-            List<GameObject> toRemove = new List<GameObject>();
+            // Revert objects that exited range
+            List<GameObject> toRemove = new();
             foreach (var obj in currentlyVisible)
             {
                 if (!detectedThisFrame.Contains(obj))
                 {
-                    SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
-                    if (sr != null && originalLayers.ContainsKey(obj))
+                    if (obj != null && originalLayers.ContainsKey(obj))
                     {
-                        sr.sortingLayerName = originalLayers[obj];
+                        SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+                        if (sr != null)
+                            sr.sortingLayerName = originalLayers[obj];
                     }
                     toRemove.Add(obj);
                 }
             }
 
-            // Clean up exited objects
             foreach (var obj in toRemove)
-            {
                 currentlyVisible.Remove(obj);
-            }
 
-            timer += 0.2f; // Scan interval
+            timer += 0.2f;
             yield return new WaitForSeconds(0.2f);
         }
 
-        // Revert any remaining objects
+        // Final cleanup
         foreach (var obj in currentlyVisible)
         {
             if (obj != null && originalLayers.ContainsKey(obj))
             {
                 SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
                 if (sr != null)
-                {
                     sr.sortingLayerName = originalLayers[obj];
-                }
             }
         }
     }
+
 
 }

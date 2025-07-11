@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class OfficeDoor : MonoBehaviour
@@ -10,6 +11,61 @@ public class OfficeDoor : MonoBehaviour
     private Coroutine lockpickRoutine;
     private bool isBeingLockpicked = false;
     private KieranController kieran;
+
+    private GameObject kieranObj;
+    private Vector2 kieranPosition;
+    public float lockpickRadius = 3f; // Use world units (not 300f pixels)
+    private bool hasShownPrompt = false;
+
+    void Start()
+    {
+        if (kieranObj == null)
+        {
+            kieranObj = GameObject.Find("Kieran");
+            if (kieranObj == null)
+            {
+                Debug.LogError("Kieran not found!");
+            }
+            else
+            {
+                Debug.Log("Found");
+            }
+        }
+    }
+
+
+
+    void Update()
+    {
+        if (kieranObj == null) return;
+
+        kieranPosition = kieranObj.transform.position;
+
+        if (IsInRange(kieranPosition))
+        {
+            if (!hasShownPrompt)
+            {
+                hasShownPrompt = true;
+                InspectPromptManager.Instance.ShowPromptOfficeDoor();
+            }
+        }
+        else
+        {
+            if (hasShownPrompt)
+            {
+                hasShownPrompt = false;
+                InspectPromptManager.Instance.HidePromptOfficeDoor();
+            }
+        }
+    }
+
+
+
+    public bool IsInRange(Vector2 unitPosition)
+    {
+        return Vector2.Distance(transform.position, unitPosition) <= lockpickRadius;
+    }
+
 
     public void TryLockpick(KieranController kieranRef)
     {
@@ -70,4 +126,11 @@ public class OfficeDoor : MonoBehaviour
         isBeingLockpicked = true; */
         gameObject.SetActive(false);
     }
+
+    void OnDrawGizmosSelected()
+{
+    Gizmos.color = Color.red;
+    Gizmos.DrawWireSphere(transform.position, lockpickRadius);
+}
+
 }
